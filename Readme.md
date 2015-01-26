@@ -14,11 +14,11 @@ If you have any question or would like to contribute code, please email to xiaof
 Usage
 -------------------
 
-'''cs
+```cs
 RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wc-api/v2/", "<WooCommerce Key>", "<WooCommerce Secret");
 WCObject wc = new WCObject(rest);
 var products = await wc.GetProducts();
-'''
+```
 
 Version History
 -------------------
