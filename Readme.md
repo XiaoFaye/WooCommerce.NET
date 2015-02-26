@@ -22,6 +22,10 @@ var products = await wc.GetProducts();
 
 Version History
 -------------------
+* v0.1.1 Minor update
+  1. Use the same way to trim json string.
+  2. Implement Customer Download call.
+  3. Implement Order Refund call.
 * v0.1 First working version
   1. Implement only GET method for most REST API calls.
   2. Supports WooCommerce REST API version 2.

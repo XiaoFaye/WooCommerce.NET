@@ -151,4 +151,17 @@ namespace WooCommerceNET.WooCommerce
 
         public bool customer_note { get; set; }
     }
+
+    public class OrderRefund
+    {
+        public int id { get; set; }
+
+        public DateTime date { get; set; }
+
+        public decimal amount { get; set; }
+
+        public string reason { get; set; }
+
+        public object line_items { get; set; }
+    }
 }

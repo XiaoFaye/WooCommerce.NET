@@ -26,15 +26,15 @@ namespace WooCommerceNET.WooCommerce
 
         public List<int> exclude_product_ids { get; set; }
 
-        public int usage_limit { get; set; }
+        public int? usage_limit { get; set; }
 
-        public int usage_limit_per_user { get; set; }
+        public int? usage_limit_per_user { get; set; }
 
         public int limit_usage_to_x_items { get; set; }
 
         public int usage_count { get; set; }
 
-        public DateTime expiry_date { get; set; }
+        public DateTime? expiry_date { get; set; }
 
         public bool apply_before_tax { get; set; }
 

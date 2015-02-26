@@ -52,6 +52,7 @@
     <Compile Include="WooCommerce\Address.cs" />
     <Compile Include="WooCommerce\Coupon.cs" />
     <Compile Include="WooCommerce\Customer.cs" />
+    <Compile Include="WooCommerce\Download.cs" />
     <Compile Include="WooCommerce\Order.cs" />
     <Compile Include="WooCommerce\Product.cs" />
     <Compile Include="WooCommerce\ProductImage.cs" />
