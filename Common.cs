@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Windows.Security.Cryptography;
-using Windows.Security.Cryptography.Core;
-using Windows.Storage.Streams;
 
 namespace WooCommerceNET
 {
@@ -34,24 +31,27 @@ namespace WooCommerceNET
 
         public static string GetSHA1(string message)
         {
-            HashAlgorithmProvider sha1 = HashAlgorithmProvider.OpenAlgorithm("SHA1");
-            IBuffer vector = CryptographicBuffer.ConvertStringToBinary(message, BinaryStringEncoding.Utf8);
-            IBuffer digest = sha1.HashData(vector);////Hashing The Data 
+            SHA1 sha1 = new SHA1(message);
+            return sha1.GetHash();
+            //HashAlgorithmProvider sha1 = HashAlgorithmProvider.OpenAlgorithm("SHA1");
+            //IBuffer vector = CryptographicBuffer.ConvertStringToBinary(message, BinaryStringEncoding.Utf8);
+            //IBuffer digest = sha1.HashData(vector);////Hashing The Data 
 
-            return CryptographicBuffer.EncodeToHexString(digest).ToLower();
+            //return CryptographicBuffer.EncodeToHexString(digest).ToLower();
         }
 
         public static string GetSHA256(string key, string message)
         {
-            MacAlgorithmProvider sha256 = MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA256");
-            IBuffer contentBuffer = CryptographicBuffer.ConvertStringToBinary(message, BinaryStringEncoding.Utf8);
+            return HMAC_SHA256.HMAC(Encoding.UTF8.GetBytes(message), Encoding.UTF8.GetBytes(key));
+            //MacAlgorithmProvider sha256 = MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA256");
+            //IBuffer contentBuffer = CryptographicBuffer.ConvertStringToBinary(message, BinaryStringEncoding.Utf8);
 
-            IBuffer keyBuffer = CryptographicBuffer.ConvertStringToBinary(key, BinaryStringEncoding.Utf8);
-            var signatureKey = sha256.CreateKey(keyBuffer);
+            //IBuffer keyBuffer = CryptographicBuffer.ConvertStringToBinary(key, BinaryStringEncoding.Utf8);
+            //var signatureKey = sha256.CreateKey(keyBuffer);
 
-            IBuffer digest = CryptographicEngine.Sign(signatureKey, contentBuffer);
+            //IBuffer digest = CryptographicEngine.Sign(signatureKey, contentBuffer);
 
-            return CryptographicBuffer.EncodeToBase64String(digest);
+            //return CryptographicBuffer.EncodeToBase64String(digest);
         }
     }
 }
