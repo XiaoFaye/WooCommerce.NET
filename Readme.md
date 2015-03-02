@@ -4,7 +4,7 @@
 A Brief Intro
 -------------------
 
-WooCommerce.NET(Rx) is a .NET library for calling WooCommerce REST API v2 in Windows 8.1 APP or Windows Phone 8.1 APP (NOT included Desktop APP).
+WooCommerce.NET is a .NET library for calling WooCommerce REST API v2 in Windows 8.1 APP, Windows Phone 8.1 APP, Windows Desktop APP and ASP.NET Web application.
 
 [Visit WooCommerce](http://www.woothemes.com/woocommerce/)
 [Visit WooCommerce REST API](http://woothemes.github.io/woocommerce-rest-api-docs/)
@@ -22,6 +22,8 @@ var products = await wc.GetProducts();
 
 Version History
 -------------------
+* v0.2.0 Minor update
+  1. Add support for Windows Desktop application and Web application..
 * v0.1.1 Minor update
   1. Use the same way to trim json string.
   2. Implement Customer Download call.
