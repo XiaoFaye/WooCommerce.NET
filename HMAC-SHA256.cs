@@ -272,7 +272,6 @@ namespace WooCommerceNET
                 index++;
                 numBytes--;
             }
-
         }
 
 
@@ -320,20 +319,27 @@ namespace WooCommerceNET
             // find right position
 
             ulong addLength;
+            byte[] temp;
             if (paddedLength < BlockSize)
+            {
+                temp = m_buffer;
                 addLength = paddedLength;
+            }
             else
+            {
+                temp = extra;
                 addLength = paddedLength - BlockSize;
+            }
 
             // must be big endian
-            m_buffer[addLength++] = (byte)((msgBits >> 56) & 0xFF);
-            m_buffer[addLength++] = (byte)((msgBits >> 48) & 0xFF);
-            m_buffer[addLength++] = (byte)((msgBits >> 40) & 0xFF);
-            m_buffer[addLength++] = (byte)((msgBits >> 32) & 0xFF);
-            m_buffer[addLength++] = (byte)((msgBits >> 24) & 0xFF);
-            m_buffer[addLength++] = (byte)((msgBits >> 16) & 0xFF);
-            m_buffer[addLength++] = (byte)((msgBits >> 8) & 0xFF);
-            m_buffer[addLength] = (byte)(msgBits & 0xFF);
+            temp[addLength++] = (byte)((msgBits >> 56) & 0xFF);
+            temp[addLength++] = (byte)((msgBits >> 48) & 0xFF);
+            temp[addLength++] = (byte)((msgBits >> 40) & 0xFF);
+            temp[addLength++] = (byte)((msgBits >> 32) & 0xFF);
+            temp[addLength++] = (byte)((msgBits >> 24) & 0xFF);
+            temp[addLength++] = (byte)((msgBits >> 16) & 0xFF);
+            temp[addLength++] = (byte)((msgBits >> 8) & 0xFF);
+            temp[addLength] = (byte)(msgBits & 0xFF);
 
             // process blocks
             processBlock(m_buffer);

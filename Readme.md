@@ -22,8 +22,10 @@ var products = await wc.GetProducts();
 
 Version History
 -------------------
+* v0.2.1 Minor update (4/03/2015)
+  1. Fix HMAC-SHA256 bug.
 * v0.2.0 Minor update
-  1. Add support for Windows Desktop application and Web application..
+  1. Add support for Windows Desktop application and Web application.
 * v0.1.1 Minor update
   1. Use the same way to trim json string.
   2. Implement Customer Download call.
