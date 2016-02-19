@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace WooCommerceNET.WooCommerce
 {
+    public class StoreData
+    {
+        public Store store { get; set; }
+    }
+
     public class Store
     {
         public string name { get; set; }

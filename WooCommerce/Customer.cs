@@ -20,6 +20,8 @@ namespace WooCommerceNET.WooCommerce
 
         public string username { get; set; }
 
+        public string password { get; set; }
+
         public int? last_order_id { get; set; }
 
         public DateTime? last_order_date { get; set; }
