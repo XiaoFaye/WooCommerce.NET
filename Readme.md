@@ -51,6 +51,8 @@ var p = await wc.GetProducts(new Dictionary<string, string>() {
 
 Version History
 -------------------
+* v0.4.1 Minor update
+  1. Add https support.
 * v0.4.0 Major update
   1. Remove all dependencies. NOTE: Anonymous type will not be allowed for POST or UPDATE calls anymore.
   2. Get all avaliable API routes using WCObject.GetStoreInfo(), all routes are in the WCRoutes property.

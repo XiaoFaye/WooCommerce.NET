@@ -21,7 +21,7 @@ namespace WooCommerceNET
         {
             wc_url = url;
             wc_key = key;
-            if (url.ToLower().Contains("wc-api/v3"))
+            if (url.ToLower().Contains("wc-api/v3") && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 wc_secret = secret + "&";
             else
                 wc_secret = secret;
@@ -44,10 +44,10 @@ namespace WooCommerceNET
             try
             {
                 httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
-                //if (!string.IsNullOrEmpty(username) || !string.IsNullOrEmpty(password))
-                //{
-                //    httpWebRequest.Credentials = new NetworkCredential(username, password);
-                //}
+                if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+                {
+                    httpWebRequest.Credentials = new NetworkCredential(wc_key, wc_secret);
+                }
 
                 // start the stream immediately
                 httpWebRequest.Method = method.ToString();
@@ -107,6 +107,20 @@ namespace WooCommerceNET
 
         private string GetOAuthEndPoint(string method, string endpoint, Dictionary<string, string> parms = null)
         {
+            if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+            {
+                if (parms == null)
+                    return endpoint;
+                else
+                {
+                    string requestParms = string.Empty;
+                    foreach (var parm in parms)
+                        requestParms += parm.Key + "=" + parm.Value + "&";
+
+                    return endpoint + "?" + requestParms.TrimEnd('&');
+                }
+            }
+
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic.Add("oauth_consumer_key", wc_key);
             dic.Add("oauth_nonce", Common.GetSHA1(Common.GetUnixTime(true)));
