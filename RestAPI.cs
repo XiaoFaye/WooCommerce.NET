@@ -35,7 +35,7 @@ namespace WooCommerceNET
         /// <typeparam name="T"></typeparam>
         /// <param name="endpoint"></param>
         /// <param name="method">HEAD, GET, POST, PUT, PATCH, DELETE</param>
-        /// <param name="requestBody"></param>
+        /// <param name="requestBody">If your call doesn't have a body, please pass string.Empty, not null.</param>
         /// <param name="parms"></param>
         /// <returns>json string</returns>
         public async Task<string> SendHttpClientRequest<T>(string endpoint, RequestMethod method, T requestBody, Dictionary<string, string> parms = null)

@@ -32,7 +32,7 @@ Product p = new Product()
                 description = "test product 8",
                 price = 8.0M
             };
-await wc.PostProduct(p)
+await wc.PostProduct(p);
 
 //Update products
 await wc.UpdateProducts(new Product[] { new Product { id = 128, name = "test 99" } });
