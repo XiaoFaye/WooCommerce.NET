@@ -937,14 +937,14 @@ namespace WooCommerceNET.WooCommerce
 
 
     [CollectionDataContract]
-    public class ProductCategoryList : List<ProductCategory>
+    public class ProductCategoryList : List<Product_Category>
     {
         [DataMember]
-        public List<ProductCategory> product_categories { get; set; }
+        public List<Product_Category> product_categories { get; set; }
     }
 
     [DataContract]
-    public class ProductCategory
+    public class Product_Category
     {
         /// <summary>
         /// Category ID (term ID) 

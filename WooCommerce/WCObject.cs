@@ -260,11 +260,11 @@ namespace WooCommerceNET.WooCommerce
             return RestAPI.DeserializeJSon<ProductCategoryList>(json);
         }
 
-        public async Task<ProductCategory> GetProductCategory(int categoryid, Dictionary<string,string> parms = null)
+        public async Task<Product_Category> GetProductCategory(int categoryid, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("products/categories/" + categoryid.ToString(), RequestMethod.GET, string.Empty, parms);
             json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<ProductCategory>(json);
+            return RestAPI.DeserializeJSon<Product_Category>(json);
         }
 
         #endregion

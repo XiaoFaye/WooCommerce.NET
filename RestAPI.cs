@@ -179,7 +179,6 @@ namespace WooCommerceNET
             };
             MemoryStream stream = new MemoryStream();
             DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T), settings);
-            DataContractJsonSerializerSettings s = new DataContractJsonSerializerSettings();
             ds.WriteObject(stream, t);
             byte[] data = stream.ToArray();
             string jsonString = Encoding.UTF8.GetString(data, 0, data.Length);
