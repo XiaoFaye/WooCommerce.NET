@@ -52,7 +52,7 @@ var p = await wc.GetProducts(new Dictionary<string, string>() {
 Version History
 -------------------
 * v0.4.2 Minor update
-  1. Fix issue when creating product category.
+  1. Fix issue when creating product category. NOTE: class ProductCategory has been renamed to Product_Category, please update your code accordingly.
 * v0.4.1 Minor update
   1. Add https support.
 * v0.4.0 Major update
