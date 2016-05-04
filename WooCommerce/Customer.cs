@@ -87,7 +87,7 @@ namespace WooCommerceNET.WooCommerce
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? total_spent { get; set; }
+        public decimal? total_spent { get; set; }
 
         /// <summary>
         /// Gravatar URL
