@@ -13,8 +13,6 @@ It's in Nuget now!!!
 [Visit Nuget](https://www.nuget.org/packages/WooCommerceNET)
 
 
-If you have any question or would like to contribute to the code, please email to xiaofaye@msn.com.
-
 Usage
 -------------------
 
@@ -51,6 +49,9 @@ var p = await wc.GetProducts(new Dictionary<string, string>() {
 
 Version History
 -------------------
+* v0.4.3 Minor update
+  1. Fix total_spent type mismatch in Customer object.
+  2. Add support to create/update/delete categories.
 * v0.4.2 Minor update
   1. Fix issue when creating product category. NOTE: class ProductCategory has been renamed to Product_Category, please update your code accordingly.
 * v0.4.1 Minor update
@@ -58,7 +59,7 @@ Version History
 * v0.4.0 Major update
   1. Remove all dependencies. NOTE: Anonymous type will not be allowed for POST or UPDATE calls anymore.
   2. Get all avaliable API routes using WCObject.GetStoreInfo(), all routes are in the WCRoutes property.
-  3. Add support for ASP.NET Core 5.0, Xamarin.Android and Xamarin.iOS projects.
+  3. Add support for ASP.NET Core 1.0, Xamarin.Android and Xamarin.iOS projects.
   4. Properties of all objects now compliant with WooCommerce REST API DOCS.
   5. Provide built-in RestAPI.SendHttpClientRequest function for your own RESTful calls.
 * v0.3.1 Major update
