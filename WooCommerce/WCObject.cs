@@ -267,6 +267,21 @@ namespace WooCommerceNET.WooCommerce
             return RestAPI.DeserializeJSon<Product_Category>(json);
         }
 
+        public async Task<string> PostProductCategory(Product_Category pc, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/categories", RequestMethod.POST, pc, parms);
+        }
+
+        public async Task<string> UpdateProductCategory(int categoryid, Product_Category pc, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/categories/" + categoryid.ToString(), RequestMethod.PUT, pc, parms);
+        }
+
+        public async Task<string> DeleteProductCategory(int categoryid, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/categories/" + categoryid.ToString(), RequestMethod.DELETE, string.Empty, parms);
+        }
+
         #endregion
 
         #region "coupons..."
