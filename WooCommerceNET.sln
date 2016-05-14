@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WooCommerceNET", "WooCommerceNET.csproj", "{63DDA1FE-3011-4700-A0F4-78E2358B330F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wocomtest", "..\..\..\Documents\Visual Studio 2015\Projects\wocomtest\wocomtest\wocomtest.csproj", "{AFD602AB-B8AE-455C-B3BA-A59100CB440C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63DDA1FE-3011-4700-A0F4-78E2358B330F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63DDA1FE-3011-4700-A0F4-78E2358B330F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63DDA1FE-3011-4700-A0F4-78E2358B330F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63DDA1FE-3011-4700-A0F4-78E2358B330F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFD602AB-B8AE-455C-B3BA-A59100CB440C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFD602AB-B8AE-455C-B3BA-A59100CB440C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFD602AB-B8AE-455C-B3BA-A59100CB440C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFD602AB-B8AE-455C-B3BA-A59100CB440C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
