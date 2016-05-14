@@ -55,6 +55,7 @@
     <Compile Include="WooCommerce\Store.cs" />
     <Compile Include="WooCommerce\Tax.cs" />
     <Compile Include="WooCommerce\WCObject.cs" />
+    <Compile Include="WooCommerce\Webhook.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <PropertyGroup>
