@@ -362,11 +362,11 @@ namespace WooCommerceNET.WooCommerce
 
         #region "webhooks..."
 
-        public async Task<string> GetWebhooks(Dictionary<string,string> parms = null)
+        public async Task<WebhookList> GetWebhooks(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("webhooks", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf('['), json.Length - json.IndexOf('[') - 1);
-            return json;
+            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
+            return RestAPI.DeserializeJSon<WebhookList>(json);
         }
 
         public async Task<int> GetWebhookCount(Dictionary<string,string> parms = null)
@@ -375,25 +375,25 @@ namespace WooCommerceNET.WooCommerce
             return int.Parse(json.Substring(json.IndexOf(':') + 1, json.IndexOf('}') - json.IndexOf(':') - 1).Trim('"'));
         }
 
-        public async Task<string> GetWebhook(int id, Dictionary<string,string> parms = null)
+        public async Task<Webhook> GetWebhook(int id, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("webhooks/" + id.ToString(), RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(":{") + 1, json.Length - json.IndexOf(":{") - 2);
-            return json;
+            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
+            return RestAPI.DeserializeJSon<Webhook>(json);
         }
 
-        public async Task<string> GetWebhookDeliveries(int id, Dictionary<string,string> parms = null)
+        public async Task<WebhookDeliveryList> GetWebhookDeliveries(int webhookid, Dictionary<string,string> parms = null)
         {
-            string json = await API.SendHttpClientRequest("webhooks/" + id.ToString() + "/deliveries", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf('['), json.Length - json.IndexOf('[') - 1);
-            return json;
+            string json = await API.SendHttpClientRequest("webhooks/" + webhookid.ToString() + "/deliveries", RequestMethod.GET, string.Empty, parms);
+            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
+            return RestAPI.DeserializeJSon<WebhookDeliveryList>(json);
         }
 
-        public async Task<string> GetWebhookDelivery(int webhookid, int deliveryid, Dictionary<string,string> parms = null)
+        public async Task<WebhookDelivery> GetWebhookDelivery(int webhookid, int deliveryid, Dictionary<string,string> parms = null)
         {
             string json = await API.GetRestful("webhooks/" + webhookid.ToString() + "/deliveries/" + deliveryid.ToString(), parms);
-            json = json.Substring(json.IndexOf(":{") + 1, json.Length - json.IndexOf(":{") - 2);
-            return json;
+            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
+            return RestAPI.DeserializeJSon<WebhookDelivery>(json);
         }
 
         #endregion
