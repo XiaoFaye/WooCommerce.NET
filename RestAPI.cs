@@ -175,7 +175,8 @@ namespace WooCommerceNET
         {
             DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
             {
-                DateTimeFormat = new DateTimeFormat("yyyy-MM-ddTHH:mm:ssZ")
+                DateTimeFormat = new DateTimeFormat("yyyy-MM-ddTHH:mm:ssZ"),
+                UseSimpleDictionaryFormat = true
             };
             MemoryStream stream = new MemoryStream();
             DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T), settings);
