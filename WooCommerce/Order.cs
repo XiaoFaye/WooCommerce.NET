@@ -214,7 +214,7 @@ namespace WooCommerceNET.WooCommerce
         public Customer customer { get; set; }
 
         /// <summary>
-        /// Dictionary of order metadata/custom fields. Undocumented.
+        /// Dictionary of order metadata/custom fields. Undocumented; set parameter filter[meta] to true on GetOrders to include in response.
         /// </summary>
         [DataMember( EmitDefaultValue = false )]
         public IDictionary<string, string> order_meta { get; set; }
