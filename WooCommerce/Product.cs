@@ -203,7 +203,7 @@ namespace WooCommerceNET.WooCommerce
         /// <summary>
         /// Featured Product
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = true)]
         public bool featured { get; set; }
 
         /// <summary>
