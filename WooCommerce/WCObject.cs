@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace WooCommerceNET.WooCommerce
@@ -8,16 +9,15 @@ namespace WooCommerceNET.WooCommerce
         private RestAPI API;
         public WCObject(RestAPI api)
         {
+            if (api.IsLegacy)
+                throw new Exception("You need to use the legacy WCObject on the legacy version of WooCommerce Restful API.");
+
             API = api;
         }
 
-        public async Task<Store> GetStoreInfo()
+        public async Task<string> GetStoreInfo()
         {
-            string json = await API.SendHttpClientRequest(string.Empty, RequestMethod.GET, string.Empty);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            Store store = RestAPI.DeserializeJSon<Store>(json);
-            store.WCRoutes = store.GetRoutes(json);
-            return store;
+            return await API.SendHttpClientRequest(string.Empty, RequestMethod.GET, string.Empty);
         }
 
         #region "customers..."
@@ -25,42 +25,31 @@ namespace WooCommerceNET.WooCommerce
         public async Task<CustomerList> GetCustomers(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("customers", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<CustomerList>(json);
-        }
-
-        public async Task<int> GetCustomerCount(Dictionary<string, string> parms = null)
-        {
-            string json = await API.SendHttpClientRequest("customers/count", RequestMethod.GET, string.Empty, parms);
-            return int.Parse(json.Substring(json.IndexOf(':') + 1, json.IndexOf('}') - json.IndexOf(':') - 1).Trim('"'));
+            return API.DeserializeJSon<CustomerList>(json);
         }
 
         public async Task<Customer> GetCustomer(int id, Dictionary<string, string> parms = null)
         {
             string json = await API.SendHttpClientRequest("customers/" + id.ToString(), RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Customer>(json);
+            return API.DeserializeJSon<Customer>(json);
         }
 
         public async Task<Customer> GetCustomerByEmail(string email, Dictionary<string, string> parms = null)
         {
             string json = await API.SendHttpClientRequest("customers/email/" + email, RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Customer>(json);
+            return API.DeserializeJSon<Customer>(json);
         }
 
         public async Task<OrderList> GetCustomerOrders(int id, Dictionary<string, string> parms = null)
         {
             string json = await API.GetRestful("customers/" + id.ToString() + "/orders", parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<OrderList>(json);
+            return API.DeserializeJSon<OrderList>(json);
         }
 
         public async Task<DownloadList> GetCustomerDownloads(int id, Dictionary<string, string> parms = null)
         {
             string json = await API.GetRestful("customers/" + id.ToString() + "/downloads", parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<DownloadList>(json);
+            return API.DeserializeJSon<DownloadList>(json);
         }
 
         //Don't forget to include a password when creating a customer, the example in REST API DOCS will not work!!!
@@ -76,7 +65,7 @@ namespace WooCommerceNET.WooCommerce
 
         public async Task<string> UpdateCustomers(Customer[] cs, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("customers/bulk", RequestMethod.POST, cs, parms);
+            return await API.SendHttpClientRequest("customers/batch", RequestMethod.POST, cs, parms);
         }
 
         public async Task<string> DeleteCustomer(int id, Dictionary<string, string> parms = null)
@@ -91,21 +80,13 @@ namespace WooCommerceNET.WooCommerce
         public async Task<OrderList> GetOrders(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("orders", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<OrderList>(json);
-        }
-
-        public async Task<int> GetOrderCount(Dictionary<string,string> parms = null)
-        {
-            string json = await API.SendHttpClientRequest("orders/count", RequestMethod.GET, string.Empty, parms);
-            return int.Parse(json.Substring(json.IndexOf(':') + 1, json.IndexOf('}') - json.IndexOf(':') - 1).Trim('"'));
+            return API.DeserializeJSon<OrderList>(json);
         }
 
         public async Task<Order> GetOrder(int orderid, Dictionary<string, string> parms = null)
         {
             string json = await API.SendHttpClientRequest("orders/" + orderid.ToString(), RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Order>(json);
+            return API.DeserializeJSon<Order>(json);
         }
 
         public async Task<List<KeyValuePair<string, string>>> GetOrderStatuses(Dictionary<string,string> parms = null)
@@ -135,7 +116,7 @@ namespace WooCommerceNET.WooCommerce
 
         public async Task<string> UpdateOrders(Order[] cs, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("orders/bulk", RequestMethod.PUT, cs, parms);
+            return await API.SendHttpClientRequest("orders/batch", RequestMethod.PUT, cs, parms);
         }
 
         public async Task<string> DeleteOrder(int orderid, Dictionary<string, string> parms = null)
@@ -143,26 +124,28 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("orders/" + orderid.ToString(), RequestMethod.DELETE, string.Empty, parms);
         }
 
+        #endregion
+
+        #region "Order notes..."
+
         public async Task<OrderNoteList> GetOrderNotes(int id, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("orders/" + id.ToString() + "/notes", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<OrderNoteList>(json);
+            return API.DeserializeJSon<OrderNoteList>(json);
         }
 
-        public async Task<Order_Note> GetOrderNote(int orderid, int noteid, Dictionary<string,string> parms = null)
+        public async Task<OrderNote> GetOrderNote(int orderid, int noteid, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("orders/" + orderid.ToString() + "/notes/" + noteid.ToString(), RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Order_Note>(json);
+            return API.DeserializeJSon<OrderNote>(json);
         }
 
-        public async Task<string> PostOrderNote(int orderid, Order_Note n, Dictionary<string, string> parms = null)
+        public async Task<string> PostOrderNote(int orderid, OrderNote n, Dictionary<string, string> parms = null)
         {
             return await API.SendHttpClientRequest("orders/" + orderid.ToString() + "/notes", RequestMethod.POST, n, parms);
         }
 
-        public async Task<string> UpdateOrderNote(int orderid, int noteid, Order_Note n, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateOrderNote(int orderid, int noteid, OrderNote n, Dictionary<string, string> parms = null)
         {
             return await API.SendHttpClientRequest("orders/" + orderid.ToString() + "/notes/" + noteid.ToString(), RequestMethod.PUT, n, parms);
         }
@@ -172,26 +155,28 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("orders/" + orderid.ToString() + "/notes/" + noteid.ToString(), RequestMethod.DELETE, parms);
         }
 
+        #endregion
+
+        #region "Order refunds..."
+
         public async Task<OrderRefundList> GetOrderRefunds(int orderid, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("orders/" + orderid.ToString() + "/refunds", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<OrderRefundList>(json);
+            return API.DeserializeJSon<OrderRefundList>(json);
         }
 
-        public async Task<Order_Refund> GetOrderRefund(int orderid, int refundid, Dictionary<string, string> parms = null)
+        public async Task<OrderRefund> GetOrderRefund(int orderid, int refundid, Dictionary<string, string> parms = null)
         {
             string json = await API.SendHttpClientRequest("orders/" + orderid.ToString() + "/refunds/" + refundid.ToString(), RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Order_Refund>(json);
+            return API.DeserializeJSon<OrderRefund>(json);
         }
 
-        public async Task<string> PostOrderRefund(int orderid, Order_Refund r, Dictionary<string, string> parms = null)
+        public async Task<string> PostOrderRefund(int orderid, OrderRefund r, Dictionary<string, string> parms = null)
         {
             return await API.SendHttpClientRequest("orders/" + orderid.ToString() + "/refunds", RequestMethod.POST, r, parms);
         }
 
-        public async Task<string> UpdateOrderRefund(int orderid, int refundid, Order_Refund r, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateOrderRefund(int orderid, int refundid, OrderRefund r, Dictionary<string, string> parms = null)
         {
             return await API.SendHttpClientRequest("orders/" + orderid.ToString() + "/refunds/" + refundid.ToString(), RequestMethod.PUT, r, parms);
         }
@@ -209,21 +194,13 @@ namespace WooCommerceNET.WooCommerce
         public async Task<ProductList> GetProducts(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("products", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<ProductList>(json);
-        }
-
-        public async Task<int> GetProductCount(Dictionary<string,string> parms = null)
-        {
-            string json = await API.SendHttpClientRequest("products/count", RequestMethod.GET, string.Empty, parms);
-            return int.Parse(json.Substring(json.IndexOf(':') + 1, json.IndexOf('}') - json.IndexOf(':') - 1).Trim('"'));
+            return API.DeserializeJSon<ProductList>(json);
         }
 
         public async Task<Product> GetProduct(int productid, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("products/" + productid.ToString(), RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Product>(json);
+            return API.DeserializeJSon<Product>(json);
         }
 
         public async Task<string> PostProduct(Product p, Dictionary<string, string> parms = null)
@@ -238,7 +215,7 @@ namespace WooCommerceNET.WooCommerce
 
         public async Task<string> UpdateProducts(Product[] ps, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("products/bulk", RequestMethod.PUT, ps, parms);
+            return await API.SendHttpClientRequest("products/batch", RequestMethod.PUT, ps, parms);
         }
 
         public async Task<string> DeleteProduct(int productid, Dictionary<string, string> parms = null)
@@ -246,35 +223,45 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("products/" + productid.ToString(), RequestMethod.DELETE, string.Empty, parms);
         }
 
+        #endregion
+
+        #region "Product reviews..."
+
         public async Task<ProductReviewList> GetProductReviews(int productid, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("products/" + productid.ToString() + "/reviews", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<ProductReviewList>(json);
+            return API.DeserializeJSon<ProductReviewList>(json);
         }
+
+        #endregion
+
+        #region "Product categories..."
 
         public async Task<ProductCategoryList> GetProductCategories(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("products/categories", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<ProductCategoryList>(json);
+            return API.DeserializeJSon<ProductCategoryList>(json);
         }
 
-        public async Task<Product_Category> GetProductCategory(int categoryid, Dictionary<string,string> parms = null)
+        public async Task<ProductCategory> GetProductCategory(int categoryid, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("products/categories/" + categoryid.ToString(), RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Product_Category>(json);
+            return API.DeserializeJSon<ProductCategory>(json);
         }
 
-        public async Task<string> PostProductCategory(Product_Category pc, Dictionary<string, string> parms = null)
+        public async Task<string> PostProductCategory(ProductCategory pc, Dictionary<string, string> parms = null)
         {
             return await API.SendHttpClientRequest("products/categories", RequestMethod.POST, pc, parms);
         }
 
-        public async Task<string> UpdateProductCategory(int categoryid, Product_Category pc, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateProductCategory(int categoryid, ProductCategory pc, Dictionary<string, string> parms = null)
         {
             return await API.SendHttpClientRequest("products/categories/" + categoryid.ToString(), RequestMethod.PUT, pc, parms);
+        }
+
+        public async Task<string> UpdateProductCategories(ProductCategory[] pc, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/categories/batch", RequestMethod.PUT, pc, parms);
         }
 
         public async Task<string> DeleteProductCategory(int categoryid, Dictionary<string, string> parms = null)
@@ -284,33 +271,164 @@ namespace WooCommerceNET.WooCommerce
 
         #endregion
 
+        #region "Product attributes..."
+
+        public async Task<ProductAttributeList> GetProductAttributes(Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("products/attributes", RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<ProductAttributeList>(json);
+        }
+
+        public async Task<ProductAttribute> GetProductAttribute(int attributeid, Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("products/attributes/" + attributeid.ToString(), RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<ProductAttribute>(json);
+        }
+
+        public async Task<string> PostProductAttribute(ProductAttribute pa, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/attributes", RequestMethod.POST, pa, parms);
+        }
+
+        public async Task<string> UpdateProductAttribute(int attributeid, ProductAttribute pa, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/attributes/" + attributeid.ToString(), RequestMethod.PUT, pa, parms);
+        }
+
+        public async Task<string> UpdateProductAttributes(ProductAttribute[] pa, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/attributes/batch", RequestMethod.PUT, pa, parms);
+        }
+
+        public async Task<string> DeleteProductAttribute(int attributeid, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/attributes/" + attributeid.ToString(), RequestMethod.DELETE, string.Empty, parms);
+        }
+
+        #endregion
+
+        #region "Product Attribute terms..."
+
+        public async Task<ProductAttributeTermList> GetProductAttributeTerms(int attributeid, Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("products/attributes/" + attributeid.ToString() + "/terms", RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<ProductAttributeTermList>(json);
+        }
+
+        public async Task<ProductAttributeTerm> GetProductAttributeTerm(int attributeid, int termid, Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("products/attributes/" + attributeid.ToString() + "/terms/" + termid.ToString(), RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<ProductAttributeTerm>(json);
+        }
+
+        public async Task<string> PostProductAttributeTerm(int attributeid, ProductAttributeTerm t, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/attributes/" + attributeid.ToString() + "/terms", RequestMethod.POST, t, parms);
+        }
+
+        public async Task<string> UpdateProductAttributeTerm(int attributeid, int termid, ProductAttributeTerm t, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/attributes/" + attributeid.ToString() + "/terms/" + termid.ToString(), RequestMethod.PUT, t, parms);
+        }
+
+        public async Task<string> DeleteProductAttributeTerm(int attributeid, int termid, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/attributes/" + attributeid.ToString() + "/terms/" + termid.ToString(), RequestMethod.DELETE, string.Empty, parms);
+        }
+
+
+        #endregion
+
+        #region "Product Shipping class..."
+
+        public async Task<ShippingClassList> GetProductShippingClasses(Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("products/shipping_classes", RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<ShippingClassList>(json);
+        }
+
+        public async Task<ShippingClass> GetProductShippingClass(int shippingclassid, Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("products/shipping_classes/" + shippingclassid.ToString(), RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<ShippingClass>(json);
+        }
+
+        public async Task<string> PostProductShippingClass(ShippingClass sc, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/shipping_classes", RequestMethod.POST, sc, parms);
+        }
+
+        public async Task<string> UpdateProductShippingClass(int shippingclassid, ShippingClass sc, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/shipping_classes/" + shippingclassid.ToString(), RequestMethod.PUT, sc, parms);
+        }
+
+        public async Task<string> UpdateProductShippingClasses(ShippingClass[] sc, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/shipping_classes/batch", RequestMethod.PUT, sc, parms);
+        }
+
+        public async Task<string> DeleteProductShippingClass(int shippingclassid, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/shipping_classes/" + shippingclassid.ToString(), RequestMethod.DELETE, string.Empty, parms);
+        }
+
+        #endregion
+
+        #region "Product tags..."
+
+        public async Task<ProductTagList> GetProductTags(Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("products/tags", RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<ProductTagList>(json);
+        }
+
+        public async Task<ProductTag> GetProductTag(int tagid, Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("products/tags/" + tagid.ToString(), RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<ProductTag>(json);
+        }
+
+        public async Task<string> PostProductTag(ProductTag pt, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/tags", RequestMethod.POST, pt, parms);
+        }
+
+        public async Task<string> UpdateProductTag(int tagid, ProductTag pt, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/tags/" + tagid.ToString(), RequestMethod.PUT, pt, parms);
+        }
+
+        public async Task<string> UpdateProductTags(ProductTag[] pt, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/tags/batch", RequestMethod.PUT, pt, parms);
+        }
+
+        public async Task<string> DeleteProductTag(int tagid, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("products/tags/" + tagid.ToString(), RequestMethod.DELETE, string.Empty, parms);
+        }
+
+        #endregion
+
         #region "coupons..."
 
         public async Task<CouponList> GetCoupons(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("coupons", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<CouponList>(json);
-        }
-
-        public async Task<int> GetCouponCount(Dictionary<string,string> parms = null)
-        {
-            string json = await API.SendHttpClientRequest("coupons/count", RequestMethod.GET, string.Empty, parms);
-            return int.Parse(json.Substring(json.IndexOf(':') + 1, json.IndexOf('}') - json.IndexOf(':') - 1).Trim('"'));
+            return API.DeserializeJSon<CouponList>(json);
         }
 
         public async Task<Coupon> GetCoupon(int couponid, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("coupons/" + couponid.ToString(), RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Coupon>(json);
+            return API.DeserializeJSon<Coupon>(json);
         }
 
         public async Task<Coupon> GetCoupon(string code, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("coupons/code/" + code, RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Coupon>(json);
+            return API.DeserializeJSon<Coupon>(json);
         }
 
         public async Task<string> PostCoupon(Coupon c, Dictionary<string,string> parms = null)
@@ -325,7 +443,7 @@ namespace WooCommerceNET.WooCommerce
 
         public async Task<string> UpdateCoupons(Coupon[] cs, Dictionary<string,string> parms = null)
         {
-            return await API.SendHttpClientRequest("coupons/bulk", RequestMethod.PUT, cs, parms);
+            return await API.SendHttpClientRequest("coupons/batch", RequestMethod.PUT, cs, parms);
         }
 
         public async Task<string> DeleteCoupon(int couponid, Dictionary<string,string> parms = null)
@@ -335,27 +453,80 @@ namespace WooCommerceNET.WooCommerce
 
         #endregion
 
+        #region "Tax rates..."
+
+        public async Task<TaxRateList> GetTaxRates(Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("taxes", RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<TaxRateList>(json);
+        }
+
+        public async Task<TaxRate> GetTaxRate(int couponid, Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("taxes/" + couponid.ToString(), RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<TaxRate>(json);
+        }
+        
+        public async Task<string> PostTaxRate(TaxRate t, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("taxes", RequestMethod.POST, t, parms);
+        }
+
+        public async Task<string> UpdateTaxRate(int taxrateid, TaxRate t, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("taxes/" + taxrateid.ToString(), RequestMethod.PUT, t, parms);
+        }
+
+        public async Task<string> UpdateTaxRates(TaxRate[] tr, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("taxes/batch", RequestMethod.PUT, tr, parms);
+        }
+
+        public async Task<string> DeleteTaxRate(int taxrateid, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("taxes/" + taxrateid.ToString(), RequestMethod.DELETE, string.Empty, parms);
+        }
+
+        #endregion
+
+        #region "Tax classes..."
+
+        public async Task<TaxClassList> GetTaxClasses(Dictionary<string, string> parms = null)
+        {
+            string json = await API.SendHttpClientRequest("taxes/classes", RequestMethod.GET, string.Empty, parms);
+            return API.DeserializeJSon<TaxClassList>(json);
+        }
+
+        public async Task<string> PostTaxClass(TaxClass t, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("taxes/classes", RequestMethod.POST, t, parms);
+        }
+        
+        public async Task<string> DeleteTaxClass(string slug, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("taxes/" + slug, RequestMethod.DELETE, string.Empty, parms);
+        }
+
+        #endregion
+
         #region "reports..."
 
-        public async Task<List<string>> GetReports(Dictionary<string,string> parms = null)
+        public async Task<ReportList> GetReports(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("reports", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<List<string>>(json);
+            return API.DeserializeJSon<ReportList>(json);
         }
 
-        public async Task<string> GetSalesReport(Dictionary<string,string> parms = null)
+        public async Task<SalesReportList> GetSalesReport(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("reports/sales", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<string>(json);
+            return API.DeserializeJSon<SalesReportList>(json);
         }
 
-        public async Task<List<string>> GetTopSellerReport(Dictionary<string,string> parms = null)
+        public async Task<TopSellersReport> GetTopSellerReport(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("reports/sales/top_sellers", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<List<string>>(json);
+            return API.DeserializeJSon<TopSellersReport>(json);
         }
 
         #endregion
@@ -365,35 +536,25 @@ namespace WooCommerceNET.WooCommerce
         public async Task<WebhookList> GetWebhooks(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("webhooks", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<WebhookList>(json);
-        }
-
-        public async Task<int> GetWebhookCount(Dictionary<string,string> parms = null)
-        {
-            string json = await API.SendHttpClientRequest("webhooks/count", RequestMethod.GET, string.Empty, parms);
-            return int.Parse(json.Substring(json.IndexOf(':') + 1, json.IndexOf('}') - json.IndexOf(':') - 1).Trim('"'));
+            return API.DeserializeJSon<WebhookList>(json);
         }
 
         public async Task<Webhook> GetWebhook(int id, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("webhooks/" + id.ToString(), RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<Webhook>(json);
+            return API.DeserializeJSon<Webhook>(json);
         }
 
         public async Task<WebhookDeliveryList> GetWebhookDeliveries(int webhookid, Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("webhooks/" + webhookid.ToString() + "/deliveries", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<WebhookDeliveryList>(json);
+            return API.DeserializeJSon<WebhookDeliveryList>(json);
         }
 
         public async Task<WebhookDelivery> GetWebhookDelivery(int webhookid, int deliveryid, Dictionary<string,string> parms = null)
         {
             string json = await API.GetRestful("webhooks/" + webhookid.ToString() + "/deliveries/" + deliveryid.ToString(), parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
-            return RestAPI.DeserializeJSon<WebhookDelivery>(json);
+            return API.DeserializeJSon<WebhookDelivery>(json);
         }
 
         #endregion

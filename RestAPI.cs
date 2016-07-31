@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using WooCommerceNET.Base;
 
 namespace WooCommerceNET
 {
@@ -21,13 +23,23 @@ namespace WooCommerceNET
         {
             wc_url = url;
             wc_key = key;
-            if (url.ToLower().Contains("wc-api/v3") && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+            if ((url.ToLower().Contains("wc-api/v3") || !IsLegacy) && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 wc_secret = secret + "&";
             else
                 wc_secret = secret;
 
             //wc_Proxy = useProxy;
         }
+
+        public bool IsLegacy
+        {
+            get
+            {
+                return !wc_url.ToLower().Contains("wp-json/wc");
+            }
+        }
+
+        public string Url { get { return wc_url; } }
 
         /// <summary>
         /// Make Restful calls
@@ -171,11 +183,11 @@ namespace WooCommerceNET
             return sb.ToString();
         }
 
-        public static string SerializeJSon<T>(T t)
+        public string SerializeJSon<T>(T t)
         {
             DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
             {
-                DateTimeFormat = new DateTimeFormat("yyyy-MM-ddTHH:mm:ssZ"),
+                DateTimeFormat = new DateTimeFormat(DateTimeFormat),
                 UseSimpleDictionaryFormat = true
             };
             MemoryStream stream = new MemoryStream();
@@ -183,21 +195,28 @@ namespace WooCommerceNET
             ds.WriteObject(stream, t);
             byte[] data = stream.ToArray();
             string jsonString = Encoding.UTF8.GetString(data, 0, data.Length);
-            if (typeof(T).IsArray)
-                jsonString = "{\"" + typeof(T).Name.ToLower().Replace("[]", "s") + "\":" + jsonString + "}";
-            else
-                jsonString = "{\"" + typeof(T).Name.ToLower() + "\":" + jsonString + "}";
+
+            if (IsLegacy)
+                if (typeof(T).IsArray)
+                    jsonString = "{\"" + typeof(T).Name.ToLower().Replace("[]", "s") + "\":" + jsonString + "}";
+                else
+                    jsonString = "{\"" + typeof(T).Name.ToLower() + "\":" + jsonString + "}";
 
             stream.Dispose();
 
             return jsonString;
         }
 
-        public static T DeserializeJSon<T>(string jsonString)
+        public T DeserializeJSon<T>(string jsonString)
         {
+            dynamic dT = typeof(T);
+
+            if (dT.Name.EndsWith("List"))
+                dT = dT.DeclaredProperties[0].PropertyType.GenericTypeArguments[0];
+
             DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
             {
-                DateTimeFormat = new DateTimeFormat("yyyy-MM-ddTHH:mm:ssZ"),
+                DateTimeFormat = new DateTimeFormat(DateTimeFormat),
                 UseSimpleDictionaryFormat = true
             };
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T), settings);
@@ -206,6 +225,14 @@ namespace WooCommerceNET
             stream.Dispose();
 
             return obj;
+        }
+
+        public string DateTimeFormat
+        {
+            get
+            {
+                return IsLegacy ? "yyyy-MM-ddTHH:mm:ssZ" : "yyyy-MM-ddTHH:mm:ss";
+            }
         }
     }
 
@@ -217,62 +244,5 @@ namespace WooCommerceNET
         PUT = 4,
         PATCH = 5,
         DELETE = 6
-    }
-
-    public static class HttpWebRequestExtensions
-    {
-        public static Task<Stream> GetRequestStreamAsync(this HttpWebRequest request)
-        {
-            var tcs = new TaskCompletionSource<Stream>();
-
-            try
-            {
-                request.BeginGetRequestStream(iar =>
-               {
-                   try
-                   {
-                       var response = request.EndGetRequestStream(iar);
-                       tcs.SetResult(response);
-                   }
-                   catch (Exception exc)
-                   {
-                       tcs.SetException(exc);
-                   }
-               }, null);
-            }
-            catch (Exception exc)
-            {
-                tcs.SetException(exc);
-            }
-
-            return tcs.Task;
-        }
-
-        public static Task<HttpWebResponse> GetResponseAsync(this HttpWebRequest request)
-        {
-            var tcs = new TaskCompletionSource<HttpWebResponse>();
-
-            try
-            {
-                request.BeginGetResponse(iar =>
-                {
-                    try
-                    {
-                        var response = (HttpWebResponse)request.EndGetResponse(iar);
-                        tcs.SetResult(response);
-                    }
-                    catch (Exception exc)
-                    {
-                        tcs.SetException(exc);
-                    }
-                }, null);
-            }
-            catch (Exception exc)
-            {
-                tcs.SetException(exc);
-            }
-
-            return tcs.Task;
-        }
     }
 }

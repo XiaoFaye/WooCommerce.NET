@@ -15,84 +15,79 @@ namespace WooCommerceNET.WooCommerce
     public class Webhook
     {
         /// <summary>
-        /// Webhook ID (post ID) 
+        /// Unique identifier for the resource. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
-
+        public int id { get; set; }
 
         /// <summary>
-        /// A friendly name for the webhook, defaults to “Webhook created on <date>”
+        /// A friendly name for the webhook. Defaults is Webhook created on lt;dategt;.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string name { get; set; }
 
         /// <summary>
-        /// Webhook status, options are active (delivers payload), paused (does not deliver), or disabled (does not deliver due delivery failures). Default is active
+        /// Webhook status. Default is active. Options active (delivers payload), paused (does not deliver), or disabled (does not deliver due delivery failures).
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string status { get; set; }
 
         /// <summary>
-        /// Webhook topic, e.g. coupon.updated. See the complete list (http://woothemes.github.io/woocommerce-rest-api-docs/#webhooks)
-        /// The topic is a combination resource (e.g. order) and event (e.g. created) and maps to one or more hook names (e.g. woocommerce_checkout_order_processed). Webhooks can be created using the topic name and the appropriate hooks are automatically added.
+        /// Webhook topic, e.g. coupon.updated. See the complete list. 
+        /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, IsRequired = true)]
         public string topic { get; set; }
 
         /// <summary>
-        /// Webhook resource, e.g. coupon
+        /// Webhook resource, e.g. coupon 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string resource { get; set; }
 
         /// <summary>
-        /// Webhook event, e.g. updated
+        /// Webhook event, e.g. updated 
         /// read-only
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string @event { get; set; }
-
+        [DataMember(Name = "event", EmitDefaultValue = false)]
+        public string _event{ get; set; }
 
         /// <summary>
-        /// WooCommerce action names associated with the webhook
+        /// WooCommerce action names associated with the webhook. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public List<string> hooks { get; set; }
 
         /// <summary>
-        /// The URL where the webhook payload is delivered       
+        /// The URL where the webhook payload is delivered. 
+        /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, IsRequired = true)]
         public string delivery_url { get; set; }
 
         /// <summary>
-        /// Secret key used to generate a hash of the delivered webhook and provided in the request headers. This will default to the current API user’s consumer secret if not provided
+        /// Secret key used to generate a hash of the delivered webhook and provided in the request headers. This will default is a MD5 hash from the current user’s IDsusername if not provided. 
         /// write-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string secret { get; set; }
 
-
         /// <summary>
-        /// UTC DateTime when the webhook was created
+        /// UTC DateTime when the webhook was created 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string created_at { get; set; }
+        public DateTime? date_created { get; set; }
 
         /// <summary>
-        /// UTC DateTime when the webhook was last updated
+        /// UTC DateTime when the webhook was last updated 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-
-        public string updated_at { get; set; }
-
-
+        public DateTime? date_modified { get; set; }
     }
 
 
@@ -107,79 +102,92 @@ namespace WooCommerceNET.WooCommerce
     public class WebhookDelivery
     {
         /// <summary>
-        /// The delivery ID (comment ID)
+        /// Unique identifier for the resource. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
         /// <summary>
-        /// The delivery duration, in seconds        
+        /// The delivery duration, in seconds. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string duration { get; set; }
 
         /// <summary>
-        /// A friendly summary of the response including the HTTP response code, message, and body        
+        /// A friendly summary of the response including the HTTP response code, message, and body. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string summary { get; set; }
 
         /// <summary>
-        /// The URL where the webhook was delivered
+        /// The URL where the webhook was delivered. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string request_url { get; set; }
 
         /// <summary>
-        /// Array of request headers (see Request Headers Attributes)
+        /// Request headers. See Request Headers Attributes for more details. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public RequestHeaders request_headers { get; set; }
+        public RequestHeaderList request_headers { get; set; }
 
         /// <summary>
-        /// The request body, this matches the API response for the given resource        
+        /// Request body. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string request_body { get; set; }
 
         /// <summary>
-        /// The HTTP response code from the receiving server        
+        /// The HTTP response code from the receiving server. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string response_code { get; set; }
 
         /// <summary>
-        /// The HTTP response message from the receiving server        
+        /// The HTTP response message from the receiving server. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string response_message { get; set; }
 
         /// <summary>
-        /// Array of the response headers from the receiving server        
+        /// Array of the response headers from the receiving server. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public ResponseHeaders response_headers { get; set; }
+        public ResponseHeaderList response_headers { get; set; }
 
         /// <summary>
-        /// The response body from the receiving server        
+        /// The response body from the receiving server. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string response_body { get; set; }
 
         /// <summary>
-        /// A DateTime of when the delivery was logged        
+        /// The date the webhook delivery was logged, in the site’s timezone. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public DateTime? created_at { get; set; }
-
+        public DateTime? date_created { get; set; }
     }
 
+    [CollectionDataContract]
+    public class RequestHeaderList : List<RequestHeader>
+    {
+        [DataMember]
+        public List<RequestHeader> requestHeaders { get; set; }
+    }
 
     [DataContract]
-    public class RequestHeaders
+    public class RequestHeader
     {
         /// <summary>
         /// The request user agent, defaults to “WooCommerce/{version} Hookshot (WordPress/{version})”
@@ -231,8 +239,15 @@ namespace WooCommerceNET.WooCommerce
 
     }
 
+    [CollectionDataContract]
+    public class ResponseHeaderList : List<ResponseHeader>
+    {
+        [DataMember]
+        public List<ResponseHeader> responseHeaders { get; set; }
+    }
+
     [DataContract]
-    public class ResponseHeaders
+    public class ResponseHeader
     {
         /// <summary>
         /// cache response directives values: private | public | no-cache
@@ -276,7 +291,4 @@ namespace WooCommerceNET.WooCommerce
         [DataMember(Name = "content-length", EmitDefaultValue = false)]
         public string contentlength { get; set; }
     }
-
-
-
 }

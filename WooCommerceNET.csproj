@@ -41,18 +41,27 @@
     <None Include="Readme.md" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common.cs" />
-    <Compile Include="HMAC-SHA256.cs" />
+    <Compile Include="Base\Common.cs" />
+    <Compile Include="Base\Extension.cs" />
+    <Compile Include="Base\HMAC-SHA256.cs" />
+    <Compile Include="Base\JsonObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestAPI.cs" />
-    <Compile Include="SHA1.cs" />
+    <Compile Include="Base\SHA1.cs" />
     <Compile Include="WooCommerce\Address.cs" />
     <Compile Include="WooCommerce\Coupon.cs" />
     <Compile Include="WooCommerce\Customer.cs" />
+    <Compile Include="WooCommerce\Legacy\Coupon.cs" />
+    <Compile Include="WooCommerce\Legacy\Customer.cs" />
+    <Compile Include="WooCommerce\Legacy\Order.cs" />
+    <Compile Include="WooCommerce\Legacy\Product.cs" />
+    <Compile Include="WooCommerce\Legacy\Store.cs" />
+    <Compile Include="WooCommerce\Legacy\Tax.cs" />
+    <Compile Include="WooCommerce\Legacy\WCObject.cs" />
+    <Compile Include="WooCommerce\Legacy\Webhook.cs" />
     <Compile Include="WooCommerce\Order.cs" />
     <Compile Include="WooCommerce\Product.cs" />
     <Compile Include="WooCommerce\Report.cs" />
-    <Compile Include="WooCommerce\Store.cs" />
     <Compile Include="WooCommerce\Tax.cs" />
     <Compile Include="WooCommerce\WCObject.cs" />
     <Compile Include="WooCommerce\Webhook.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
@@ -12,252 +13,242 @@ namespace WooCommerceNET.WooCommerce
     }
 
     [DataContract]
-    public class Order
+    public class Order : JsonObject
     {
         /// <summary>
-        /// Order ID (post ID) 
+        /// Unique identifier for the resource. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
         /// <summary>
-        /// Order number 
-        /// read-only
+        /// Parent order ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? order_number { get; set; }
+        public int? parent_id { get; set; }
 
         /// <summary>
-        /// UTC DateTime when the order was created 
-        /// read-only
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public DateTime? created_at { get; set; }
-
-        /// <summary>
-        /// UTC DateTime when the order was last updated 
-        /// read-only
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public DateTime? updated_at { get; set; }
-
-        /// <summary>
-        /// UTC DateTime when the order was last completed 
-        /// read-only
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public DateTime? completed_at { get; set; }
-
-        /// <summary>
-        /// Order status. By default are available the status: pending, processing, on-hold, completed, cancelled, refunded and failed. See View List of Order Statuses
+        /// Order status. Default is pending. Options (plugins may include new status): pending, processing, on-hold, completed, cancelled, refunded and failed.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string status { get; set; }
 
         /// <summary>
-        /// Currency in ISO format, e.g USD
+        /// Order key. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string order_key { get; set; }
+
+        /// <summary>
+        /// Currency the order was created with, in ISO format, e.g USD. Default is the current store currency.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string currency { get; set; }
 
         /// <summary>
-        /// Order total 
+        /// Version of WooCommerce when the order was made. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal total { get; set; }
+        public string version { get; set; }
 
         /// <summary>
-        /// Order subtotal 
+        /// Shows if the prices included tax during checkout. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal subtotal { get; set; }
+        public bool? prices_include_tax { get; set; }
 
         /// <summary>
-        /// Total of order items 
+        /// The date the order was created, in the site’s timezone. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? total_line_items_quantity { get; set; }
+        public DateTime? date_created { get; set; }
 
         /// <summary>
-        /// Order tax total 
+        /// The date the order was last modified, in the site’s timezone. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal total_tax { get; set; }
+        public DateTime? date_modified { get; set; }
 
         /// <summary>
-        /// Order shipping total 
+        /// User ID who owns the order. Use 0 for guests. Default is 0.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? customer_id { get; set; }
+
+        /// <summary>
+        /// Total discount amount for the order. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal total_shipping { get; set; }
+        public decimal? discount_total { get; set; }
 
         /// <summary>
-        /// Order cart tax 
+        /// Total discount tax amount for the order. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal cart_tax { get; set; }
+        public decimal? discount_tax { get; set; }
 
         /// <summary>
-        /// Order shipping tax 
+        /// Total shipping amount for the order. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal shipping_tax { get; set; }
+        public decimal? shipping_total { get; set; }
 
         /// <summary>
-        /// Order total discount 
+        /// Total shipping tax amount for the order. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal total_discount { get; set; }
+        public decimal? shipping_tax { get; set; }
 
         /// <summary>
-        /// Text list of the shipping methods used in the order 
+        /// Sum of line item taxes only. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string shipping_methods { get; set; }
+        public decimal? cart_tax { get; set; }
 
         /// <summary>
-        /// List of payment details. See Payment Details Properties
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public PaymentDetail payment_details { get; set; }
-
-        /// <summary>
-        /// List of customer billing address. See Customer Billing Address Properties
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public BillingAddress billing_address { get; set; }
-
-        /// <summary>
-        /// List of customer shipping address. See Customer Shipping Address Properties
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public ShippingAddress shipping_address { get; set; }
-
-        /// <summary>
-        /// Customer order notes
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string note { get; set; }
-
-        /// <summary>
-        /// Customer IP address 
+        /// Grand total. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string customer_ip { get; set; }
+        public decimal? total { get; set; }
 
         /// <summary>
-        /// Customer User-Agent 
+        /// Sum of all taxes. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? total_tax { get; set; }
+
+        /// <summary>
+        /// Billing address. See Customer Billing Address properties.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public BillingAddress billing { get; set; }
+
+        /// <summary>
+        /// Shipping address. See Customer Shipping Address properties.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public ShippingAddress shipping { get; set; }
+
+        /// <summary>
+        /// Payment method ID.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string payment_method { get; set; }
+
+        /// <summary>
+        /// Payment method title.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string payment_method_title { get; set; }
+
+        /// <summary>
+        /// Define if the order is paid. It will set the status to processing and reduce stock items. Default is false. 
+        /// write-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public bool? set_paid { get; set; }
+
+        /// <summary>
+        /// Unique transaction ID. In write-mode only is available if set_paid is true.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string transaction_id { get; set; }
+
+        /// <summary>
+        /// Customer’s IP address. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string customer_ip_address { get; set; }
+
+        /// <summary>
+        /// User agent of the customer. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string customer_user_agent { get; set; }
 
         /// <summary>
-        /// Customer ID (user ID) 
-        /// required when creating a new order
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public int? customer_id { get; set; }
-
-        /// <summary>
-        /// URL to view the order in frontend 
+        /// Shows where the order was created. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string view_order_url { get; set; }
+        public string created_via { get; set; }
 
         /// <summary>
-        /// List of order line items. See Line Items Properties
+        /// Note left by customer during checkout.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string customer_note { get; set; }
+
+        /// <summary>
+        /// The date the order was completed, in the site’s timezone. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public DateTime? date_completed { get; set; }
+
+        /// <summary>
+        /// The date the order has been paid, in the site’s timezone. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false, Name = "date_paid")]
+        private object date_paidValue { get; set; }
+
+        public DateTime? date_paid { get; set; }
+
+        /// <summary>
+        /// MD5 hash of cart items to ensure orders are not modified. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string cart_hash { get; set; }
+
+        /// <summary>
+        /// Line items data. See Line Items properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public LineItemList line_items { get; set; }
 
         /// <summary>
-        /// List of shipping line items. See Shipping Lines Properties
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public ShippingLineList shipping_lines { get; set; }
-
-        /// <summary>
-        /// List of tax line items. See Tax Lines Properties 
+        /// Tax lines data. See Tax Lines properties. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public TaxLineList tax_lines { get; set; }
 
         /// <summary>
-        /// List of fee line items. See Fee Lines Properites
+        /// Shipping lines data. See Shipping Lines properties.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public ShippingLineList shipping_lines { get; set; }
+
+        /// <summary>
+        /// Fee lines data. See Fee Lines Properites.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public FeeLineList fee_lines { get; set; }
 
         /// <summary>
-        /// List of cupon line items. See Coupon Lines Properties
+        /// Coupons line data. See Coupon Lines properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public CouponLineList coupon_lines { get; set; }
-
-        /// <summary>
-        /// Customer data. See Customer Properties
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public Customer customer { get; set; }
-
-        /// <summary>
-        /// Dictionary of order metadata/custom fields. Undocumented; set parameter filter[meta] to true on GetOrders to include in response.
-        /// </summary>
-        [DataMember( EmitDefaultValue = false )]
-        public IDictionary<string, string> order_meta { get; set; }
     }
-
-    [CollectionDataContract]
-    public class PaymentDetailList : List<PaymentDetail>
-    {
-        [DataMember]
-        public List<PaymentDetail> payment_details { get; set; }
-    }
-
-    [DataContract]
-    public class PaymentDetail
-    {
-        /// <summary>
-        /// Payment method ID 
-        /// required
-        /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = true)]
-        public string method_id { get; set; }
-
-        /// <summary>
-        /// Payment method title 
-        /// required
-        /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = true)]
-        public string method_title { get; set; }
-
-        /// <summary>
-        /// Shows/define if the order is paid using this payment method. Use true to complate the payment.
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public bool paid { get; set; }
-
-        /// <summary>
-        /// Transaction ID, an optional field to set the transacion ID when complate one payment (to set this you need set the paid as true too)
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string transaction_id { get; set; }
-    }
-
-
+    
     [CollectionDataContract]
     public class LineItemList : List<LineItem>
     {
@@ -269,89 +260,95 @@ namespace WooCommerceNET.WooCommerce
     public class LineItem
     {
         /// <summary>
-        /// Line item ID 
+        /// Item ID. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
         /// <summary>
-        /// Line item subtotal
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public decimal subtotal { get; set; }
-
-        /// <summary>
-        /// Line item tax subtotal
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public decimal subtotal_tax { get; set; }
-
-        /// <summary>
-        /// Line item total
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public decimal total { get; set; }
-
-        /// <summary>
-        /// Line item tax total
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public decimal total_tax { get; set; }
-
-        /// <summary>
-        /// Product price 
-        /// read-only
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public decimal price { get; set; }
-
-        /// <summary>
-        /// Quantity
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public int? quantity { get; set; }
-
-        /// <summary>
-        /// Product tax class 
-        /// read-only
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string tax_class { get; set; }
-
-        /// <summary>
-        /// Product name 
+        /// Product name. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string name { get; set; }
 
         /// <summary>
-        /// Product ID 
-        /// required when creating new order
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public int? product_id { get; set; }
-
-        /// <summary>
-        /// Product SKU 
+        /// Product SKU. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string sku { get; set; }
 
         /// <summary>
-        /// List of product meta items. See Products Meta Items Properties
+        /// Product ID.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? product_id { get; set; }
+
+        /// <summary>
+        /// Variation ID, if applicable.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? variation_id { get; set; }
+
+        /// <summary>
+        /// Quantity ordered.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? quantity { get; set; }
+
+        /// <summary>
+        /// Tax class of product. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string tax_class { get; set; }
+
+        /// <summary>
+        /// Product price. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? price { get; set; }
+
+        /// <summary>
+        /// Line subtotal (before discounts).
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? subtotal { get; set; }
+
+        /// <summary>
+        /// Line subtotal tax (before discounts).
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? subtotal_tax { get; set; }
+
+        /// <summary>
+        /// Line total (after discounts).
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? total { get; set; }
+
+        /// <summary>
+        /// Line total tax (after discounts).
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? total_tax { get; set; }
+
+        /// <summary>
+        /// Line taxes with id, total and subtotal. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public TaxItemList taxes { get; set; }
+
+        /// <summary>
+        /// Line item meta data with key, label and value. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public MetaItemList meta { get; set; }
-
-        /// <summary>
-        /// List of product variation attributes. e.g: "variation": {"pa_color": "Black", "pa_size": "XGG"} (Use pa_ prefix when is a product attribute) 
-        /// write-only
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public VariationList variations { get; set; }
     }
 
 
@@ -384,6 +381,35 @@ namespace WooCommerceNET.WooCommerce
         public string value { get; set; }
     }
 
+    [CollectionDataContract]
+    public class TaxItemList : List<TaxItem>
+    {
+        [DataMember]
+        public List<TaxItem> taxes { get; set; }
+    }
+
+    [DataContract]
+    public class TaxItem
+    {
+        /// <summary>
+        /// tax item id
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? id { get; set; }
+
+        /// <summary>
+        /// tax item total
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? total { get; set; }
+
+        /// <summary>
+        /// tax item subtotal
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? subtotal { get; set; }
+    }
+
 
     [CollectionDataContract]
     public class ShippingLineList : List<ShippingLine>
@@ -396,31 +422,44 @@ namespace WooCommerceNET.WooCommerce
     public class ShippingLine
     {
         /// <summary>
-        /// Shipping line ID 
+        /// Item ID. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
         /// <summary>
-        /// Shipping method ID 
-        /// required when creating a new shipping line in orders
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string method_id { get; set; }
-
-        /// <summary>
-        /// Shipping method title 
-        /// required when creating a new shipping line in orders
+        /// Shipping method name.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string method_title { get; set; }
 
         /// <summary>
-        /// Total amount
+        /// Shipping method ID. 
+        /// required
+        /// </summary>
+        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        public string method_id { get; set; }
+
+        /// <summary>
+        /// Line total (after discounts).
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal total { get; set; }
+        public decimal? total { get; set; }
+
+        /// <summary>
+        /// Line total tax (after discounts). 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? total_tax { get; set; }
+
+        /// <summary>
+        /// Line taxes with id and total. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public TaxItemList taxes { get; set; }
     }
 
 
@@ -434,46 +473,53 @@ namespace WooCommerceNET.WooCommerce
     public class TaxLine
     {
         /// <summary>
-        /// Tax rate line ID 
+        /// Item ID. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
         /// <summary>
-        /// Tax rate ID 
+        /// Tax rate code. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? rate_id { get; set; }
+        public string rate_code { get; set; }
 
         /// <summary>
-        /// Tax rate code 
+        /// Tax rate ID. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string code { get; set; }
+        public string rate_id { get; set; }
 
         /// <summary>
-        /// Tax rate title/name 
+        /// Tax rate label. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string title { get; set; }
+        public string label { get; set; }
 
         /// <summary>
-        /// Tax rate total 
+        /// Show if is a compound tax rate. Compound tax rates are applied on top of other tax rates. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal total { get; set; }
+        public bool? compound { get; set; }
 
         /// <summary>
-        /// Shows if is or not a compound rate. Compound tax rates are applied on top of other tax rates. 
+        /// Tax total (not including shipping taxes). 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public bool compound { get; set; }
+        public decimal? tax_total { get; set; }
+
+        /// <summary>
+        /// Shipping tax total. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? shipping_tax_total { get; set; }
     }
 
 
@@ -488,43 +534,50 @@ namespace WooCommerceNET.WooCommerce
     public class FeeLine
     {
         /// <summary>
-        /// Fee line ID 
+        /// Item ID. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
         /// <summary>
-        /// Shipping method title 
-        /// required when creating a new fee.
+        /// Fee name. 
+        /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string title { get; set; }
+        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        public string name { get; set; }
 
         /// <summary>
-        /// Shows/define if the fee is taxable 
-        /// write-only
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public bool taxable { get; set; }
-
-        /// <summary>
-        /// Tax class, requered in write-mode if the fee is taxable
+        /// Tax class. 
+        /// required if the fee is taxable
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string tax_class { get; set; }
 
         /// <summary>
-        /// Total amount
+        /// Tax status of fee. Set to taxable if need apply taxes.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal total { get; set; }
+        public string tax_status { get; set; }
 
         /// <summary>
-        /// Tax total
+        /// Line total (after discounts).
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal total_tax { get; set; }
+        public decimal? total { get; set; }
+
+        /// <summary>
+        /// Line total tax (after discounts).
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? total_tax { get; set; }
+
+        /// <summary>
+        /// Line taxes with id, total and subtotal. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public TaxItemList taxes { get; set; }
     }
 
 
@@ -539,108 +592,217 @@ namespace WooCommerceNET.WooCommerce
     public class CouponLine
     {
         /// <summary>
-        /// Coupon line ID 
+        /// Item ID. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
         /// <summary>
-        /// Coupon code 
-        /// required when creating a new order.
+        /// Coupon code. 
+        /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, IsRequired = true)]
         public string code { get; set; }
 
         /// <summary>
-        /// Total amount 
-        /// required when creating a new order.
+        /// Discount total. 
+        /// required
+        /// </summary>
+        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        public decimal? discount { get; set; }
+
+        /// <summary>
+        /// Discount total tax. 
+        /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal amount { get; set; }
+        public decimal? discount_tax { get; set; }
     }
 
 
     [CollectionDataContract]
-    public class OrderNoteList : List<Order_Note>
+    public class OrderNoteList : List<OrderNote>
     {
         [DataMember]
-        public List<Order_Note> order_notes { get; set; }
+        public List<OrderNote> order_notes { get; set; }
     }
 
     [DataContract]
-    public class Order_Note
+    public class OrderNote
     {
         /// <summary>
-        /// Order note ID 
+        /// Unique identifier for the resource. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
         /// <summary>
-        /// UTC DateTime when the order note was created 
+        /// The date the order note was created, in the site’s timezone. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public DateTime? created_at { get; set; }
+        public DateTime? date_created { get; set; }
 
         /// <summary>
-        /// Order note 
-        /// required when creating a new note
+        /// Order note. 
+        /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, IsRequired = true)]
         public string note { get; set; }
 
         /// <summary>
-        /// Shows/define if the note is only for reference or for the customer (the user will be notified). Default is false
+        /// Shows/define if the note is only for reference or for the customer (the user will be notified). Default is false.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public bool customer_note { get; set; }
+        public bool? customer_note { get; set; }
     }
 
 
     [CollectionDataContract]
-    public class OrderRefundList : List<Order_Refund>
+    public class OrderRefundList : List<OrderRefund>
     {
         [DataMember]
-        public List<Order_Refund> order_refunds { get; set; }
+        public List<OrderRefund> order_refunds { get; set; }
     }
 
     [DataContract]
-    public class Order_Refund
+    public class OrderRefund
     {
         /// <summary>
-        /// Order note ID 
+        /// Unique identifier for the resource. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
         /// <summary>
-        /// UTC DateTime when the order refund was created 
+        /// The date the order refund was created, in the site’s timezone. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public DateTime? created_at { get; set; }
+        public DateTime? date_created { get; set; }
 
         /// <summary>
-        /// Refund amount 
-        /// required when creating a new refund.
+        /// Refund amount. 
+        /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public decimal amount { get; set; }
+        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        public decimal? amount { get; set; }
 
         /// <summary>
-        /// Reason for refund
+        /// Reason for refund.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string reason { get; set; }
 
         /// <summary>
-        /// List of order items to refund. See Line Items Properties
+        /// Line items data. See Refunds Line Items properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public LineItemList line_items { get; set; }
+        public OrderRefundLineList line_items { get; set; }
+    }
+
+    [CollectionDataContract]
+    public class OrderRefundLineList : List<OrderRefundLine>
+    {
+        [DataMember]
+        public List<OrderRefundLine> orderrefundlines { get; set; }
+    }
+
+    [DataContract]
+    public class OrderRefundLine
+    {
+        /// <summary>
+        /// Item ID. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? id { get; set; }
+
+        /// <summary>
+        /// Product name. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string name { get; set; }
+
+        /// <summary>
+        /// Product SKU. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string sku { get; set; }
+
+        /// <summary>
+        /// Product ID.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? product_id { get; set; }
+
+        /// <summary>
+        /// Variation ID, if applicable.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? variation_id { get; set; }
+
+        /// <summary>
+        /// Quantity ordered.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? quantity { get; set; }
+
+        /// <summary>
+        /// Tax class of product. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string tax_class { get; set; }
+
+        /// <summary>
+        /// Product price. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? price { get; set; }
+
+        /// <summary>
+        /// Line subtotal (before discounts).
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? subtotal { get; set; }
+
+        /// <summary>
+        /// Line subtotal tax (before discounts).
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? subtotal_tax { get; set; }
+
+        /// <summary>
+        /// Line total (after discounts).
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? total { get; set; }
+
+        /// <summary>
+        /// Line total tax (after discounts).
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public decimal? total_tax { get; set; }
+
+        /// <summary>
+        /// Line total tax with id, total and subtotal. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public TaxItemList taxes { get; set; }
+
+        /// <summary>
+        /// Line item meta data with key, label and value. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public MetaItemList meta { get; set; }
     }
 }
