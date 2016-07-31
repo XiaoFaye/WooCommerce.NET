@@ -4,7 +4,7 @@
 A Brief Intro
 -------------------
 
-WooCommerce.NET is a .NET library for calling WooCommerce REST API v2 & v3 in Windows 10 APP, Windows Phone APP, Windows Desktop APP and ASP.NET Web application.
+WooCommerce.NET is a .NET library for calling WooCommerce REST API in any .NET applications.
 
 [Visit WooCommerce](http://www.woothemes.com/woocommerce/)
 [Visit WooCommerce REST API DOCS](http://woothemes.github.io/woocommerce-rest-api-docs/)
@@ -17,7 +17,10 @@ Usage
 -------------------
 
 ```cs
-RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wc-api/v3/", "<WooCommerce Key>", "<WooCommerce Secret");
+//Legacy way of calling WooCommerce REST API
+//RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wc-api/v3/", "<WooCommerce Key>", "<WooCommerce Secret");
+RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/wc/v1/", "<WooCommerce Key>", "<WooCommerce Secret");
+
 WCObject wc = new WCObject(rest);
 //Get all products
 var products = await wc.GetProducts();
@@ -46,31 +49,3 @@ var p = await wc.GetProducts(new Dictionary<string, string>() {
 
 
 ```
-
-Version History
--------------------
-* v0.4.3 Minor update
-  1. Fix total_spent type mismatch in Customer object.
-  2. Add support to create/update/delete categories.
-* v0.4.2 Minor update
-  1. Fix issue when creating product category. NOTE: class ProductCategory has been renamed to Product_Category, please update your code accordingly.
-* v0.4.1 Minor update
-  1. Add https support.
-* v0.4.0 Major update
-  1. Remove all dependencies. NOTE: Anonymous type will not be allowed for POST or UPDATE calls anymore.
-  2. Get all avaliable API routes using WCObject.GetStoreInfo(), all routes are in the WCRoutes property.
-  3. Add support for ASP.NET Core 1.0, Xamarin.Android and Xamarin.iOS projects.
-  4. Properties of all objects now compliant with WooCommerce REST API DOCS.
-  5. Provide built-in RestAPI.SendHttpClientRequest function for your own RESTful calls.
-* v0.3.1 Major update
-  1. Supports WooCommerce REST API version 3.
-  2. Implement POST, PUT, DELETE for most resources.
-* v0.2.0 Minor update
-  1. Add support for Windows Desktop application and Web application..
-* v0.1.1 Minor update
-  1. Use the same way to trim json string.
-  2. Implement Customer Download call.
-  3. Implement Order Refund call.
-* v0.1 First working version
-  1. Implement only GET method for most REST API calls.
-  2. Supports WooCommerce REST API version 2.
