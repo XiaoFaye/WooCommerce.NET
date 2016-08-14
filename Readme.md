@@ -48,4 +48,31 @@ var p = await wc.GetProducts(new Dictionary<string, string>() {
                 { "filter[limit]", "15" } });
 
 
+//Batch update
+            CustomerBatch cb = new CustomerBatch();
+
+            CustomerList create = new CustomerList();
+            create.Add(new Customer()
+            {
+                first_name = "first",
+                last_name = "last",
+                email = "first@lastsss.com",
+                username = "firstnlast",
+                password = "12345"
+            });
+
+            CustomerList update = new CustomerList();
+            update.Add(new Customer()
+            {
+                id = 4,
+                last_name = "xu2"
+            });
+
+            List<int> delete = new List<int>() { 8 };
+            cb.create = create;
+            cb.update = update;
+            cb.delete = delete;
+            var c = await wc.UpdateCustomers(cb);
+
+
 ```
