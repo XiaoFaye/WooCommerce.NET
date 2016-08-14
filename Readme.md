@@ -19,9 +19,11 @@ Usage
 ```cs
 //Legacy way of calling WooCommerce REST API
 //RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wc-api/v3/", "<WooCommerce Key>", "<WooCommerce Secret");
-RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/wc/v1/", "<WooCommerce Key>", "<WooCommerce Secret");
+//WooCommerceNET.WooCommerce.Legacy.WCObject wc = new WooCommerceNET.WooCommerce.Legacy.WCObject(rest);
 
+RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/wc/v1/", "<WooCommerce Key>", "<WooCommerce Secret");
 WCObject wc = new WCObject(rest);
+
 //Get all products
 var products = await wc.GetProducts();
 
@@ -49,30 +51,31 @@ var p = await wc.GetProducts(new Dictionary<string, string>() {
 
 
 //Batch update
-            CustomerBatch cb = new CustomerBatch();
+CustomerBatch cb = new CustomerBatch();
 
-            CustomerList create = new CustomerList();
-            create.Add(new Customer()
-            {
-                first_name = "first",
-                last_name = "last",
-                email = "first@lastsss.com",
-                username = "firstnlast",
-                password = "12345"
-            });
+CustomerList create = new CustomerList();
+create.Add(new Customer()
+{
+    first_name = "first",
+    last_name = "last",
+    email = "first@lastsss.com",
+    username = "firstnlast",
+    password = "12345"
+});
 
-            CustomerList update = new CustomerList();
-            update.Add(new Customer()
-            {
-                id = 4,
-                last_name = "xu2"
-            });
+CustomerList update = new CustomerList();
+update.Add(new Customer()
+{
+    id = 4,
+    last_name = "xu2"
+});
 
-            List<int> delete = new List<int>() { 8 };
-            cb.create = create;
-            cb.update = update;
-            cb.delete = delete;
-            var c = await wc.UpdateCustomers(cb);
+List<int> delete = new List<int>() { 8 };
+cb.create = create;
+cb.update = update;
+cb.delete = delete;
+
+var c = await wc.UpdateCustomers(cb);
 
 
 ```
