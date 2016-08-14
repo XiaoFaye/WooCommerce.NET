@@ -5,6 +5,18 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
+    public class ProductBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public ProductList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public ProductList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
+    }
+
     [CollectionDataContract]
     public class ProductList : List<Product>
     {
@@ -441,6 +453,18 @@ namespace WooCommerceNET.WooCommerce
         public string height { get; set; }
     }
 
+    public class CategoryBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public CategoryList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public CategoryList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
+    }
+
     [CollectionDataContract]
     public class CategoryList : List<Category>
     {
@@ -559,6 +583,17 @@ namespace WooCommerceNET.WooCommerce
         public int? position { get; set; }
     }
 
+    public class AttributeBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public AttributeList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public AttributeList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
+    }
 
     [CollectionDataContract]
     public class AttributeList : List<Attribute>
@@ -1125,6 +1160,18 @@ namespace WooCommerceNET.WooCommerce
         public string alt { get; set; }
     }
 
+    public class ShippingClassBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public ShippingClassList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public ShippingClassList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
+    }
+
     [CollectionDataContract]
     public class ShippingClassList : List<ShippingClass>
     {
@@ -1167,6 +1214,18 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? count { get; set; }
+    }
+
+    public class ProductTagBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public ProductTagList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public ProductTagList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
     }
 
     [CollectionDataContract]

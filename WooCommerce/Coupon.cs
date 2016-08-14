@@ -5,6 +5,18 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
+    public class CouponBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public CouponList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public CouponList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
+    }
+
     [CollectionDataContract]
     public class CouponList : List<Coupon>
     {

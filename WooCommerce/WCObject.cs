@@ -63,9 +63,9 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("customers/" + id.ToString(), RequestMethod.POST, c, parms);
         }
 
-        public async Task<string> UpdateCustomers(Customer[] cs, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateCustomers(CustomerBatch cb, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("customers/batch", RequestMethod.POST, cs, parms);
+            return await API.SendHttpClientRequest("customers/batch", RequestMethod.POST, cb, parms);
         }
 
         public async Task<string> DeleteCustomer(int id, Dictionary<string, string> parms = null)
@@ -114,9 +114,9 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("orders/" + id.ToString(), RequestMethod.PUT, c, parms);
         }
 
-        public async Task<string> UpdateOrders(Order[] cs, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateOrders(OrderBatch ob, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("orders/batch", RequestMethod.PUT, cs, parms);
+            return await API.SendHttpClientRequest("orders/batch", RequestMethod.PUT, ob, parms);
         }
 
         public async Task<string> DeleteOrder(int orderid, Dictionary<string, string> parms = null)
@@ -213,9 +213,9 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("products/" + productid.ToString(), RequestMethod.PUT, p, parms);
         }
 
-        public async Task<string> UpdateProducts(Product[] ps, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateProducts(ProductBatch pb, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("products/batch", RequestMethod.PUT, ps, parms);
+            return await API.SendHttpClientRequest("products/batch", RequestMethod.PUT, pb, parms);
         }
 
         public async Task<string> DeleteProduct(int productid, Dictionary<string, string> parms = null)
@@ -259,9 +259,9 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("products/categories/" + categoryid.ToString(), RequestMethod.PUT, pc, parms);
         }
 
-        public async Task<string> UpdateProductCategories(ProductCategory[] pc, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateProductCategories(CategoryBatch cb, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("products/categories/batch", RequestMethod.PUT, pc, parms);
+            return await API.SendHttpClientRequest("products/categories/batch", RequestMethod.PUT, cb, parms);
         }
 
         public async Task<string> DeleteProductCategory(int categoryid, Dictionary<string, string> parms = null)
@@ -295,9 +295,9 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("products/attributes/" + attributeid.ToString(), RequestMethod.PUT, pa, parms);
         }
 
-        public async Task<string> UpdateProductAttributes(ProductAttribute[] pa, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateProductAttributes(AttributeBatch ab, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("products/attributes/batch", RequestMethod.PUT, pa, parms);
+            return await API.SendHttpClientRequest("products/attributes/batch", RequestMethod.PUT, ab, parms);
         }
 
         public async Task<string> DeleteProductAttribute(int attributeid, Dictionary<string, string> parms = null)
@@ -363,9 +363,9 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("products/shipping_classes/" + shippingclassid.ToString(), RequestMethod.PUT, sc, parms);
         }
 
-        public async Task<string> UpdateProductShippingClasses(ShippingClass[] sc, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateProductShippingClasses(ShippingClassBatch sb, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("products/shipping_classes/batch", RequestMethod.PUT, sc, parms);
+            return await API.SendHttpClientRequest("products/shipping_classes/batch", RequestMethod.PUT, sb, parms);
         }
 
         public async Task<string> DeleteProductShippingClass(int shippingclassid, Dictionary<string, string> parms = null)
@@ -399,9 +399,9 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("products/tags/" + tagid.ToString(), RequestMethod.PUT, pt, parms);
         }
 
-        public async Task<string> UpdateProductTags(ProductTag[] pt, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateProductTags(ProductTagBatch pb, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("products/tags/batch", RequestMethod.PUT, pt, parms);
+            return await API.SendHttpClientRequest("products/tags/batch", RequestMethod.PUT, pb, parms);
         }
 
         public async Task<string> DeleteProductTag(int tagid, Dictionary<string, string> parms = null)
@@ -441,9 +441,9 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("coupons/" + couponid.ToString(), RequestMethod.PUT, c, parms);
         }
 
-        public async Task<string> UpdateCoupons(Coupon[] cs, Dictionary<string,string> parms = null)
+        public async Task<string> UpdateCoupons(CouponBatch cb, Dictionary<string,string> parms = null)
         {
-            return await API.SendHttpClientRequest("coupons/batch", RequestMethod.PUT, cs, parms);
+            return await API.SendHttpClientRequest("coupons/batch", RequestMethod.PUT, cb, parms);
         }
 
         public async Task<string> DeleteCoupon(int couponid, Dictionary<string,string> parms = null)
@@ -477,9 +477,9 @@ namespace WooCommerceNET.WooCommerce
             return await API.SendHttpClientRequest("taxes/" + taxrateid.ToString(), RequestMethod.PUT, t, parms);
         }
 
-        public async Task<string> UpdateTaxRates(TaxRate[] tr, Dictionary<string, string> parms = null)
+        public async Task<string> UpdateTaxRates(TaxRateBatch tb, Dictionary<string, string> parms = null)
         {
-            return await API.SendHttpClientRequest("taxes/batch", RequestMethod.PUT, tr, parms);
+            return await API.SendHttpClientRequest("taxes/batch", RequestMethod.PUT, tb, parms);
         }
 
         public async Task<string> DeleteTaxRate(int taxrateid, Dictionary<string, string> parms = null)

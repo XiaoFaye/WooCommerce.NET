@@ -4,6 +4,18 @@ using System.Runtime.Serialization;
 
 namespace WooCommerceNET.WooCommerce
 {
+    public class CustomerBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public CustomerList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public CustomerList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
+    }
+
     [CollectionDataContract]
     public class CustomerList : List<Customer>
     {
@@ -39,7 +51,7 @@ namespace WooCommerceNET.WooCommerce
         /// The email address for the customer. 
         /// mandatory
         /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        [DataMember(EmitDefaultValue = false)]
         public string email { get; set; }
 
         /// <summary>

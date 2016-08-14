@@ -5,6 +5,18 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
+    public class OrderBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public OrderList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public OrderList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
+    }
+
     [CollectionDataContract]
     public class OrderList : List<Order>
     {
