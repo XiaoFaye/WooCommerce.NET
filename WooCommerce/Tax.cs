@@ -3,6 +3,18 @@ using System.Runtime.Serialization;
 
 namespace WooCommerceNET.WooCommerce
 {
+    public class TaxRateBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public TaxRateList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public TaxRateList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
+    }
+
     [CollectionDataContract]
     public class TaxRateList : List<TaxRate>
     {

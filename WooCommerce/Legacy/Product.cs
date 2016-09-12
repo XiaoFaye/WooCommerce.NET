@@ -715,19 +715,22 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// Current variation price. This is setted from regular_price and sale_price 
         /// read-only
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "price")]
+        private object priceValue { get; set; }
         public decimal? price { get; set; }
 
         /// <summary>
         /// Variation regular price
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "regular_price")]
+        private object regular_priceValue { get; set; }
         public decimal? regular_price { get; set; }
 
         /// <summary>
         /// Variation sale price
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "sale_price")]
+        private object sale_priceValue { get; set; }
         public decimal? sale_price { get; set; }
 
         /// <summary>
