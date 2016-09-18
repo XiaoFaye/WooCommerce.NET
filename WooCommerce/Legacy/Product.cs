@@ -738,14 +738,14 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// write-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal? sale_price_dates_from { get; set; }
+        public string sale_price_dates_from { get; set; }
 
         /// <summary>
         /// Sets the sale end date. Date in the YYYY-MM-DD format 
         /// write-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal? sale_price_dates_to { get; set; }
+        public string sale_price_dates_to { get; set; }
 
         /// <summary>
         /// Show if the variation is taxable or not 

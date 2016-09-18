@@ -58,13 +58,15 @@ namespace WooCommerceNET
                 httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
                 if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 {
-                    httpWebRequest.Credentials = new NetworkCredential(wc_key, wc_secret);
+                    //httpWebRequest.Credentials = new NetworkCredential(wc_key, wc_secret);
+                    httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
                 }
 
                 // start the stream immediately
                 httpWebRequest.Method = method.ToString();
                 httpWebRequest.ContentType = "application/json";
                 httpWebRequest.AllowReadStreamBuffering = false;
+                
                 //if (wc_Proxy)
                 //    httpWebRequest.Proxy.Credentials = CredentialCache.DefaultCredentials;
                 //else

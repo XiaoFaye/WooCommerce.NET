@@ -887,7 +887,8 @@ namespace WooCommerceNET.WooCommerce
         /// <summary>
         /// Variation weight in decimal format.
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "weight")]
+        private object weightValue { get; set; }
         public decimal? weight { get; set; }
 
         /// <summary>
