@@ -414,7 +414,7 @@ namespace WooCommerceNET.WooCommerce
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string grouped_products { get; set; }
+        public List<int> grouped_products { get; set; }
 
         /// <summary>
         /// Menu order, used to custom sort products.
