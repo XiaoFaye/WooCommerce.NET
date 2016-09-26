@@ -3,6 +3,11 @@
 
 Version History
 -------------------
+* v0.5.2 Minor update
+  1. Fix https Authorization error.
+  2. Fix some desalinize errors.
+* v0.5.1 Minor update
+  1. Fix the batch update issue.
 * v0.5.0 Major update
   1. Supports up to Wordpress 4.5.3 and WooCommerce 2.6.2
   2. Supports latest WooCommerce Rest API and legacy (v1, v2 and v3) WooCommerce Rest API.
