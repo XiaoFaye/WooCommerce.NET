@@ -46,8 +46,8 @@ await wc.DeleteProduct(128);
 
 //Use filters
 var p = await wc.GetProducts(new Dictionary<string, string>() {
-                { "fields", "id,title,description,sale_price,price,in_stock,short_description,average_rating,images" },
-                { "filter[limit]", "15" } });
+                { "include", "10, 11, 12, 13, 14, 15" },
+                { "per_page", "15" } });
 
 
 //Batch update
