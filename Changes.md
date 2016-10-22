@@ -3,6 +3,11 @@
 
 Version History
 -------------------
+* v0.5.5 Minor update
+  1. Add Webhook.
+  2. Fix some desalinize errors.
+* v0.5.3 Minor update
+  1. Fix some desalinize errors.
 * v0.5.2 Minor update
   1. Fix https Authorization error.
   2. Fix some desalinize errors.

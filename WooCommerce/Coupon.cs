@@ -175,6 +175,6 @@ namespace WooCommerceNET.WooCommerce
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<int> used_by { get; set; }
+        public List<string> used_by { get; set; }
     }
 }

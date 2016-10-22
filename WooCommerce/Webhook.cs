@@ -4,6 +4,18 @@ using System.Runtime.Serialization;
 
 namespace WooCommerceNET.WooCommerce
 {
+    public class WebhookBatch
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public WebhookList create { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public WebhookList update { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public List<int> delete { get; set; }
+    }
+
     [CollectionDataContract]
     public class WebhookList : List<Webhook>
     {
@@ -37,7 +49,7 @@ namespace WooCommerceNET.WooCommerce
         /// Webhook topic, e.g. coupon.updated. See the complete list. 
         /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        [DataMember(EmitDefaultValue = false)]
         public string topic { get; set; }
 
         /// <summary>
@@ -65,7 +77,7 @@ namespace WooCommerceNET.WooCommerce
         /// The URL where the webhook payload is delivered. 
         /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        [DataMember(EmitDefaultValue = false)]
         public string delivery_url { get; set; }
 
         /// <summary>

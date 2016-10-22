@@ -241,7 +241,7 @@ namespace WooCommerceNET.WooCommerce
         /// Stock management at product level. Default is false.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public bool? manage_stock { get; set; }
+        public string manage_stock { get; set; }
 
         /// <summary>
         /// Stock quantity. If is a variable product this value will be used to control stock for all variations, unless you define stock at variation level.
@@ -843,7 +843,7 @@ namespace WooCommerceNET.WooCommerce
         /// Stock management at variation level. Default is false.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public bool? manage_stock { get; set; }
+        public string manage_stock { get; set; }
 
         /// <summary>
         /// Stock quantity. If is a variable variation this value will be used to control stock for all variations, unless you define stock at variation level.

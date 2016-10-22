@@ -461,9 +461,9 @@ namespace WooCommerceNET.WooCommerce
             return API.DeserializeJSon<TaxRateList>(json);
         }
 
-        public async Task<TaxRate> GetTaxRate(int couponid, Dictionary<string, string> parms = null)
+        public async Task<TaxRate> GetTaxRate(int taxRateid, Dictionary<string, string> parms = null)
         {
-            string json = await API.SendHttpClientRequest("taxes/" + couponid.ToString(), RequestMethod.GET, string.Empty, parms);
+            string json = await API.SendHttpClientRequest("taxes/" + taxRateid.ToString(), RequestMethod.GET, string.Empty, parms);
             return API.DeserializeJSon<TaxRate>(json);
         }
         
@@ -543,6 +543,26 @@ namespace WooCommerceNET.WooCommerce
         {
             string json = await API.SendHttpClientRequest("webhooks/" + id.ToString(), RequestMethod.GET, string.Empty, parms);
             return API.DeserializeJSon<Webhook>(json);
+        }
+
+        public async Task<string> PostWebhook(Webhook obj, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("webhooks", RequestMethod.POST, obj, parms);
+        }
+
+        public async Task<string> UpdateWebhook(int webhookid, Webhook obj, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("webhooks/" + webhookid.ToString(), RequestMethod.PUT, obj, parms);
+        }
+
+        public async Task<string> UpdateWebhooks(WebhookBatch obj, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("webhooks/batch", RequestMethod.PUT, obj, parms);
+        }
+
+        public async Task<string> DeleteWebhook(int webhookid, Dictionary<string, string> parms = null)
+        {
+            return await API.SendHttpClientRequest("webhooks/" + webhookid.ToString(), RequestMethod.DELETE, string.Empty, parms);
         }
 
         public async Task<WebhookDeliveryList> GetWebhookDeliveries(int webhookid, Dictionary<string,string> parms = null)
