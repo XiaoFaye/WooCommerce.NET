@@ -3,6 +3,9 @@
 
 Version History
 -------------------
+* v0.5.6 Minor update
+  1. Fix woocommerce_rest_authentication_error issue when using parameters.
+  2. Fix some desalinize errors.
 * v0.5.5 Minor update
   1. Add Webhook.
   2. Fix some desalinize errors.

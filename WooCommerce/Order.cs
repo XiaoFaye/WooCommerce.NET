@@ -401,7 +401,7 @@ namespace WooCommerceNET.WooCommerce
     }
 
     [DataContract]
-    public class TaxItem
+    public class TaxItem : JsonObject
     {
         /// <summary>
         /// tax item id
@@ -412,13 +412,15 @@ namespace WooCommerceNET.WooCommerce
         /// <summary>
         /// tax item total
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "total")]
+        private object totalValue { get; set; }
         public decimal? total { get; set; }
 
         /// <summary>
         /// tax item subtotal
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "subtotal")]
+        private object subtotalValue { get; set; }
         public decimal? subtotal { get; set; }
     }
 
@@ -431,7 +433,7 @@ namespace WooCommerceNET.WooCommerce
     }
 
     [DataContract]
-    public class ShippingLine
+    public class ShippingLine : JsonObject
     {
         /// <summary>
         /// Item ID. 
@@ -456,14 +458,16 @@ namespace WooCommerceNET.WooCommerce
         /// <summary>
         /// Line total (after discounts).
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "total")]
+        private object totalValue { get; set; }
         public decimal? total { get; set; }
 
         /// <summary>
         /// Line total tax (after discounts). 
         /// read-only
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "total_tax")]
+        private object total_taxValue { get; set; }
         public decimal? total_tax { get; set; }
 
         /// <summary>
@@ -482,7 +486,7 @@ namespace WooCommerceNET.WooCommerce
         public List<TaxLine> tax_lines { get; set; }
     }
 
-    public class TaxLine
+    public class TaxLine : JsonObject
     {
         /// <summary>
         /// Item ID. 
@@ -523,14 +527,16 @@ namespace WooCommerceNET.WooCommerce
         /// Tax total (not including shipping taxes). 
         /// read-only
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "tax_total")]
+        private object tax_totalValue { get; set; }
         public decimal? tax_total { get; set; }
 
         /// <summary>
         /// Shipping tax total. 
         /// read-only
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "shipping_tax_total")]
+        private object shipping_tax_totalValue { get; set; }
         public decimal? shipping_tax_total { get; set; }
     }
 
@@ -543,7 +549,7 @@ namespace WooCommerceNET.WooCommerce
     }
 
     [DataContract]
-    public class FeeLine
+    public class FeeLine : JsonObject
     {
         /// <summary>
         /// Item ID. 
@@ -575,13 +581,15 @@ namespace WooCommerceNET.WooCommerce
         /// <summary>
         /// Line total (after discounts).
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "total")]
+        private object totalValue { get; set; }
         public decimal? total { get; set; }
 
         /// <summary>
         /// Line total tax (after discounts).
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "total_tax")]
+        private object total_taxValue { get; set; }
         public decimal? total_tax { get; set; }
 
         /// <summary>
@@ -601,7 +609,7 @@ namespace WooCommerceNET.WooCommerce
     }
 
     [DataContract]
-    public class CouponLine
+    public class CouponLine : JsonObject
     {
         /// <summary>
         /// Item ID. 
@@ -614,21 +622,23 @@ namespace WooCommerceNET.WooCommerce
         /// Coupon code. 
         /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        [DataMember(EmitDefaultValue = false)]
         public string code { get; set; }
 
         /// <summary>
         /// Discount total. 
         /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        [DataMember(EmitDefaultValue = false, Name = "discount")]
+        private object discountValue { get; set; }
         public decimal? discount { get; set; }
 
         /// <summary>
         /// Discount total tax. 
         /// read-only
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember(EmitDefaultValue = false, Name = "discount_tax")]
+        private object discount_taxValue { get; set; }
         public decimal? discount_tax { get; set; }
     }
 
@@ -680,7 +690,7 @@ namespace WooCommerceNET.WooCommerce
     }
 
     [DataContract]
-    public class OrderRefund
+    public class OrderRefund : JsonObject
     {
         /// <summary>
         /// Unique identifier for the resource. 
@@ -700,7 +710,8 @@ namespace WooCommerceNET.WooCommerce
         /// Refund amount. 
         /// required
         /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = true)]
+        [DataMember(EmitDefaultValue = false, Name = "amount")]
+        private object amountValue { get; set; }
         public decimal? amount { get; set; }
 
         /// <summary>

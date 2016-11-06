@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -145,31 +144,27 @@ namespace WooCommerceNET
                 foreach (var p in parms)
                     dic.Add(p.Key, p.Value);
 
-            string base_request_uri = System.Uri.EscapeDataString(wc_url + endpoint).Replace("%2f", "%2F").Replace("%3a", "%3A");
+            string base_request_uri = Uri.EscapeDataString(wc_url + endpoint).Replace("%2f", "%2F").Replace("%3a", "%3A");
             string stringToSign = string.Empty;
 
             foreach (var parm in dic.OrderBy(x => x.Key))
-                stringToSign += parm.Key + "%3D" + parm.Value + "%26";
+                stringToSign += parm.Key + "%3D" + Uri.EscapeDataString(Uri.EscapeDataString(parm.Value)) + "%26";
 
             base_request_uri = method.ToUpper() + "&" + base_request_uri + "&" + stringToSign.Substring(0, stringToSign.Length - 3);
-
-            base_request_uri = base_request_uri.Replace(",", "%252C").Replace("[", "%255B").Replace("]", "%255D");
-
+            
             Common.DebugInfo.Append(base_request_uri);
 
-            stringToSign += "oauth_signature%3D" + Common.GetSHA256(wc_secret, base_request_uri).Replace(",", "%252C").Replace("[", "%255B").Replace("]", "%255D").Replace("=", "%3D");
+            stringToSign += "oauth_signature%3D" + Common.GetSHA256(wc_secret, base_request_uri);
 
-            dic.Add("oauth_signature", Common.GetSHA256(wc_secret, base_request_uri).Replace(",", "%252C").Replace("[", "%255B").Replace("]", "%255D").Replace("=", "%3D"));
+            dic.Add("oauth_signature", Common.GetSHA256(wc_secret, base_request_uri));
 
             string parmstr = string.Empty;
             foreach (var parm in dic)
-                parmstr += parm.Key + "=" + System.Uri.EscapeDataString(parm.Value) + "&";
-
+                parmstr += parm.Key + "=" + Uri.EscapeDataString(parm.Value) + "&";
 
             return endpoint + "?" + parmstr.TrimEnd('&');
-
         }
-
+        
         private async Task<string> GetStreamContent(Stream s, string charset)
         {
             StringBuilder sb = new StringBuilder();

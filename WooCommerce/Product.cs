@@ -713,7 +713,7 @@ namespace WooCommerceNET.WooCommerce
     }
 
     [DataContract]
-    public class Variation
+    public class Variation : JsonObject
     {
         /// <summary>
         /// Variation ID. 
@@ -843,7 +843,7 @@ namespace WooCommerceNET.WooCommerce
         /// Stock management at variation level. Default is false.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string manage_stock { get; set; }
+        public bool? manage_stock { get; set; }
 
         /// <summary>
         /// Stock quantity. If is a variable variation this value will be used to control stock for all variations, unless you define stock at variation level.
@@ -1054,28 +1054,8 @@ namespace WooCommerceNET.WooCommerce
     }
 
     [DataContract]
-    public class ProductCategory
+    public class ProductCategory : Category
     {
-        /// <summary>
-        /// Unique identifier for the resource. 
-        /// read-only
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
-
-        /// <summary>
-        /// Category name. 
-        /// required
-        /// </summary>
-        [DataMember(EmitDefaultValue = false, IsRequired = true)]
-        public string name { get; set; }
-
-        /// <summary>
-        /// An alphanumeric identifier for the resource unique to its type.
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string slug { get; set; }
-
         /// <summary>
         /// The id for the parent of the resource.
         /// </summary>
