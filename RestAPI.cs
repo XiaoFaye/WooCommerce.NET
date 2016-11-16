@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -206,10 +207,10 @@ namespace WooCommerceNET
 
         public T DeserializeJSon<T>(string jsonString)
         {
-            dynamic dT = typeof(T);
-
+            Type dT = typeof(T);
+            
             if (dT.Name.EndsWith("List"))
-                dT = dT.DeclaredProperties[0].PropertyType.GenericTypeArguments[0];
+                dT = dT.GetTypeInfo().DeclaredProperties.First().PropertyType.GenericTypeArguments[0];
 
             DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
             {
