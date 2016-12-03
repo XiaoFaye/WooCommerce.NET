@@ -19,17 +19,30 @@ namespace WooCommerceNET
         private string wc_secret = "";
         //private bool wc_Proxy = false;
 
-        public RestAPI(string url, string key, string secret)//, bool useProxy = false)
+        private bool AuthorizedHeader { get; set; }
+
+        private Func<string, string> jsonSeFilter;
+        private Func<string, string> jsonDeseFilter;
+        
+
+        public RestAPI(string url, string key, string secret, bool authorizedHeader = true, 
+                            Func<string, string> jsonSerializeFilter = null, Func<string, string> jsonDeserializeFilter = null)//, bool useProxy = false)
         {
             wc_url = url;
             wc_key = key;
+            AuthorizedHeader = authorizedHeader;
             if ((url.ToLower().Contains("wc-api/v3") || !IsLegacy) && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 wc_secret = secret + "&";
             else
                 wc_secret = secret;
 
+            jsonSeFilter = jsonSerializeFilter;
+            jsonDeseFilter = jsonDeserializeFilter;
+
             //wc_Proxy = useProxy;
         }
+
+        
 
         public bool IsLegacy
         {
@@ -55,11 +68,13 @@ namespace WooCommerceNET
             HttpWebRequest httpWebRequest = null;
             try
             {
-                httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
                 if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 {
-                    //httpWebRequest.Credentials = new NetworkCredential(wc_key, wc_secret);
-                    httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
+                    if (AuthorizedHeader)
+                        httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
+                    else
+                        httpWebRequest.Credentials = new NetworkCredential(wc_key, wc_secret);
                 }
 
                 // start the stream immediately
@@ -74,11 +89,11 @@ namespace WooCommerceNET
                 
                 if (requestBody.GetType() != typeof(string))
                 {
-                    var buffer = UTF8Encoding.UTF8.GetBytes(SerializeJSon(requestBody));
+                    var buffer = Encoding.UTF8.GetBytes(SerializeJSon(requestBody));
                     Stream dataStream = await httpWebRequest.GetRequestStreamAsync();
                     dataStream.Write(buffer, 0, buffer.Length);
                 }
-
+                
                 // asynchronously get a response
                 WebResponse wr = await httpWebRequest.GetResponseAsync();
                 return await GetStreamContent(wr.GetResponseStream(), wr.ContentType.Split('=')[1]);
@@ -202,11 +217,17 @@ namespace WooCommerceNET
 
             stream.Dispose();
 
+            if (jsonSeFilter != null)
+                jsonString = jsonSeFilter.Invoke(jsonString);
+
             return jsonString;
         }
 
         public T DeserializeJSon<T>(string jsonString)
         {
+            if (jsonDeseFilter != null)
+                jsonString = jsonDeseFilter.Invoke(jsonString);
+
             Type dT = typeof(T);
             
             if (dT.Name.EndsWith("List"))

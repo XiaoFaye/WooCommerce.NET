@@ -3,6 +3,13 @@
 
 Version History
 -------------------
+* v0.6.0 Major update
+  1. Add generic WCObject which allows you to use customize object class.
+  2. Use generic batch update object.
+  3. Add jsonSerializeFilter and jsonDeserializeFilter parameters in RestAPI, which allows you to manipulate the json string. What we have found is that in some server, the json string from WooCommerce has a byte order mark (BOM) and can't be deserlized.
+  4. Add authorizedHeader parameter in RestAPI, which allows you to choose how to pass the username & password. What we have found is that in some server, these information can't be pass in request header.
+  5. Use InvariantCulture in decimal.Parse to prevent deserlized error.
+  6. Fix GetCustomerByEmail not working issue.
 * v0.5.6 Minor update
   1. Fix woocommerce_rest_authentication_error issue when using parameters.
   2. Fix some desalinize errors.

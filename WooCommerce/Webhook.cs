@@ -1,27 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
-    public class WebhookBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public WebhookList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public WebhookList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class WebhookList : List<Webhook>
-    {
-        [DataMember]
-        public List<Webhook> webhooks { get; set; }
-    }
+    public class WebhookBatch : BatchObject<Webhook> { }
 
     [DataContract]
     public class Webhook
@@ -102,14 +86,6 @@ namespace WooCommerceNET.WooCommerce
         public DateTime? date_modified { get; set; }
     }
 
-
-    [CollectionDataContract]
-    public class WebhookDeliveryList : List<WebhookDelivery>
-    {
-        [DataMember]
-        public List<Webhook> webhookdeliveries { get; set; }
-    }
-
     [DataContract]
     public class WebhookDelivery
     {
@@ -146,7 +122,7 @@ namespace WooCommerceNET.WooCommerce
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public RequestHeaderList request_headers { get; set; }
+        public List<RequestHeader> request_headers { get; set; }
 
         /// <summary>
         /// Request body. 
@@ -174,7 +150,7 @@ namespace WooCommerceNET.WooCommerce
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public ResponseHeaderList response_headers { get; set; }
+        public List<ResponseHeader> response_headers { get; set; }
 
         /// <summary>
         /// The response body from the receiving server. 
@@ -189,13 +165,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public DateTime? date_created { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class RequestHeaderList : List<RequestHeader>
-    {
-        [DataMember]
-        public List<RequestHeader> requestHeaders { get; set; }
     }
 
     [DataContract]
@@ -249,13 +218,6 @@ namespace WooCommerceNET.WooCommerce
         [DataMember(Name = "X-WC-Webhook-Delivery-ID", EmitDefaultValue = false)]
         public int XWCWebhookDeliveryID { get; set; }
 
-    }
-
-    [CollectionDataContract]
-    public class ResponseHeaderList : List<ResponseHeader>
-    {
-        [DataMember]
-        public List<ResponseHeader> responseHeaders { get; set; }
     }
 
     [DataContract]

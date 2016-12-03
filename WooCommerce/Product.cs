@@ -5,25 +5,7 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
-    public class ProductBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public ProductList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public ProductList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class ProductList : List<Product>
-    {
-        [DataMember]
-        public List<Product> products { get; set; }
-    }
-
+    public class ProductBatch : BatchObject<Product> { }
 
     [DataContract]
     public class Product : JsonObject
@@ -193,7 +175,7 @@ namespace WooCommerceNET.WooCommerce
         /// List of downloadable files. See Downloads properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public DownloadList downloads { get; set; }
+        public List<Download> downloads { get; set; }
 
         /// <summary>
         /// Amount of times the product can be downloaded, the -1 values means unlimited re-downloads. Default is -1.
@@ -293,7 +275,7 @@ namespace WooCommerceNET.WooCommerce
         /// Product dimensions. See Dimensions properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public DimensionList dimensions { get; set; }
+        public List<Dimension> dimensions { get; set; }
 
         /// <summary>
         /// Shows if the product need to be shipped. 
@@ -377,37 +359,37 @@ namespace WooCommerceNET.WooCommerce
         /// List of categories. See Categories properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public CategoryList categories { get; set; }
+        public List<Category> categories { get; set; }
 
         /// <summary>
         /// List of tags. See Tags properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public TagList tags { get; set; }
+        public List<Tag> tags { get; set; }
 
         /// <summary>
         /// List of images. See Images properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public ImageList images { get; set; }
+        public List<Image> images { get; set; }
 
         /// <summary>
         /// List of attributes. See Attributes properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public AttributeList attributes { get; set; }
+        public List<Attribute> attributes { get; set; }
 
         /// <summary>
         /// Defaults variation attributes, used only for variations and pre-selecte attributes on the frontend. See Default Attributes properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public DefaultAttributeList default_attributes { get; set; }
+        public List<DefaultAttribute> default_attributes { get; set; }
 
         /// <summary>
         /// List of variations. See Variations properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public VariationList variations { get; set; }
+        public List<Variation> variations { get; set; }
 
         /// <summary>
         /// List of grouped products ID, only for group type products. 
@@ -421,14 +403,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? menu_order { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class DimensionList : List<Dimension>
-    {
-        [DataMember]
-        public List<Dimension> dimensions { get; set; }
     }
 
     [DataContract]
@@ -453,24 +427,7 @@ namespace WooCommerceNET.WooCommerce
         public string height { get; set; }
     }
 
-    public class CategoryBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public CategoryList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public CategoryList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class CategoryList : List<Category>
-    {
-        [DataMember]
-        public List<Category> categorys { get; set; }
-    }
+    public class CategoryBatch : BatchObject<Category> { }
 
     [DataContract]
     public class Category
@@ -496,13 +453,6 @@ namespace WooCommerceNET.WooCommerce
         public string slug { get; set; }
     }
 
-    [CollectionDataContract]
-    public class TagList : List<Tag>
-    {
-        [DataMember]
-        public List<Tag> tags { get; set; }
-    }
-
     [DataContract]
     public class Tag
     {
@@ -525,14 +475,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string slug { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class ImageList : List<Image>
-    {
-        [DataMember]
-        public List<Image> images { get; set; }
     }
 
     [DataContract]
@@ -583,24 +525,7 @@ namespace WooCommerceNET.WooCommerce
         public int? position { get; set; }
     }
 
-    public class AttributeBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public AttributeList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public AttributeList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class AttributeList : List<Attribute>
-    {
-        [DataMember]
-        public List<Attribute> attributes { get; set; }
-    }
+    public class AttributeBatch : BatchObject<Attribute> { }
 
     [DataContract]
     public class Attribute
@@ -642,14 +567,6 @@ namespace WooCommerceNET.WooCommerce
         public List<string> options { get; set; }
     }
 
-
-    [CollectionDataContract]
-    public class DefaultAttributeList : List<DefaultAttribute>
-    {
-        [DataMember]
-        public List<DefaultAttribute> default_attributes { get; set; }
-    }
-
     [DataContract]
     public class DefaultAttribute
     {
@@ -673,14 +590,6 @@ namespace WooCommerceNET.WooCommerce
 
     }
 
-
-    [CollectionDataContract]
-    public class DownloadList : List<Download>
-    {
-        [DataMember]
-        public List<Download> downloads { get; set; }
-    }
-
     [DataContract]
     public class Download
     {
@@ -702,14 +611,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string file { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class VariationList : List<Variation>
-    {
-        [DataMember]
-        public List<Variation> variations { get; set; }
     }
 
     [DataContract]
@@ -813,7 +714,7 @@ namespace WooCommerceNET.WooCommerce
         /// List of downloadable files. See Downloads properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public DownloadList downloads { get; set; }
+        public List<Download> downloads { get; set; }
 
         /// <summary>
         /// Amount of times the variation can be downloaded, the -1 values means unlimited re-downloads. Default is -1.
@@ -895,7 +796,7 @@ namespace WooCommerceNET.WooCommerce
         /// Variation dimensions. See Dimensions properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public DimensionList dimensions { get; set; }
+        public List<Dimension> dimensions { get; set; }
 
         /// <summary>
         /// Shipping class slug. Shipping classes are used by certain shipping methods to group similar products.
@@ -914,20 +815,13 @@ namespace WooCommerceNET.WooCommerce
         /// Variation featured image. Only position 0 will be used. See Images properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public ImageList image { get; set; }
+        public List<Image> image { get; set; }
 
         /// <summary>
         /// List of variation attributes. See Variation Attributes properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public VariationAttributeList attributes { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class VariationAttributeList : List<VariationAttribute>
-    {
-        [DataMember]
-        public List<VariationAttribute> variation_attributes { get; set; }
+        public List<VariationAttribute> attributes { get; set; }
     }
 
     [DataContract]
@@ -950,13 +844,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string option { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class ProductAttributeList : List<ProductAttribute>
-    {
-        [DataMember]
-        public List<ProductAttribute> product_attributes { get; set; }
     }
 
     [DataContract]
@@ -1001,13 +888,6 @@ namespace WooCommerceNET.WooCommerce
         public bool? has_archives { get; set; }
     }
 
-    [CollectionDataContract]
-    public class ProductAttributeTermList : List<ProductAttributeTerm>
-    {
-        [DataMember]
-        public List<ProductAttributeTerm> product_attribute_terms { get; set; }
-    }
-
     [DataContract]
     public class ProductAttributeTerm
     {
@@ -1045,14 +925,6 @@ namespace WooCommerceNET.WooCommerce
         public int? count { get; set; }
     }
 
-
-    [CollectionDataContract]
-    public class ProductCategoryList : List<ProductCategory>
-    {
-        [DataMember]
-        public List<ProductCategory> product_categories { get; set; }
-    }
-
     [DataContract]
     public class ProductCategory : Category
     {
@@ -1078,7 +950,7 @@ namespace WooCommerceNET.WooCommerce
         /// Image data. See Category Image properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public ProductCategoryImageList image { get; set; }
+        public List<ProductCategoryImage> image { get; set; }
 
         /// <summary>
         /// Menu order, used to custom sort the resource.
@@ -1092,14 +964,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? count { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class ProductCategoryImageList : List<ProductCategoryImage>
-    {
-        [DataMember]
-        public List<ProductCategoryImage> product_category_images { get; set; }
     }
 
     [DataContract]
@@ -1144,24 +1008,7 @@ namespace WooCommerceNET.WooCommerce
         public string alt { get; set; }
     }
 
-    public class ShippingClassBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public ShippingClassList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public ShippingClassList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class ShippingClassList : List<ShippingClass>
-    {
-        [DataMember]
-        public List<ShippingClass> product_shippingclass { get; set; }
-    }
+    public class ShippingClassBatch : BatchObject<ShippingClass> { }
 
     [DataContract]
     public class ShippingClass
@@ -1200,24 +1047,7 @@ namespace WooCommerceNET.WooCommerce
         public int? count { get; set; }
     }
 
-    public class ProductTagBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public ProductTagList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public ProductTagList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class ProductTagList : List<ProductTag>
-    {
-        [DataMember]
-        public List<ProductTag> product_tags { get; set; }
-    }
+    public class ProductTagBatch : BatchObject<ProductTag> { }
 
     [DataContract]
     public class ProductTag
@@ -1254,14 +1084,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? count { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class ProductReviewList : List<ProductReview>
-    {
-        [DataMember]
-        public List<ProductReview> product_reviews { get; set; }
     }
 
     [DataContract]

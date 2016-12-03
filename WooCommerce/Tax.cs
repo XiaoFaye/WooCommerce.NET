@@ -1,26 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
+using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
-    public class TaxRateBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public TaxRateList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public TaxRateList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class TaxRateList : List<TaxRate>
-    {
-        [DataMember]
-        public List<TaxRate> taxrates { get; set; }
-    }
+    public class TaxRateBatch : BatchObject<TaxRate> { }
 
     [DataContract]
     public class TaxRate
@@ -98,13 +82,6 @@ namespace WooCommerceNET.WooCommerce
         [DataMember(Name = "class", EmitDefaultValue = false)]
         public string _class{ get; set; }
 }
-
-    [CollectionDataContract]
-    public class TaxClassList : List<TaxClass>
-    {
-        [DataMember]
-        public List<TaxClass> taxclasses { get; set; }
-    }
 
     [DataContract]
     public class TaxClass

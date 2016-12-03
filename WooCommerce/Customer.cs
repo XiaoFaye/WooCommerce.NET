@@ -1,27 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
+using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
-    public class CustomerBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public CustomerList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public CustomerList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class CustomerList : List<Customer>
-    {
-        [DataMember]
-        public List<Customer> customers { get; set; }
-    }
+    public class CustomerBatch : BatchObject<Customer> { }
 
     [DataContract]
     public class Customer
@@ -118,13 +101,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public ShippingAddress shipping { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class LastOrderList : List<LastOrder>
-    {
-        [DataMember]
-        public List<LastOrder> lastOrders { get; set; }
     }
 
     [DataContract]

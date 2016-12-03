@@ -5,24 +5,7 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
-    public class CouponBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public CouponList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public CouponList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class CouponList : List<Coupon>
-    {
-        [DataMember]
-        public List<Coupon> coupons { get; set; }
-    }
+    public class CouponBatch : BatchObject<Coupon> { }
 
     [DataContract]
     public class Coupon : JsonObject

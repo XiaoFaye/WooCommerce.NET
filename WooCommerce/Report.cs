@@ -7,13 +7,6 @@ using System.Threading.Tasks;
 
 namespace WooCommerceNET.WooCommerce
 {
-    [CollectionDataContract]
-    public class ReportList : List<Report>
-    {
-        [DataMember]
-        public List<Report> reports { get; set; }
-    }
-
     [DataContract]
     public class Report
     {
@@ -28,13 +21,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string description { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class SalesReportList : List<SalesReport>
-    {
-        [DataMember]
-        public List<SalesReport> sales_reports { get; set; }
     }
 
     [DataContract]

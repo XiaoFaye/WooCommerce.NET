@@ -5,24 +5,7 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
-    public class OrderBatch
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public OrderList create { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public OrderList update { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public List<int> delete { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class OrderList : List<Order>
-    {
-        [DataMember]
-        public List<Order> orders { get; set; }
-    }
+    public class OrderBatch : BatchObject<Order> { }
 
     [DataContract]
     public class Order : JsonObject
@@ -233,39 +216,32 @@ namespace WooCommerceNET.WooCommerce
         /// Line items data. See Line Items properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public LineItemList line_items { get; set; }
+        public List<LineItem> line_items { get; set; }
 
         /// <summary>
         /// Tax lines data. See Tax Lines properties. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public TaxLineList tax_lines { get; set; }
+        public List<TaxLine> tax_lines { get; set; }
 
         /// <summary>
         /// Shipping lines data. See Shipping Lines properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public ShippingLineList shipping_lines { get; set; }
+        public List<ShippingLine> shipping_lines { get; set; }
 
         /// <summary>
         /// Fee lines data. See Fee Lines Properites.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public FeeLineList fee_lines { get; set; }
+        public List<FeeLine> fee_lines { get; set; }
 
         /// <summary>
         /// Coupons line data. See Coupon Lines properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public CouponLineList coupon_lines { get; set; }
-    }
-    
-    [CollectionDataContract]
-    public class LineItemList : List<LineItem>
-    {
-        [DataMember]
-        public List<LineItem> line_items { get; set; }
+        public List<CouponLine> coupon_lines { get; set; }
     }
 
     [DataContract]
@@ -353,22 +329,14 @@ namespace WooCommerceNET.WooCommerce
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public TaxItemList taxes { get; set; }
+        public List<TaxItem> taxes { get; set; }
 
         /// <summary>
         /// Line item meta data with key, label and value. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public MetaItemList meta { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class MetaItemList : List<MetaItem>
-    {
-        [DataMember]
-        public List<MetaItem> metas { get; set; }
+        public List<MetaItem> meta { get; set; }
     }
 
     [DataContract]
@@ -393,13 +361,6 @@ namespace WooCommerceNET.WooCommerce
         public string value { get; set; }
     }
 
-    [CollectionDataContract]
-    public class TaxItemList : List<TaxItem>
-    {
-        [DataMember]
-        public List<TaxItem> taxes { get; set; }
-    }
-
     [DataContract]
     public class TaxItem : JsonObject
     {
@@ -422,14 +383,6 @@ namespace WooCommerceNET.WooCommerce
         [DataMember(EmitDefaultValue = false, Name = "subtotal")]
         private object subtotalValue { get; set; }
         public decimal? subtotal { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class ShippingLineList : List<ShippingLine>
-    {
-        [DataMember]
-        public List<ShippingLine> shipping_lines { get; set; }
     }
 
     [DataContract]
@@ -475,15 +428,7 @@ namespace WooCommerceNET.WooCommerce
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public TaxItemList taxes { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class TaxLineList : List<TaxLine>
-    {
-        [DataMember]
-        public List<TaxLine> tax_lines { get; set; }
+        public List<TaxItem> taxes { get; set; }
     }
 
     public class TaxLine : JsonObject
@@ -540,14 +485,6 @@ namespace WooCommerceNET.WooCommerce
         public decimal? shipping_tax_total { get; set; }
     }
 
-
-    [CollectionDataContract]
-    public class FeeLineList : List<FeeLine>
-    {
-        [DataMember]
-        public List<FeeLine> fee_lines { get; set; }
-    }
-
     [DataContract]
     public class FeeLine : JsonObject
     {
@@ -597,15 +534,7 @@ namespace WooCommerceNET.WooCommerce
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public TaxItemList taxes { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class CouponLineList : List<CouponLine>
-    {
-        [DataMember]
-        public List<CouponLine> coupon_lines { get; set; }
+        public List<TaxItem> taxes { get; set; }
     }
 
     [DataContract]
@@ -642,14 +571,6 @@ namespace WooCommerceNET.WooCommerce
         public decimal? discount_tax { get; set; }
     }
 
-
-    [CollectionDataContract]
-    public class OrderNoteList : List<OrderNote>
-    {
-        [DataMember]
-        public List<OrderNote> order_notes { get; set; }
-    }
-
     [DataContract]
     public class OrderNote
     {
@@ -679,14 +600,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public bool? customer_note { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class OrderRefundList : List<OrderRefund>
-    {
-        [DataMember]
-        public List<OrderRefund> order_refunds { get; set; }
     }
 
     [DataContract]
@@ -724,14 +637,7 @@ namespace WooCommerceNET.WooCommerce
         /// Line items data. See Refunds Line Items properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public OrderRefundLineList line_items { get; set; }
-    }
-
-    [CollectionDataContract]
-    public class OrderRefundLineList : List<OrderRefundLine>
-    {
-        [DataMember]
-        public List<OrderRefundLine> orderrefundlines { get; set; }
+        public List<OrderRefundLine> line_items { get; set; }
     }
 
     [DataContract]
@@ -819,13 +725,13 @@ namespace WooCommerceNET.WooCommerce
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public TaxItemList taxes { get; set; }
+        public List<TaxItem> taxes { get; set; }
 
         /// <summary>
         /// Line item meta data with key, label and value. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public MetaItemList meta { get; set; }
+        public List<MetaItem> meta { get; set; }
     }
 }

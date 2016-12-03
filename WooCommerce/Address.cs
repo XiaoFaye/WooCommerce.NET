@@ -1,15 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace WooCommerceNET.WooCommerce
 {
-    [CollectionDataContract]
-    public class BillingAddressList : List<BillingAddress>
-    {
-        [DataMember]
-        public List<BillingAddress> billing_address { get; set; }
-    }
-
     [DataContract]
     public class BillingAddress
     {
@@ -78,14 +70,6 @@ namespace WooCommerceNET.WooCommerce
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string phone { get; set; }
-    }
-
-
-    [CollectionDataContract]
-    public class ShippingAddressList : List<ShippingAddress>
-    {
-        [DataMember]
-        public List<ShippingAddress> shipping_address { get; set; }
     }
 
     [DataContract]
