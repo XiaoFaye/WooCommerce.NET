@@ -275,7 +275,7 @@ namespace WooCommerceNET.WooCommerce
         /// Product dimensions. See Dimensions properties.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<Dimension> dimensions { get; set; }
+        public Dimension dimensions { get; set; }
 
         /// <summary>
         /// Shows if the product need to be shipped. 
