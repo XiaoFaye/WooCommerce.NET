@@ -10,6 +10,7 @@ Version History
   4. Add authorizedHeader parameter in RestAPI, which allows you to choose how to pass the username & password. What we have found is that in some server, these information can't be pass in request header.
   5. Use InvariantCulture in decimal.Parse to prevent deserlized error.
   6. Fix GetCustomerByEmail not working issue.
+  7. Change data type of dimensions from List of Dimension to Dimension in Product.cs so it will work correctly.
 * v0.5.6 Minor update
   1. Fix woocommerce_rest_authentication_error issue when using parameters.
   2. Fix some desalinize errors.
