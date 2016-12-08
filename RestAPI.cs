@@ -23,10 +23,22 @@ namespace WooCommerceNET
 
         private Func<string, string> jsonSeFilter;
         private Func<string, string> jsonDeseFilter;
-        
+        private Action<HttpWebRequest> webRequestFilter;
 
+        /// <summary>
+        /// Initialize the RestAPI object
+        /// </summary>
+        /// <param name="url">WooCommerce REST API URL, e.g.: http://yourstore/wp-json/wc/v1/ </param>
+        /// <param name="key">WooCommerce REST API Key</param>
+        /// <param name="secret">WooCommerce REST API Secret</param>
+        /// <param name="authorizedHeader">WHEN using HTTPS, do you prefer to send the Credentials in HTTP HEADER?</param>
+        /// <param name="jsonSerializeFilter">Provide a function to modify the json string after serilizing.</param>
+        /// <param name="jsonDeserializeFilter">Provide a function to modify the json string before deserilizing.</param>
+        /// <param name="requestFilter">Provide a function to modify the HttpWebRequest object.</param>
         public RestAPI(string url, string key, string secret, bool authorizedHeader = true, 
-                            Func<string, string> jsonSerializeFilter = null, Func<string, string> jsonDeserializeFilter = null)//, bool useProxy = false)
+                            Func<string, string> jsonSerializeFilter = null, 
+                            Func<string, string> jsonDeserializeFilter = null, 
+                            Action<HttpWebRequest> requestFilter = null)//, bool useProxy = false)
         {
             wc_url = url;
             wc_key = key;
@@ -38,6 +50,7 @@ namespace WooCommerceNET
 
             jsonSeFilter = jsonSerializeFilter;
             jsonDeseFilter = jsonDeserializeFilter;
+            webRequestFilter = requestFilter;
 
             //wc_Proxy = useProxy;
         }
@@ -76,6 +89,9 @@ namespace WooCommerceNET
                     else
                         httpWebRequest.Credentials = new NetworkCredential(wc_key, wc_secret);
                 }
+
+                if (webRequestFilter != null)
+                    webRequestFilter.Invoke(httpWebRequest);
 
                 // start the stream immediately
                 httpWebRequest.Method = method.ToString();
