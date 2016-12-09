@@ -10,9 +10,10 @@ Version History
   4. Add authorizedHeader parameter in RestAPI, which allows you to choose how to pass the Credentials. What we have found is that in some server, these information can't be pass in request header.
   5. Add webRequestFilter in RestAPI, which allows you to modify the HttpWebRequest object.
   6. Add HttpWebRequestExtensions for setting restricted Headers.
-  7. Use InvariantCulture in decimal.Parse to prevent deserlized error.
-  8. Fix GetCustomerByEmail not working issue.
-  9. Change data type of dimensions from List<Dimension> to Dimension in Product.cs
+  7. Only set Content Type when this is a request body.
+  8. Use InvariantCulture in decimal.Parse to prevent deserlized error.
+  9. Fix GetCustomerByEmail not working issue.
+  10. Change data type of dimensions from List<Dimension> to Dimension in Product.cs
 * v0.5.6 Minor update
   1. Fix woocommerce_rest_authentication_error issue when using parameters.
   2. Fix some desalinize errors.

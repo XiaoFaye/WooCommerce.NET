@@ -97,11 +97,14 @@ namespace WooCommerceNET.WooCommerce
             return API.DeserializeJSon<T2>(json);
         }
 
-        public async Task<T2> GetCustomerByEmail(string email)
+        public async Task<T2> GetCustomerByEmail(string email, Dictionary<string, string> parms = null)
         {
-            string json = await API.SendHttpClientRequest("customers", RequestMethod.GET, string.Empty, new Dictionary<string, string>() {
-                {"email", email }
-            });
+            if (parms == null)
+                parms = new Dictionary<string, string>();
+
+            parms.Add("email", email);
+
+            string json = await API.SendHttpClientRequest("customers", RequestMethod.GET, string.Empty, parms);
 
             List<T2> c = API.DeserializeJSon<List<T2>>(json);
             if (c.Count == 0)

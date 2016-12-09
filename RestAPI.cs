@@ -81,30 +81,40 @@ namespace WooCommerceNET
             HttpWebRequest httpWebRequest = null;
             try
             {
-                httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
                 if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 {
                     if (AuthorizedHeader)
+                    {
+                        httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
                         httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
+                    }
                     else
-                        httpWebRequest.Credentials = new NetworkCredential(wc_key, wc_secret);
+                    {
+                        if (parms == null) parms = new Dictionary<string, string>();
+                        parms.Add("consumer_key", wc_key);
+                        parms.Add("consumer_secret", wc_secret);
+
+                        httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                    }
                 }
+                else
+                    httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+
+                // start the stream immediately
+                httpWebRequest.Method = method.ToString();
+                httpWebRequest.AllowReadStreamBuffering = false;
 
                 if (webRequestFilter != null)
                     webRequestFilter.Invoke(httpWebRequest);
 
-                // start the stream immediately
-                httpWebRequest.Method = method.ToString();
-                httpWebRequest.ContentType = "application/json";
-                httpWebRequest.AllowReadStreamBuffering = false;
-                
                 //if (wc_Proxy)
                 //    httpWebRequest.Proxy.Credentials = CredentialCache.DefaultCredentials;
                 //else
                 //    httpWebRequest.Proxy = null;
-                
+
                 if (requestBody.GetType() != typeof(string))
                 {
+                    httpWebRequest.ContentType = "application/json";
                     var buffer = Encoding.UTF8.GetBytes(SerializeJSon(requestBody));
                     Stream dataStream = await httpWebRequest.GetRequestStreamAsync();
                     dataStream.Write(buffer, 0, buffer.Length);
