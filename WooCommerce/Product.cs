@@ -5,6 +5,7 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
+    [KnownType(typeof(ProductBatch))]
     public class ProductBatch : BatchObject<Product> { }
 
     [DataContract]
@@ -427,6 +428,7 @@ namespace WooCommerceNET.WooCommerce
         public string height { get; set; }
     }
 
+    [KnownType(typeof(CategoryBatch))]
     public class CategoryBatch : BatchObject<Category> { }
 
     [DataContract]
@@ -525,6 +527,7 @@ namespace WooCommerceNET.WooCommerce
         public int? position { get; set; }
     }
 
+    [KnownType(typeof(AttributeBatch))]
     public class AttributeBatch : BatchObject<Attribute> { }
 
     [DataContract]
@@ -1008,6 +1011,7 @@ namespace WooCommerceNET.WooCommerce
         public string alt { get; set; }
     }
 
+    [KnownType(typeof(ShippingClassBatch))]
     public class ShippingClassBatch : BatchObject<ShippingClass> { }
 
     [DataContract]
@@ -1047,6 +1051,7 @@ namespace WooCommerceNET.WooCommerce
         public int? count { get; set; }
     }
 
+    [KnownType(typeof(ProductTagBatch))]
     public class ProductTagBatch : BatchObject<ProductTag> { }
 
     [DataContract]

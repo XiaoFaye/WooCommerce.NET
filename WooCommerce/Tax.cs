@@ -4,6 +4,7 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
+    [KnownType(typeof(TaxRateBatch))]
     public class TaxRateBatch : BatchObject<TaxRate> { }
 
     [DataContract]

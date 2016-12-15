@@ -4,6 +4,7 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
+    [KnownType(typeof(CustomerBatch))]
     public class CustomerBatch : BatchObject<Customer> { }
 
     [DataContract]

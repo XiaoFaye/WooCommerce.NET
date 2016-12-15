@@ -5,6 +5,7 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce
 {
+    [KnownType(typeof(CouponBatch))]
     public class CouponBatch : BatchObject<Coupon> { }
 
     [DataContract]
