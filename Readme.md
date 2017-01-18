@@ -44,7 +44,7 @@ await wc.UpdateProduct(128, new Product { name = "test 9" });
 //Delete product
 await wc.DeleteProduct(128);
 
-//Use filters
+//Use parameters
 var p = await wc.GetProducts(new Dictionary<string, string>() {
                 { "include", "10, 11, 12, 13, 14, 15" },
                 { "per_page", "15" } });
