@@ -953,7 +953,7 @@ namespace WooCommerceNET.WooCommerce
         /// Image data. See Category Image properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<ProductCategoryImage> image { get; set; }
+        public ProductCategoryImage image { get; set; }
 
         /// <summary>
         /// Menu order, used to custom sort the resource.
