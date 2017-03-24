@@ -178,7 +178,7 @@ namespace WooCommerceNET
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic.Add("oauth_consumer_key", wc_key);
-            dic.Add("oauth_nonce", Common.GetSHA1(Common.GetUnixTime(true)));
+            dic.Add("oauth_nonce", Guid.NewGuid().ToString("N"));
             dic.Add("oauth_signature_method", "HMAC-SHA256");
             dic.Add("oauth_timestamp", Common.GetUnixTime(false));
 
