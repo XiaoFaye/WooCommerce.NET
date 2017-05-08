@@ -12,11 +12,7 @@ namespace WooCommerceNET.Base
 
         [OnSerializing]
         void OnSerializing(StreamingContext ctx)
-        {
-
-            NumberFormatInfo nfi = new NumberFormatInfo();
-            nfi.NumberDecimalSeparator = ".";
-            
+        {   
             //AmountValue = Amount.ToString();
 
             foreach (PropertyInfo pi in GetType().GetRuntimeProperties())
@@ -28,9 +24,7 @@ namespace WooCommerceNET.Base
                     {
                         if (pi.GetValue(this) != null)
                         {
-                            decimal decvalue = decimal.Parse(pi.GetValue(this).ToString());
-
-                            objValue.SetValue(this, decvalue.ToString(nfi));
+                            objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
                         }
                     }
                     else if (pi.PropertyType == typeof(DateTime?))
