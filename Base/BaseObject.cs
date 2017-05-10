@@ -9,9 +9,12 @@ namespace WooCommerceNET.Base
     [DataContract]
     public class JsonObject
     {
+
         [OnSerializing]
         void OnSerializing(StreamingContext ctx)
-        {
+        {   
+            //AmountValue = Amount.ToString();
+
             foreach (PropertyInfo pi in GetType().GetRuntimeProperties())
             {
                 PropertyInfo objValue = GetType().GetRuntimeProperties().FindByName(pi.Name + "Value");
@@ -20,7 +23,9 @@ namespace WooCommerceNET.Base
                     if (pi.PropertyType == typeof(decimal?))
                     {
                         if (pi.GetValue(this) != null)
-                            objValue.SetValue(this, pi.GetValue(this).ToString());
+                        {
+                            objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
+                        }
                     }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {
@@ -30,6 +35,7 @@ namespace WooCommerceNET.Base
                 }
             }
         }
+
 
         [OnDeserialized]
         void OnDeserialized(StreamingContext ctx)
