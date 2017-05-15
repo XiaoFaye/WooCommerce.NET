@@ -40,9 +40,27 @@ namespace WooCommerceNET
                             Func<string, string> jsonDeserializeFilter = null, 
                             Action<HttpWebRequest> requestFilter = null)//, bool useProxy = false)
         {
-            wc_url = url;
+            if (string.IsNullOrEmpty(url))
+                throw new Exception("Please use a valid WooCommerce Restful API url.");
+
+            url = url.Trim().ToLower().TrimEnd('/');
+            if (url.EndsWith("wc-api/v1") || url.EndsWith("wc-api/v2") || url.EndsWith("wc-api/v3"))
+                Version = APIVersion.Legacy;
+            else if (url.EndsWith("wp-json/wc/v1"))
+                Version = APIVersion.Version1;
+            else if (url.EndsWith("wp-json/wc/v2"))
+                Version = APIVersion.Version2;
+            else
+            {
+                Version = APIVersion.Unknown;
+                throw new Exception("Unknow WooCommerce Restful API version.");
+            }
+
+            wc_url = url + '/';
             wc_key = key;
             AuthorizedHeader = authorizedHeader;
+
+            //Why extra '&'? look here: https://wordpress.org/support/topic/woocommerce-rest-api-v3-problem-woocommerce_api_authentication_error/
             if ((url.ToLower().Contains("wc-api/v3") || !IsLegacy) && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 wc_secret = secret + "&";
             else
@@ -61,9 +79,11 @@ namespace WooCommerceNET
         {
             get
             {
-                return !wc_url.ToLower().Contains("wp-json/wc");
+                return Version == APIVersion.Legacy;
             }
         }
+
+        public APIVersion Version { get; private set; }
 
         public string Url { get { return wc_url; } }
 
@@ -81,24 +101,23 @@ namespace WooCommerceNET
             HttpWebRequest httpWebRequest = null;
             try
             {
-                if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+                if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && AuthorizedHeader)
                 {
-                    if (AuthorizedHeader)
-                    {
-                        httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
-                        httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
-                    }
-                    else
-                    {
-                        if (parms == null) parms = new Dictionary<string, string>();
-                        parms.Add("consumer_key", wc_key);
-                        parms.Add("consumer_secret", wc_secret);
-
-                        httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
-                    }
+                    httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                    httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
                 }
                 else
+                {
+                    if (parms == null)
+                        parms = new Dictionary<string, string>();
+
+                    if (!parms.ContainsKey("consumer_key"))
+                        parms.Add("consumer_key", wc_key);
+                    if (!parms.ContainsKey("consumer_secret"))
+                        parms.Add("consumer_secret", wc_secret);
+
                     httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                }
 
                 // start the stream immediately
                 httpWebRequest.Method = method.ToString();
@@ -122,13 +141,13 @@ namespace WooCommerceNET
                 
                 // asynchronously get a response
                 WebResponse wr = await httpWebRequest.GetResponseAsync();
-                return await GetStreamContent(wr.GetResponseStream(), wr.ContentType.Split('=')[1]);
+                return await GetStreamContent(wr.GetResponseStream(), wr.ContentType.Contains("=") ? wr.ContentType.Split('=')[1] : "UTF-8");
             }
             catch (WebException we)
             {
                 if (httpWebRequest != null && httpWebRequest.HaveResponse)
                     if (we.Response != null)
-                        throw new Exception(await GetStreamContent(we.Response.GetResponseStream(), we.Response.ContentType.Split('=')[1]));
+                        throw new Exception(await GetStreamContent(we.Response.GetResponseStream(), we.Response.ContentType.Contains("=") ? we.Response.ContentType.Split('=')[1] : "UTF-8"));
                     else
                         throw we;
                 else
@@ -229,8 +248,9 @@ namespace WooCommerceNET
                 DateTimeFormat = new DateTimeFormat(DateTimeFormat),
                 UseSimpleDictionaryFormat = true
             };
+
             MemoryStream stream = new MemoryStream();
-            DataContractJsonSerializer ds = new DataContractJsonSerializer(typeof(T), settings);
+            DataContractJsonSerializer ds = new DataContractJsonSerializer(t.GetType(), settings);
             ds.WriteObject(stream, t);
             byte[] data = stream.ToArray();
             string jsonString = Encoding.UTF8.GetString(data, 0, data.Length);
@@ -289,5 +309,13 @@ namespace WooCommerceNET
         PUT = 4,
         PATCH = 5,
         DELETE = 6
+    }
+
+    public enum APIVersion
+    {
+        Unknown = 0,
+        Legacy = 1,
+        Version1 = 2,
+        Version2 = 3
     }
 }

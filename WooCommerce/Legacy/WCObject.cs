@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce.Legacy
 {
@@ -10,7 +11,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         public WCObject(RestAPI api)
         {
             if (!api.IsLegacy)
-                throw new Exception("You can't use the legacy WCObject on the latest version of WooCommerce Restful API.");
+                throw new Exception("Please use WooCommerce Restful API Legacy version url for this WCObject. e.g.: http://www.yourstore.co.nz/wc-api/v3/");
 
             API = api;
         }
@@ -29,7 +30,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         public async Task<CustomerList> GetCustomers(Dictionary<string,string> parms = null)
         {
             string json = await API.SendHttpClientRequest("customers", RequestMethod.GET, string.Empty, parms);
-            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2);
+            json = json.Substring(json.IndexOf(':') + 1, json.Length - json.IndexOf(':') - 2); 
             return API.DeserializeJSon<CustomerList>(json);
         }
 

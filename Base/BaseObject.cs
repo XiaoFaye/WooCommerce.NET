@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace WooCommerceNET.Base
 {
     [DataContract]
     public class JsonObject
     {
-
         [OnSerializing]
         void OnSerializing(StreamingContext ctx)
-        {   
-            //AmountValue = Amount.ToString();
-
+        {
             foreach (PropertyInfo pi in GetType().GetRuntimeProperties())
             {
                 PropertyInfo objValue = GetType().GetRuntimeProperties().FindByName(pi.Name + "Value");
@@ -23,9 +21,7 @@ namespace WooCommerceNET.Base
                     if (pi.PropertyType == typeof(decimal?))
                     {
                         if (pi.GetValue(this) != null)
-                        {
                             objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
-                        }
                     }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {
@@ -35,7 +31,6 @@ namespace WooCommerceNET.Base
                 }
             }
         }
-
 
         [OnDeserialized]
         void OnDeserialized(StreamingContext ctx)
@@ -75,5 +70,105 @@ namespace WooCommerceNET.Base
 
         [DataMember(EmitDefaultValue = false)]
         public List<int> delete { get; set; }
+    }
+
+    public class WCItem<T>
+    {
+        public string APIEndpoint { get; protected set; }
+        public RestAPI API { get; protected set; }
+
+        public WCItem(RestAPI api)
+        {
+            API = api;
+            APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+        }
+
+        public async Task<T> Get(int id, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.GetRestful(APIEndpoint + "/" + id.ToString(), parms));
+        }
+
+        public async Task<List<T>> GetAll(Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<List<T>>(await API.GetRestful(APIEndpoint, parms));
+        }
+
+        public async Task<T> Add(T item, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.PostRestful(APIEndpoint, item, parms));
+        }
+
+        public async Task<string> AddRange(BatchObject<T> items, Dictionary<string, string> parms = null)
+        {
+            return await API.PostRestful(APIEndpoint + "/batch", items, parms);
+        }
+
+        public async Task<T> Update(int id, T item, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.PostRestful(APIEndpoint + "/" + id.ToString(), item, parms));
+        }
+
+        public async Task<string> UpdateRange(BatchObject<T> items, Dictionary<string, string> parms = null)
+        {
+            return await API.PostRestful(APIEndpoint + "/batch", items, parms);
+        }
+        
+        public async Task<string> Delete(int id, bool force = false, Dictionary<string, string> parms = null)
+        {
+            if(force)
+            {
+                if (parms == null)
+                    parms = new Dictionary<string, string>();
+
+                if (!parms.ContainsKey("force"))
+                    parms.Add("force", "true");
+            }
+
+            return await API.DeleteRestful(APIEndpoint + "/" + id.ToString(), parms);
+        }
+
+        public async Task<string> DeleteRange(BatchObject<T> items, Dictionary<string, string> parms = null)
+        {
+            return await API.PostRestful(APIEndpoint + "/batch", items, parms);
+        }
+    }
+
+    public class WCSubItem<T>
+    {
+        public string APIEndpoint { get; protected set; }
+        public string APIParentEndpoint { get; protected set; }
+        public RestAPI API { get; protected set; }
+
+        public WCSubItem(RestAPI api, string parentEndpoint)
+        {
+            API = api;
+            APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+            APIParentEndpoint = parentEndpoint;
+        }
+
+        public async Task<T> Get(int id, int parentId, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.GetRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), parms));
+        }
+
+        public async Task<List<T>> GetAll(object parentId, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<List<T>>(await API.GetRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint, parms));
+        }
+
+        public async Task<T> Add(T item, int parentId, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint, item, parms));
+        }
+
+        public async Task<T> Update(int id, T item, int parentId, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), item, parms));
+        }
+
+        public async Task<string> Delete(int id, int parentId, bool force = false, Dictionary<string, string> parms = null)
+        {
+            return await API.DeleteRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), parms);
+        }
     }
 }
