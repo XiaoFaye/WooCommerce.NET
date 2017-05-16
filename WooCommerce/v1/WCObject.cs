@@ -113,6 +113,7 @@ namespace WooCommerceNET.WooCommerce.v1
                 return c[0];
         }
 
+        [Obsolete("GetCustomerOrders is deprecated in v1, please use GetOrders method with customer parameter instead.", true)]
         public async Task<List<T3>> GetCustomerOrders(int id, Dictionary<string, string> parms = null)
         {
             string json = await API.GetRestful("customers/" + id.ToString() + "/orders", parms);
