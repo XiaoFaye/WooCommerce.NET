@@ -209,7 +209,7 @@ namespace WooCommerceNET
             string stringToSign = string.Empty;
 
             foreach (var parm in dic.OrderBy(x => x.Key))
-                stringToSign += parm.Key + "%3D" + Uri.EscapeDataString(Uri.EscapeDataString(parm.Value)) + "%26";
+                stringToSign += Uri.EscapeDataString(parm.Key) + "%3D" + Uri.EscapeDataString(Uri.EscapeDataString(parm.Value)) + "%26";
 
             base_request_uri = method.ToUpper() + "&" + base_request_uri + "&" + stringToSign.Substring(0, stringToSign.Length - 3);
             
