@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace WooCommerceNET.Base
 {
@@ -58,7 +59,41 @@ namespace WooCommerceNET.Base
                 }
             }
         }
+        
+
+        //[OnDeserializing]
+        //void tset(StreamingContext ctx)
+        //{
+        //    if (GetType().Name.Contains("ProductMeta"))
+        //        foreach (PropertyInfo pi in GetType().GetRuntimeProperties())
+        //        {
+                    
+        //        }
+        //}
     }
+
+    //public class MyCustomerResolver : DataContractResolver
+    //{
+    //    public override bool TryResolveType(Type dataContractType, Type declaredType, DataContractResolver knownTypeResolver, out XmlDictionaryString typeName, out XmlDictionaryString typeNamespace)
+    //    {
+    //        if (dataContractType == typeof(string))
+    //        {
+    //            XmlDictionary dictionary = new XmlDictionary();
+    //            typeName = dictionary.Add("SomeCustomer");
+    //            typeNamespace = dictionary.Add("http://tempuri.com");
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            return knownTypeResolver.TryResolveType(dataContractType, declaredType, null, out typeName, out typeNamespace);
+    //        }
+    //    }
+
+    //    public override Type ResolveName(string typeName, string typeNamespace, Type declaredType, DataContractResolver knownTypeResolver)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 
     public class BatchObject<T>
     {

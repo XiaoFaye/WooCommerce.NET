@@ -222,9 +222,10 @@ namespace WooCommerceNET.WooCommerce.v1
 
         /// <summary>
         /// Stock management at product level. Default is false.
+        /// When Manage stock is checked, string value "parent" will be given, otherwise, it will be bool value false.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public bool? manage_stock { get; set; }
+        public object manage_stock { get; set; }
 
         /// <summary>
         /// Stock quantity. If is a variable product this value will be used to control stock for all variations, unless you define stock at variation level.
@@ -745,9 +746,10 @@ namespace WooCommerceNET.WooCommerce.v1
 
         /// <summary>
         /// Stock management at variation level. Default is false.
+        /// When Manage stock is checked, string value "parent" will be given, otherwise, it will be bool value false.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public bool? manage_stock { get; set; }
+        public object manage_stock { get; set; }
 
         /// <summary>
         /// Stock quantity. If is a variable variation this value will be used to control stock for all variations, unless you define stock at variation level.

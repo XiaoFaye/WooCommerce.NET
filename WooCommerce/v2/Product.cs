@@ -624,7 +624,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// List of available term names of the attribute.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<object> options { get; set; }
+        public List<string> options { get; set; }
 
     }
     
@@ -650,7 +650,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public string option { get; set; }
 
     }
-    
+
     [DataContract]
     public class ProductMeta
     {
@@ -671,8 +671,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Meta value.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string value { get; set; }
-
+        public object value { get; set; }
     }
 
     [DataContract]
