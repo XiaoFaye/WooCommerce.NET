@@ -3,6 +3,15 @@
 
 Version History
 -------------------
+* v0.7.0 Major update
+  1. Add support for WooCommerce Restful API version 2. Note: The way of making api request in v2 has been changed, please see readme file for details.
+  2. Fix different decimal point parsing error.
+  3. Fix manage_stock property deserializing issue.
+  4. Fix issue when run in multiple parallel threads.
+  5. Fix issue when reuse Dictionary parameter in request.
+  6. Fix image property data type in ProductCategory.
+  7. Fix issue when using filter in legacy api.
+  8. Mark GetCustomerOrders as deprecated in version 1 api.
 * v0.6.0 Major update
   1. Add generic WCObject which allows you to use customize object class.
   2. Use generic batch update object.
@@ -10,7 +19,7 @@ Version History
   4. Add authorizedHeader parameter in RestAPI, which allows you to choose how to pass the Credentials. What we have found is that in some server, these information can't be pass in request header.
   5. Add webRequestFilter in RestAPI, which allows you to modify the HttpWebRequest object.
   6. Add HttpWebRequestExtensions for setting restricted Headers.
-  7. Only set Content Type when this is a request body.
+  7. Only set Content Type when there is a request body.
   8. Use InvariantCulture in decimal.Parse to prevent deserlized error.
   9. Fix GetCustomerByEmail not working issue.
   10. Change data type of dimensions from List<Dimension> to Dimension in Product.cs
