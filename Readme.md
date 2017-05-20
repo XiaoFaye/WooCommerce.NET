@@ -13,6 +13,7 @@ It's in Nuget now!!!
 [Visit Nuget](https://www.nuget.org/packages/WooCommerceNET)
 
 * [How to use JSON.NET in WooCommerce.NET](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-use-JSON.NET-in-WooCommerce.NET)
+* [Handle different types of Meta Value in WC Restful API V2](https://github.com/XiaoFaye/WooCommerce.NET/wiki/Handle-different-types-of-Meta-Value-in-WC-Restful-API-V2)
 
 Usage
 -------------------
