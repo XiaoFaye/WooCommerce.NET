@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WooCommerceNET.Base;
 
@@ -7,7 +8,45 @@ namespace WooCommerceNET.WooCommerce.v2
 {
     public class WCObject
     {
-        protected RestAPI API;
+        [DataContract]
+        public class MetaData
+        {
+            /// <summary>
+            /// Meta ID. 
+            /// read-only
+            /// </summary>
+            [DataMember(EmitDefaultValue = false)]
+            public int? id { get; set; }
+
+            /// <summary>
+            /// Meta key.
+            /// </summary>
+            [DataMember(EmitDefaultValue = false)]
+            public string key { get; set; }
+
+            /// <summary>
+            /// Meta value.
+            /// </summary>
+            private object preValue;
+            [DataMember(EmitDefaultValue = false)]
+            public object value
+            {
+                get
+                {
+                    return preValue;
+                }
+                set
+                {
+                    if (MetaValueProcessor != null)
+                        preValue = MetaValueProcessor.Invoke(GetType().Name, value);
+                    else
+                        preValue = value;
+                }
+            }
+        }
+
+        protected RestAPI API { get; set; }
+        public static Func<string, object, object> MetaValueProcessor { get; set; }
         public WCObject(RestAPI api)
         {
             if (api.Version != APIVersion.Version2)

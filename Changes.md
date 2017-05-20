@@ -3,6 +3,10 @@
 
 Version History
 -------------------
+* v0.7.1 Major update
+  1. Able to override the process of SerializeJSon and DeserializeJSon.
+  2. Allow to handle meta value for different return types.
+  3. Handle int values when json value as empty string.
 * v0.7.0 Major update
   1. Add support for WooCommerce Restful API version 2. Note: The way of making api request in v2 has been changed, please see readme file for details.
   2. Fix different decimal point parsing error.

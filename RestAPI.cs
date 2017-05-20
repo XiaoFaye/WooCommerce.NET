@@ -55,7 +55,7 @@ namespace WooCommerceNET
                 Version = APIVersion.Unknown;
                 throw new Exception("Unknow WooCommerce Restful API version.");
             }
-
+            
             wc_url = url + '/';
             wc_key = key;
             AuthorizedHeader = authorizedHeader;
@@ -241,7 +241,7 @@ namespace WooCommerceNET
             return sb.ToString();
         }
 
-        public string SerializeJSon<T>(T t)
+        public virtual string SerializeJSon<T>(T t)
         {
             DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
             {
@@ -269,7 +269,7 @@ namespace WooCommerceNET
             return jsonString;
         }
 
-        public T DeserializeJSon<T>(string jsonString)
+        public virtual T DeserializeJSon<T>(string jsonString)
         {
             if (jsonDeseFilter != null)
                 jsonString = jsonDeseFilter.Invoke(jsonString);
@@ -284,6 +284,7 @@ namespace WooCommerceNET
                 DateTimeFormat = new DateTimeFormat(DateTimeFormat),
                 UseSimpleDictionaryFormat = true
             };
+
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T), settings);
             MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
             T obj = (T)ser.ReadObject(stream);

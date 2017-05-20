@@ -24,6 +24,11 @@ namespace WooCommerceNET.Base
                         if (pi.GetValue(this) != null)
                             objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
                     }
+                    else if (pi.PropertyType == typeof(int?))
+                    {
+                        if (pi.GetValue(this) != null)
+                            objValue.SetValue(this, int.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
+                    }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {
                         if (pi.GetValue(this) != null)
@@ -48,6 +53,13 @@ namespace WooCommerceNET.Base
 
                         if (!(value == null || value.ToString() == string.Empty))
                             pi.SetValue(this, decimal.Parse(value.ToString(), CultureInfo.InvariantCulture));
+                    }
+                    else if (pi.PropertyType == typeof(int?))
+                    {
+                        object value = objValue.GetValue(this);
+
+                        if (!(value == null || value.ToString() == string.Empty))
+                            pi.SetValue(this, int.Parse(value.ToString(), CultureInfo.InvariantCulture));
                     }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {

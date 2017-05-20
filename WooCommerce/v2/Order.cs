@@ -424,26 +424,8 @@ namespace WooCommerceNET.WooCommerce.v2
     }
     
     [DataContract]
-    public class OrderMeta
+    public class OrderMeta : WCObject.MetaData
     {
-        /// <summary>
-        /// Meta ID. 
-        /// read-only
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
-
-        /// <summary>
-        /// Meta key.
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string key { get; set; }
-
-        /// <summary>
-        /// Meta value.
-        /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string value { get; set; }
 
     }
     
