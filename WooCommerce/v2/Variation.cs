@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce.v2
 {
     [DataContract]
-    public class Variation
+    public class Variation : JsonObject
     {
         public static string Endpoint { get { return "variations"; } }
 
