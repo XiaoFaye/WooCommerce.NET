@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using System.Xml;
 
 namespace WooCommerceNET.Base
 {
@@ -20,7 +22,12 @@ namespace WooCommerceNET.Base
                     if (pi.PropertyType == typeof(decimal?))
                     {
                         if (pi.GetValue(this) != null)
-                            objValue.SetValue(this, pi.GetValue(this).ToString());
+                            objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
+                    }
+                    else if (pi.PropertyType == typeof(int?))
+                    {
+                        if (pi.GetValue(this) != null)
+                            objValue.SetValue(this, int.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
                     }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {
@@ -47,6 +54,13 @@ namespace WooCommerceNET.Base
                         if (!(value == null || value.ToString() == string.Empty))
                             pi.SetValue(this, decimal.Parse(value.ToString(), CultureInfo.InvariantCulture));
                     }
+                    else if (pi.PropertyType == typeof(int?))
+                    {
+                        object value = objValue.GetValue(this);
+
+                        if (!(value == null || value.ToString() == string.Empty))
+                            pi.SetValue(this, int.Parse(value.ToString(), CultureInfo.InvariantCulture));
+                    }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {
                         object value = objValue.GetValue(this);
@@ -57,7 +71,41 @@ namespace WooCommerceNET.Base
                 }
             }
         }
+        
+
+        //[OnDeserializing]
+        //void tset(StreamingContext ctx)
+        //{
+        //    if (GetType().Name.Contains("ProductMeta"))
+        //        foreach (PropertyInfo pi in GetType().GetRuntimeProperties())
+        //        {
+                    
+        //        }
+        //}
     }
+
+    //public class MyCustomerResolver : DataContractResolver
+    //{
+    //    public override bool TryResolveType(Type dataContractType, Type declaredType, DataContractResolver knownTypeResolver, out XmlDictionaryString typeName, out XmlDictionaryString typeNamespace)
+    //    {
+    //        if (dataContractType == typeof(string))
+    //        {
+    //            XmlDictionary dictionary = new XmlDictionary();
+    //            typeName = dictionary.Add("SomeCustomer");
+    //            typeNamespace = dictionary.Add("http://tempuri.com");
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            return knownTypeResolver.TryResolveType(dataContractType, declaredType, null, out typeName, out typeNamespace);
+    //        }
+    //    }
+
+    //    public override Type ResolveName(string typeName, string typeNamespace, Type declaredType, DataContractResolver knownTypeResolver)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 
     public class BatchObject<T>
     {
@@ -69,5 +117,105 @@ namespace WooCommerceNET.Base
 
         [DataMember(EmitDefaultValue = false)]
         public List<int> delete { get; set; }
+    }
+
+    public class WCItem<T>
+    {
+        public string APIEndpoint { get; protected set; }
+        public RestAPI API { get; protected set; }
+
+        public WCItem(RestAPI api)
+        {
+            API = api;
+            APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+        }
+
+        public async Task<T> Get(int id, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.GetRestful(APIEndpoint + "/" + id.ToString(), parms));
+        }
+
+        public async Task<List<T>> GetAll(Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<List<T>>(await API.GetRestful(APIEndpoint, parms));
+        }
+
+        public async Task<T> Add(T item, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.PostRestful(APIEndpoint, item, parms));
+        }
+
+        public async Task<string> AddRange(BatchObject<T> items, Dictionary<string, string> parms = null)
+        {
+            return await API.PostRestful(APIEndpoint + "/batch", items, parms);
+        }
+
+        public async Task<T> Update(int id, T item, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.PostRestful(APIEndpoint + "/" + id.ToString(), item, parms));
+        }
+
+        public async Task<string> UpdateRange(BatchObject<T> items, Dictionary<string, string> parms = null)
+        {
+            return await API.PostRestful(APIEndpoint + "/batch", items, parms);
+        }
+        
+        public async Task<string> Delete(int id, bool force = false, Dictionary<string, string> parms = null)
+        {
+            if(force)
+            {
+                if (parms == null)
+                    parms = new Dictionary<string, string>();
+
+                if (!parms.ContainsKey("force"))
+                    parms.Add("force", "true");
+            }
+
+            return await API.DeleteRestful(APIEndpoint + "/" + id.ToString(), parms);
+        }
+
+        public async Task<string> DeleteRange(BatchObject<T> items, Dictionary<string, string> parms = null)
+        {
+            return await API.PostRestful(APIEndpoint + "/batch", items, parms);
+        }
+    }
+
+    public class WCSubItem<T>
+    {
+        public string APIEndpoint { get; protected set; }
+        public string APIParentEndpoint { get; protected set; }
+        public RestAPI API { get; protected set; }
+
+        public WCSubItem(RestAPI api, string parentEndpoint)
+        {
+            API = api;
+            APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+            APIParentEndpoint = parentEndpoint;
+        }
+
+        public async Task<T> Get(int id, int parentId, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.GetRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), parms));
+        }
+
+        public async Task<List<T>> GetAll(object parentId, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<List<T>>(await API.GetRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint, parms));
+        }
+
+        public async Task<T> Add(T item, int parentId, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint, item, parms));
+        }
+
+        public async Task<T> Update(int id, T item, int parentId, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), item, parms));
+        }
+
+        public async Task<string> Delete(int id, int parentId, bool force = false, Dictionary<string, string> parms = null)
+        {
+            return await API.DeleteRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), parms);
+        }
     }
 }
