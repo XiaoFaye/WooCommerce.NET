@@ -43,12 +43,12 @@ namespace WooCommerceNET
             if (string.IsNullOrEmpty(url))
                 throw new Exception("Please use a valid WooCommerce Restful API url.");
 
-            url = url.Trim().ToLower().TrimEnd('/');
-            if (url.EndsWith("wc-api/v1") || url.EndsWith("wc-api/v2") || url.EndsWith("wc-api/v3"))
+            string urlLower = url.Trim().ToLower().TrimEnd('/');
+            if (urlLower.EndsWith("wc-api/v1") || urlLower.EndsWith("wc-api/v2") || urlLower.EndsWith("wc-api/v3"))
                 Version = APIVersion.Legacy;
-            else if (url.EndsWith("wp-json/wc/v1"))
+            else if (urlLower.EndsWith("wp-json/wc/v1"))
                 Version = APIVersion.Version1;
-            else if (url.EndsWith("wp-json/wc/v2"))
+            else if (urlLower.EndsWith("wp-json/wc/v2"))
                 Version = APIVersion.Version2;
             else
             {
