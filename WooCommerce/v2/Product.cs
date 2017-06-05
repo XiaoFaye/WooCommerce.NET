@@ -283,8 +283,10 @@ namespace WooCommerceNET.WooCommerce.v2
         /// <summary>
         /// Product weight (kg).
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string weight { get; set; }
+        [DataMember(EmitDefaultValue = false, Name = "weight")]
+        private object weightValue { get; set; }
+
+        public decimal? weight { get; set; }
 
         /// <summary>
         /// Product dimensions. See Product - Dimensions properties
