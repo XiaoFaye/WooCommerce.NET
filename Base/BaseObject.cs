@@ -22,7 +22,7 @@ namespace WooCommerceNET.Base
                     if (pi.PropertyType == typeof(decimal?))
                     {
                         if (pi.GetValue(this) != null)
-                            objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
+                             objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString()).ToString(CultureInfo.InvariantCulture));
                     }
                     else if (pi.PropertyType == typeof(int?))
                     {
