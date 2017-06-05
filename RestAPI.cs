@@ -56,7 +56,7 @@ namespace WooCommerceNET
                 throw new Exception("Unknow WooCommerce Restful API version.");
             }
             
-            wc_url = url + '/';
+            wc_url = url + (url.EndsWith("/") ? "" : "/");
             wc_key = key;
             AuthorizedHeader = authorizedHeader;
 
