@@ -135,19 +135,19 @@ namespace WooCommerceNET
                 {
                     httpWebRequest.ContentType = "application/json";
                     var buffer = Encoding.UTF8.GetBytes(SerializeJSon(requestBody));
-                    Stream dataStream = await httpWebRequest.GetRequestStreamAsync();
+                    Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
                     dataStream.Write(buffer, 0, buffer.Length);
                 }
                 
                 // asynchronously get a response
-                WebResponse wr = await httpWebRequest.GetResponseAsync();
-                return await GetStreamContent(wr.GetResponseStream(), wr.ContentType.Contains("=") ? wr.ContentType.Split('=')[1] : "UTF-8");
+                WebResponse wr = await httpWebRequest.GetResponseAsync().ConfigureAwait(false);
+                return await GetStreamContent(wr.GetResponseStream(), wr.ContentType.Contains("=") ? wr.ContentType.Split('=')[1] : "UTF-8").ConfigureAwait(false);
             }
             catch (WebException we)
             {
                 if (httpWebRequest != null && httpWebRequest.HaveResponse)
                     if (we.Response != null)
-                        throw new Exception(await GetStreamContent(we.Response.GetResponseStream(), we.Response.ContentType.Contains("=") ? we.Response.ContentType.Split('=')[1] : "UTF-8"));
+                        throw new Exception(await GetStreamContent(we.Response.GetResponseStream(), we.Response.ContentType.Contains("=") ? we.Response.ContentType.Split('=')[1] : "UTF-8").ConfigureAwait(false));
                     else
                         throw we;
                 else
@@ -161,22 +161,22 @@ namespace WooCommerceNET
 
         public async Task<string> GetRestful(string endpoint, Dictionary<string, string> parms = null)
         {
-            return await SendHttpClientRequest(endpoint, RequestMethod.GET, string.Empty, parms);
+            return await SendHttpClientRequest(endpoint, RequestMethod.GET, string.Empty, parms).ConfigureAwait(false);
         }
 
         public async Task<string> PostRestful(string endpoint, object jsonObject, Dictionary<string, string> parms = null)
         {
-            return await SendHttpClientRequest(endpoint, RequestMethod.POST, jsonObject, parms);
+            return await SendHttpClientRequest(endpoint, RequestMethod.POST, jsonObject, parms).ConfigureAwait(false);
         }
 
         public async Task<string> PutRestful(string endpoint, object jsonObject, Dictionary<string, string> parms = null)
         {
-            return await SendHttpClientRequest(endpoint, RequestMethod.PUT, jsonObject, parms);
+            return await SendHttpClientRequest(endpoint, RequestMethod.PUT, jsonObject, parms).ConfigureAwait(false);
         }
 
         public async Task<string> DeleteRestful(string endpoint, Dictionary<string, string> parms = null)
         {
-            return await SendHttpClientRequest(endpoint, RequestMethod.DELETE, string.Empty, parms);
+            return await SendHttpClientRequest(endpoint, RequestMethod.DELETE, string.Empty, parms).ConfigureAwait(false);
         }
 
         private string GetOAuthEndPoint(string method, string endpoint, Dictionary<string, string> parms = null)
@@ -231,11 +231,11 @@ namespace WooCommerceNET
             StringBuilder sb = new StringBuilder();
             byte[] Buffer = new byte[512];
             int count = 0;
-            count = await s.ReadAsync(Buffer, 0, Buffer.Length);
+            count = await s.ReadAsync(Buffer, 0, Buffer.Length).ConfigureAwait(false);
             while (count > 0)
             {
                 sb.Append(Encoding.GetEncoding(charset).GetString(Buffer, 0, count));
-                count = await s.ReadAsync(Buffer, 0, Buffer.Length);
+                count = await s.ReadAsync(Buffer, 0, Buffer.Length).ConfigureAwait(false);
             }
 
             return sb.ToString();

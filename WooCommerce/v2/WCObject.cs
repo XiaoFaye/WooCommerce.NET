@@ -174,42 +174,42 @@ namespace WooCommerceNET.WooCommerce.v2.Extension
     {
         public static async Task<List<CustomerDownloads>> GetCustomerDownloads(this WCItem<Customer> item, int id, Dictionary<string, string> parms = null)
         {
-            return item.API.DeserializeJSon<List<CustomerDownloads>>(await item.API.GetRestful(item.APIEndpoint + "/" + id.ToString() + "/downloads", parms));
+            return item.API.DeserializeJSon<List<CustomerDownloads>>(await item.API.GetRestful(item.APIEndpoint + "/" + id.ToString() + "/downloads", parms).ConfigureAwait(false));
         }
 
         public static async Task<SystemStatusTool> Run(this WCItem<SystemStatusTool> item, string id, Dictionary<string, string> parms = null)
         {
-            return item.API.DeserializeJSon<SystemStatusTool>(await item.API.PutRestful(item.APIEndpoint + "/" + id, parms));
+            return item.API.DeserializeJSon<SystemStatusTool>(await item.API.PutRestful(item.APIEndpoint + "/" + id, parms).ConfigureAwait(false));
         }
 
         public static async Task<List<SalesReport>> GetSalesReport(this WCItem<Report> item, Dictionary<string, string> parms = null)
         {
-            return item.API.DeserializeJSon<List<SalesReport>>(await item.API.GetRestful(item.APIEndpoint + "/sales", parms));
+            return item.API.DeserializeJSon<List<SalesReport>>(await item.API.GetRestful(item.APIEndpoint + "/sales", parms).ConfigureAwait(false));
         }
 
         public static async Task<List<TopSellersReport>> GetTopSellerReport(this WCItem<Report> item, Dictionary<string, string> parms = null)
         {
-            return item.API.DeserializeJSon<List<TopSellersReport>>(await item.API.GetRestful(item.APIEndpoint + "/top_sellers", parms));
+            return item.API.DeserializeJSon<List<TopSellersReport>>(await item.API.GetRestful(item.APIEndpoint + "/top_sellers", parms).ConfigureAwait(false));
         }
 
         public static async Task<List<SettingOption>> GetSettingOptions(this WCItem<Setting> item, string settingId, Dictionary<string, string> parms = null)
         {
-            return item.API.DeserializeJSon<List<SettingOption>>(await item.API.GetRestful(item.APIEndpoint + "/" + settingId, parms));
+            return item.API.DeserializeJSon<List<SettingOption>>(await item.API.GetRestful(item.APIEndpoint + "/" + settingId, parms).ConfigureAwait(false));
         }
 
         public static async Task<SettingOption> GetSettingOption(this WCItem<Setting> item, string settingId, string optionId, Dictionary<string, string> parms = null)
         {
-            return item.API.DeserializeJSon<SettingOption>(await item.API.GetRestful(item.APIEndpoint + "/" + settingId + "/" + optionId, parms));
+            return item.API.DeserializeJSon<SettingOption>(await item.API.GetRestful(item.APIEndpoint + "/" + settingId + "/" + optionId, parms).ConfigureAwait(false));
         }
 
         public static async Task<SettingOption> UpdateSettingOption(this WCItem<Setting> item, string settingId, string optionId, Dictionary<string, string> parms = null)
         {
-            return item.API.DeserializeJSon<SettingOption>(await item.API.PostRestful(item.APIEndpoint + "/" + settingId + "/" + optionId, parms));
+            return item.API.DeserializeJSon<SettingOption>(await item.API.PostRestful(item.APIEndpoint + "/" + settingId + "/" + optionId, parms).ConfigureAwait(false));
         }
 
         public static async Task<List<SettingOption>> UpdateSettingOptions(this WCItem<Setting> item, string settingId, SettingOptionBatch batch, Dictionary<string, string> parms = null)
         {
-            return item.API.DeserializeJSon<List<SettingOption>>(await item.API.PostRestful(item.APIEndpoint + "/" + settingId + "/batch", parms));
+            return item.API.DeserializeJSon<List<SettingOption>>(await item.API.PostRestful(item.APIEndpoint + "/" + settingId + "/batch", parms).ConfigureAwait(false));
         }
     }
 }
