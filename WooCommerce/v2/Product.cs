@@ -280,12 +280,11 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public bool? sold_individually { get; set; }
 
+        [DataMember(EmitDefaultValue = false, Name = "weight")]
+        private object weightValue { get; set; }
         /// <summary>
         /// Product weight (kg).
         /// </summary>
-        [DataMember(EmitDefaultValue = false, Name = "weight")]
-        private object weightValue { get; set; }
-
         public decimal? weight { get; set; }
 
         /// <summary>
