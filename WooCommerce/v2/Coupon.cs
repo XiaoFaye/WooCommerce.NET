@@ -27,7 +27,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public string code { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "amount")]
-        private object amountValue { get; set; }
+        protected object amountValue { get; set; }
         /// <summary>
         /// The amount of discount. Should always be numeric, even if setting a percentage.
         /// </summary>

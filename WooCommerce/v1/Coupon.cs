@@ -54,7 +54,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// The amount of discount.
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "amount")]
-        private object amountValue { get; set; }
+        protected object amountValue { get; set; }
 
         public decimal? amount { get; set; }
 
@@ -132,14 +132,14 @@ namespace WooCommerceNET.WooCommerce.v1
         public bool? exclude_sale_items { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "minimum_amount")]
-        private object minimum_amountValue { get; set; }
+        protected object minimum_amountValue { get; set; }
         /// <summary>
         /// Minimum order amount that needs to be in the cart before coupon applies.
         /// </summary>
         public decimal? minimum_amount { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "maximum_amount")]
-        private object maximum_amountValue { get; set; }
+        protected object maximum_amountValue { get; set; }
         /// <summary>
         /// Maximum order amount allowed when using the coupon.
         /// </summary>

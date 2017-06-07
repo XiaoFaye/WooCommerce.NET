@@ -202,7 +202,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "date_paid")]
-        private object date_paidValue { get; set; }
+        protected object date_paidValue { get; set; }
 
         public DateTime? date_paid { get; set; }
 
@@ -375,14 +375,14 @@ namespace WooCommerceNET.WooCommerce.v1
         /// tax item total
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "total")]
-        private object totalValue { get; set; }
+        protected object totalValue { get; set; }
         public decimal? total { get; set; }
 
         /// <summary>
         /// tax item subtotal
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "subtotal")]
-        private object subtotalValue { get; set; }
+        protected object subtotalValue { get; set; }
         public decimal? subtotal { get; set; }
     }
 
@@ -413,7 +413,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// Line total (after discounts).
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "total")]
-        private object totalValue { get; set; }
+        protected object totalValue { get; set; }
         public decimal? total { get; set; }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "total_tax")]
-        private object total_taxValue { get; set; }
+        protected object total_taxValue { get; set; }
         public decimal? total_tax { get; set; }
 
         /// <summary>
@@ -474,7 +474,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "tax_total")]
-        private object tax_totalValue { get; set; }
+        protected object tax_totalValue { get; set; }
         public decimal? tax_total { get; set; }
 
         /// <summary>
@@ -482,7 +482,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "shipping_tax_total")]
-        private object shipping_tax_totalValue { get; set; }
+        protected object shipping_tax_totalValue { get; set; }
         public decimal? shipping_tax_total { get; set; }
     }
 
@@ -520,14 +520,14 @@ namespace WooCommerceNET.WooCommerce.v1
         /// Line total (after discounts).
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "total")]
-        private object totalValue { get; set; }
+        protected object totalValue { get; set; }
         public decimal? total { get; set; }
 
         /// <summary>
         /// Line total tax (after discounts).
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "total_tax")]
-        private object total_taxValue { get; set; }
+        protected object total_taxValue { get; set; }
         public decimal? total_tax { get; set; }
 
         /// <summary>
@@ -560,7 +560,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// required
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "discount")]
-        private object discountValue { get; set; }
+        protected object discountValue { get; set; }
         public decimal? discount { get; set; }
 
         /// <summary>
@@ -568,7 +568,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "discount_tax")]
-        private object discount_taxValue { get; set; }
+        protected object discount_taxValue { get; set; }
         public decimal? discount_tax { get; set; }
     }
 
@@ -625,7 +625,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// required
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "amount")]
-        private object amountValue { get; set; }
+        protected object amountValue { get; set; }
         public decimal? amount { get; set; }
 
         /// <summary>
