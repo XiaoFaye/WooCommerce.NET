@@ -112,13 +112,13 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public int? orders_count { get; set; }
 
-        private decimal? total_spent { get; set; }
+        [DataMember(EmitDefaultValue = false, Name = "total_spent")]
+        protected object total_spentValue { get; set; }
         /// <summary>
         /// Total amount spent. 
         /// read-only
         /// </summary>
-        [DataMember(EmitDefaultValue = false, Name = "total_spent")]
-        public object total_spentValue { get; set; }
+        public decimal? total_spent { get; set; }
 
         /// <summary>
         /// Avatar URL. 
@@ -204,7 +204,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public string phone { get; set; }
 
     }
-    
+
     [DataContract]
     public class CustomerShipping
     {
@@ -263,13 +263,13 @@ namespace WooCommerceNET.WooCommerce.v2
         public string country { get; set; }
 
     }
-    
+
     [DataContract]
     public class CustomerMeta : WCObject.MetaData
     {
 
     }
-    
+
     [DataContract]
     public class CustomerDownloads
     {

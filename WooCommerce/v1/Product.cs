@@ -98,7 +98,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "price")]
-        private object priceValue { get; set; }
+        protected object priceValue { get; set; }
 
         public decimal? price { get; set; }
 
@@ -106,7 +106,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// Product regular price.
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "regular_price")]
-        private object regular_priceValue { get; set; }
+        protected object regular_priceValue { get; set; }
 
         public decimal? regular_price { get; set; }
 
@@ -114,7 +114,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// Product sale price.
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "sale_price")]
-        private object sale_priceValue { get; set; }
+        protected object sale_priceValue { get; set; }
 
         public decimal? sale_price { get; set; }
 
@@ -156,7 +156,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "total_sales")]
-        private object total_salesValue { get; set; }
+        protected object total_salesValue { get; set; }
 
         public decimal? total_sales { get; set; }
 
@@ -269,7 +269,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// Product weight in decimal format.
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "weight")]
-        private object weightValue { get; set; }
+        protected object weightValue { get; set; }
 
         public decimal? weight { get; set; }
 
@@ -659,21 +659,21 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "price")]
-        private object priceValue { get; set; }
+        protected object priceValue { get; set; }
         public decimal? price { get; set; }
 
         /// <summary>
         /// Variation regular price.
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "regular_price")]
-        private object regular_priceValue { get; set; }
+        protected object regular_priceValue { get; set; }
         public decimal? regular_price { get; set; }
 
         /// <summary>
         /// Variation sale price.
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "sale_price")]
-        private object sale_priceValue { get; set; }
+        protected object sale_priceValue { get; set; }
         public decimal? sale_price { get; set; }
 
         /// <summary>
@@ -794,7 +794,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// Variation weight in decimal format.
         /// </summary>
         [DataMember(EmitDefaultValue = false, Name = "weight")]
-        private object weightValue { get; set; }
+        protected object weightValue { get; set; }
         public decimal? weight { get; set; }
 
         /// <summary>

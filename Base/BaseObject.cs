@@ -17,22 +17,19 @@ namespace WooCommerceNET.Base
             foreach (PropertyInfo pi in GetType().GetRuntimeProperties())
             {
                 PropertyInfo objValue = GetType().GetRuntimeProperties().FindByName(pi.Name + "Value");
-                if (objValue != null)
+                if (objValue != null && pi.GetValue(this) != null)
                 {
                     if (pi.PropertyType == typeof(decimal?))
                     {
-                        if (pi.GetValue(this) != null)
-                             objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString()).ToString(CultureInfo.InvariantCulture));
+                        objValue.SetValue(this, (pi.GetValue(this) as decimal?).Value.ToString(CultureInfo.InvariantCulture));
                     }
                     else if (pi.PropertyType == typeof(int?))
                     {
-                        if (pi.GetValue(this) != null)
-                            objValue.SetValue(this, int.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
+                        objValue.SetValue(this, int.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
                     }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {
-                        if (pi.GetValue(this) != null)
-                            objValue.SetValue(this, ((DateTime?)pi.GetValue(this)).Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+                        objValue.SetValue(this, ((DateTime?)pi.GetValue(this)).Value.ToString("yyyy-MM-ddTHH:mm:ss"));
                     }
                 }
             }
@@ -71,7 +68,7 @@ namespace WooCommerceNET.Base
                 }
             }
         }
-        
+
 
         //[OnDeserializing]
         //void tset(StreamingContext ctx)
@@ -79,7 +76,7 @@ namespace WooCommerceNET.Base
         //    if (GetType().Name.Contains("ProductMeta"))
         //        foreach (PropertyInfo pi in GetType().GetRuntimeProperties())
         //        {
-                    
+
         //        }
         //}
     }
@@ -159,10 +156,10 @@ namespace WooCommerceNET.Base
         {
             return await API.PostRestful(APIEndpoint + "/batch", items, parms);
         }
-        
+
         public async Task<string> Delete(int id, bool force = false, Dictionary<string, string> parms = null)
         {
-            if(force)
+            if (force)
             {
                 if (parms == null)
                     parms = new Dictionary<string, string>();

@@ -129,7 +129,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public decimal? cart_tax { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "total")]
-        private object totalValue { get; set; }
+        protected object totalValue { get; set; }
         /// <summary>
         /// Grand total. 
         /// read-only
@@ -137,7 +137,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public decimal? total { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "total_tax")]
-        private object total_taxValue { get; set; }
+        protected object total_taxValue { get; set; }
         /// <summary>
         /// Sum of all taxes. 
         /// read-only
@@ -483,14 +483,14 @@ namespace WooCommerceNET.WooCommerce.v2
         public decimal? subtotal_tax { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "total")]
-        private object totalValue { get; set; }
+        protected object totalValue { get; set; }
         /// <summary>
         /// Line total (after discounts).
         /// </summary>
         public decimal? total { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "total_tax")]
-        private object total_taxValue { get; set; }
+        protected object total_taxValue { get; set; }
         /// <summary>
         /// Line total tax (after discounts). 
         /// read-only
@@ -608,14 +608,14 @@ namespace WooCommerceNET.WooCommerce.v2
         public string method_id { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "total")]
-        private object totalValue { get; set; }
+        protected object totalValue { get; set; }
         /// <summary>
         /// Line total (after discounts).
         /// </summary>
         public decimal? total { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "total_tax")]
-        private object total_taxValue { get; set; }
+        protected object total_taxValue { get; set; }
         /// <summary>
         /// Line total tax (after discounts). 
         /// read-only
@@ -666,7 +666,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public string tax_status { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "total")]
-        private object totalValue { get; set; }
+        protected object totalValue { get; set; }
         /// <summary>
         /// Line total (after discounts).
         /// </summary>
@@ -748,7 +748,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public string reason { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "total")]
-        private object totalValue { get; set; }
+        protected object totalValue { get; set; }
         /// <summary>
         /// Refund total. 
         /// read-only
