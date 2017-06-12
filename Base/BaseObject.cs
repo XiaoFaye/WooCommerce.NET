@@ -137,6 +137,17 @@ namespace WooCommerceNET.Base
             return API.DeserializeJSon<List<T>>(await API.GetRestful(APIEndpoint, parms));
         }
 
+        public async Task<int> GetTotalCount()
+        {
+            var inputParams = new Dictionary<string, string>
+            {
+                {"per_page", "1"},
+                {"page", "1"}
+            };
+            await API.GetRestful(APIEndpoint, inputParams);
+            return API.ResourceCount;
+        }
+
         public async Task<T> Add(T item, Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<T>(await API.PostRestful(APIEndpoint, item, parms));
