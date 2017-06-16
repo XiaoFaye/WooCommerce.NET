@@ -197,11 +197,13 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public bool? backordered { get; set; }
 
+        [DataMember(EmitDefaultValue = false, Name = "weight")]
+        protected object weightValue { get; set; }
         /// <summary>
         /// Variation weight (kg).
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string weight { get; set; }
+        public decimal? weight { get; set; }
 
         /// <summary>
         /// Variation dimensions. See Product variation - Dimensions properties
