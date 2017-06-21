@@ -24,6 +24,7 @@ namespace WooCommerceNET
         private Func<string, string> jsonSeFilter;
         private Func<string, string> jsonDeseFilter;
         private Action<HttpWebRequest> webRequestFilter;
+        internal int ResourceCount;
 
         /// <summary>
         /// Initialize the RestAPI object
@@ -141,6 +142,14 @@ namespace WooCommerceNET
                 
                 // asynchronously get a response
                 WebResponse wr = await httpWebRequest.GetResponseAsync();
+
+                var headers = httpWebRequest.Headers;
+
+                if (headers["X-WP-Total"] != null)
+                {
+                    int.TryParse(headers["X-WP-Total"], out ResourceCount);
+                }
+
                 return await GetStreamContent(wr.GetResponseStream(), wr.ContentType.Contains("=") ? wr.ContentType.Split('=')[1] : "UTF-8");
             }
             catch (WebException we)
