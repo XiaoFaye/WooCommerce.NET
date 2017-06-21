@@ -202,7 +202,6 @@ namespace WooCommerceNET.WooCommerce.v2
         /// <summary>
         /// Variation weight (kg).
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
         public decimal? weight { get; set; }
 
         /// <summary>
