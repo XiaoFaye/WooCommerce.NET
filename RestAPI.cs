@@ -147,7 +147,7 @@ namespace WooCommerceNET
             {
                 if (httpWebRequest != null && httpWebRequest.HaveResponse)
                     if (we.Response != null)
-                        throw new Exception(await GetStreamContent(we.Response.GetResponseStream(), we.Response.ContentType.Contains("=") ? we.Response.ContentType.Split('=')[1] : "UTF-8").ConfigureAwait(false));
+                        throw new WebException(await GetStreamContent(we.Response.GetResponseStream(), we.Response.ContentType.Contains("=") ? we.Response.ContentType.Split('=')[1] : "UTF-8").ConfigureAwait(false), we.InnerException, we.Status, we.Response)
                     else
                         throw we;
                 else

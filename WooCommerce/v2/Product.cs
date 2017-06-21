@@ -109,7 +109,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public string sku { get; set; }
         
         [DataMember(EmitDefaultValue = false, Name = "price")]
-        private object priceValue { get; set; }
+        protected object priceValue { get; set; }
         /// <summary>
         /// Current product price. 
         /// read-only
@@ -117,14 +117,14 @@ namespace WooCommerceNET.WooCommerce.v2
         public decimal? price { get; set; }
         
         [DataMember(EmitDefaultValue = false, Name = "regular_price")]
-        private object regular_priceValue { get; set; }
+        protected object regular_priceValue { get; set; }
         /// <summary>
         /// Product regular price.
         /// </summary>
         public decimal? regular_price { get; set; }
         
         [DataMember(EmitDefaultValue = false, Name = "sale_price")]
-        private object sale_priceValue { get; set; }
+        protected object sale_priceValue { get; set; }
         /// <summary>
         /// Product sale price.
         /// </summary>
@@ -280,11 +280,12 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public bool? sold_individually { get; set; }
 
+        [DataMember(EmitDefaultValue = false, Name = "weight")]
+        protected object weightValue { get; set; }
         /// <summary>
         /// Product weight (kg).
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
-        public string weight { get; set; }
+        public decimal? weight { get; set; }
 
         /// <summary>
         /// Product dimensions. See Product - Dimensions properties

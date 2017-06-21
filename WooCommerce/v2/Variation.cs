@@ -51,7 +51,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public string sku { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "price")]
-        private object priceValue { get; set; }
+        protected object priceValue { get; set; }
         /// <summary>
         /// Current variation price. 
         /// read-only
@@ -59,14 +59,14 @@ namespace WooCommerceNET.WooCommerce.v2
         public decimal? price { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "regular_price")]
-        private object regular_priceValue { get; set; }
+        protected object regular_priceValue { get; set; }
         /// <summary>
         /// Variation regular price.
         /// </summary>
         public decimal? regular_price { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "sale_price")]
-        private object sale_priceValue { get; set; }
+        protected object sale_priceValue { get; set; }
         /// <summary>
         /// Variation sale price.
         /// </summary>
@@ -197,11 +197,13 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public bool? backordered { get; set; }
 
+        [DataMember(EmitDefaultValue = false, Name = "weight")]
+        protected object weightValue { get; set; }
         /// <summary>
         /// Variation weight (kg).
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string weight { get; set; }
+        public decimal? weight { get; set; }
 
         /// <summary>
         /// Variation dimensions. See Product variation - Dimensions properties
