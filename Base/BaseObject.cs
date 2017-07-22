@@ -21,7 +21,10 @@ namespace WooCommerceNET.Base
                 {
                     if (pi.PropertyType == typeof(decimal?))
                     {
-                        objValue.SetValue(this, (pi.GetValue(this) as decimal?).Value.ToString(CultureInfo.InvariantCulture));
+                        if (GetType().FullName.StartsWith("WooCommerceNET.WooCommerce.v1") || GetType().FullName.StartsWith("WooCommerceNET.WooCommerce.v2"))
+                            objValue.SetValue(this, (pi.GetValue(this) as decimal?).Value.ToString(CultureInfo.InvariantCulture));
+                        else
+                            objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
                     }
                     else if (pi.PropertyType == typeof(int?))
                     {

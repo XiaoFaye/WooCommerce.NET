@@ -242,10 +242,11 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public bool? manage_stock { get; set; }
 
+        [DataMember(EmitDefaultValue = false, Name = "stock_quantity")]
+        private object stock_quantityValue { get; set; }
         /// <summary>
         /// Stock quantity.
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
         public int? stock_quantity { get; set; }
 
         /// <summary>

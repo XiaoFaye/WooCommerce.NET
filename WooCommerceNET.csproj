@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="Changes.md" />
     <None Include="License.md" />
     <None Include="Readme.md" />
   </ItemGroup>
@@ -87,7 +88,6 @@
     <Compile Include="WooCommerce\v2\WCObject.cs" />
     <Compile Include="WooCommerce\v2\Webhook.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

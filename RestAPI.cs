@@ -24,6 +24,7 @@ namespace WooCommerceNET
         private Func<string, string> jsonSeFilter;
         private Func<string, string> jsonDeseFilter;
         private Action<HttpWebRequest> webRequestFilter;
+        private Action<HttpWebResponse> webResponseFilter;
 
         /// <summary>
         /// Initialize the RestAPI object
@@ -35,10 +36,12 @@ namespace WooCommerceNET
         /// <param name="jsonSerializeFilter">Provide a function to modify the json string after serilizing.</param>
         /// <param name="jsonDeserializeFilter">Provide a function to modify the json string before deserilizing.</param>
         /// <param name="requestFilter">Provide a function to modify the HttpWebRequest object.</param>
+        /// <param name="responseFilter">Provide a function to grab information from the HttpWebResponse object.</param>
         public RestAPI(string url, string key, string secret, bool authorizedHeader = true, 
                             Func<string, string> jsonSerializeFilter = null, 
                             Func<string, string> jsonDeserializeFilter = null, 
-                            Action<HttpWebRequest> requestFilter = null)//, bool useProxy = false)
+                            Action<HttpWebRequest> requestFilter = null,
+                            Action<HttpWebResponse> responseFilter = null)//, bool useProxy = false)
         {
             if (string.IsNullOrEmpty(url))
                 throw new Exception("Please use a valid WooCommerce Restful API url.");
@@ -50,6 +53,8 @@ namespace WooCommerceNET
                 Version = APIVersion.Version1;
             else if (urlLower.EndsWith("wp-json/wc/v2"))
                 Version = APIVersion.Version2;
+            else if (urlLower.Contains("wp-json/wc-"))
+                Version = APIVersion.ThirdPartyPlugins;
             else
             {
                 Version = APIVersion.Unknown;
@@ -69,6 +74,7 @@ namespace WooCommerceNET
             jsonSeFilter = jsonSerializeFilter;
             jsonDeseFilter = jsonDeserializeFilter;
             webRequestFilter = requestFilter;
+            webResponseFilter = responseFilter;
 
             //wc_Proxy = useProxy;
         }
@@ -205,17 +211,13 @@ namespace WooCommerceNET
                 foreach (var p in parms)
                     dic.Add(p.Key, p.Value);
 
-            string base_request_uri = Uri.EscapeDataString(wc_url + endpoint).Replace("%2f", "%2F").Replace("%3a", "%3A");
+            string base_request_uri = method.ToUpper() + "&" + Uri.EscapeDataString(wc_url + endpoint) + "&";
             string stringToSign = string.Empty;
 
             foreach (var parm in dic.OrderBy(x => x.Key))
-                stringToSign += Uri.EscapeDataString(parm.Key) + "%3D" + Uri.EscapeDataString(Uri.EscapeDataString(parm.Value)) + "%26";
+                stringToSign += Uri.EscapeDataString(parm.Key) + "=" + Uri.EscapeDataString(parm.Value) + "&";
 
-            base_request_uri = method.ToUpper() + "&" + base_request_uri + "&" + stringToSign.Substring(0, stringToSign.Length - 3);
-            
-            Common.DebugInfo.Append(base_request_uri);
-
-            stringToSign += "oauth_signature%3D" + Common.GetSHA256(wc_secret, base_request_uri);
+            base_request_uri = base_request_uri + Uri.EscapeDataString(stringToSign.TrimEnd('&'));
 
             dic.Add("oauth_signature", Common.GetSHA256(wc_secret, base_request_uri));
 
@@ -317,6 +319,7 @@ namespace WooCommerceNET
         Unknown = 0,
         Legacy = 1,
         Version1 = 2,
-        Version2 = 3
+        Version2 = 3,
+        ThirdPartyPlugins = 99
     }
 }
