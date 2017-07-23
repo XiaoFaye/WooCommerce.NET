@@ -9,8 +9,7 @@ WooCommerce.NET is a .NET library for calling WooCommerce REST API in any .NET a
 [Visit WooCommerce](http://www.woothemes.com/woocommerce/)
 [Visit WooCommerce REST API DOCS](https://woocommerce.github.io/woocommerce-rest-api-docs/)
 
-It's in Nuget now!!! 
-[Visit Nuget](https://www.nuget.org/packages/WooCommerceNET)
+[![NuGet](https://buildstats.info/nuget/WooCommerceNET)](http://www.nuget.org/packages/WooCommerceNET)
 
 * [How to use JSON.NET in WooCommerce.NET](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-use-JSON.NET-in-WooCommerce.NET)
 * [Handle different types of Meta Value in WC Restful API V2](https://github.com/XiaoFaye/WooCommerce.NET/wiki/Handle-different-types-of-Meta-Value-in-WC-Restful-API-V2)
