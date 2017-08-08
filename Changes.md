@@ -3,6 +3,12 @@
 
 Version History
 -------------------
+* v0.7.2 update
+  1. Add webResponseFilter in RestAPI, which allows you to get information from the HttpWebResponse object, e.g.:X-WP-Total and X-WP-TotalPages.
+  2. Fix decimal values do not be serialized as string issue.
+  3. Avoid Deadlocking on the UI Thread on non-async calls.
+  4. Fix Variation weight not deserialising issue.
+  5. Allow calling third party Plugins restful apis.
 * v0.7.1 Major update
   1. Able to override the process of SerializeJSon and DeserializeJSon.
   2. Allow to handle meta value for different return types.

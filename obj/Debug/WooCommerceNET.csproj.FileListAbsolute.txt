@@ -1,5 +1,0 @@
-C:\Users\yoelh\Downloads\PullRequests\WooCommerce.NET\bin\Debug\WooCommerceNET.dll
-C:\Users\yoelh\Downloads\PullRequests\WooCommerce.NET\bin\Debug\WooCommerceNET.pdb
-C:\Users\yoelh\Downloads\PullRequests\WooCommerce.NET\obj\Debug\WooCommerceNET.csprojResolveAssemblyReference.cache
-C:\Users\yoelh\Downloads\PullRequests\WooCommerce.NET\obj\Debug\WooCommerceNET.dll
-C:\Users\yoelh\Downloads\PullRequests\WooCommerce.NET\obj\Debug\WooCommerceNET.pdb
