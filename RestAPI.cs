@@ -147,6 +147,10 @@ namespace WooCommerceNET
                 
                 // asynchronously get a response
                 WebResponse wr = await httpWebRequest.GetResponseAsync().ConfigureAwait(false);
+				
+                if (webResponseFilter != null)
+                    webResponseFilter.Invoke((HttpWebResponse)wr);
+				
                 return await GetStreamContent(wr.GetResponseStream(), wr.ContentType.Contains("=") ? wr.ContentType.Split('=')[1] : "UTF-8").ConfigureAwait(false);
             }
             catch (WebException we)
