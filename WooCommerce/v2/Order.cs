@@ -502,7 +502,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<OrderTaxLine> taxes { get; set; }
+        public List<TaxItem> taxes { get; set; }
 
         /// <summary>
         /// Meta data. See Order - Meta data properties
@@ -586,6 +586,30 @@ namespace WooCommerceNET.WooCommerce.v2
     }
     
     [DataContract]
+    public class TaxItem : JsonObject
+    {
+        /// <summary>
+        /// tax item id
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? id { get; set; }
+
+        /// <summary>
+        /// tax item total
+        /// </summary>
+        [DataMember(EmitDefaultValue = false, Name = "total")]
+        protected object totalValue { get; set; }
+        public decimal? total { get; set; }
+
+        /// <summary>
+        /// tax item subtotal
+        /// </summary>
+        [DataMember(EmitDefaultValue = false, Name = "subtotal")]
+        protected object subtotalValue { get; set; }
+        public decimal? subtotal { get; set; }
+    }
+
+    [DataContract]
     public class OrderShippingLine : JsonObject
     {
         /// <summary>
@@ -627,7 +651,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<OrderTaxLine> taxes { get; set; }
+        public List<TaxItem> taxes { get; set; }
 
         /// <summary>
         /// Meta data. See Order - Meta data properties
@@ -684,7 +708,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<OrderTaxLine> taxes { get; set; }
+        public List<TaxItem> taxes { get; set; }
 
         /// <summary>
         /// Meta data. See Order - Meta data properties
