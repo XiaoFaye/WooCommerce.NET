@@ -3,6 +3,10 @@
 
 Version History
 -------------------
+* v0.7.3 update
+  1. Fix webResponseFilter not firing issue.
+  2. Fix price check for inherit class issue.
+  3. Return BatchObject instead of raw json string.
 * v0.7.2 update
   1. Add webResponseFilter in RestAPI, which allows you to get information from the HttpWebResponse object, e.g.:X-WP-Total and X-WP-TotalPages.
   2. Fix decimal values do not be serialized as string issue.
