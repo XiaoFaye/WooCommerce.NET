@@ -137,7 +137,10 @@ namespace WooCommerceNET.Base
         {
             return API.DeserializeJSon<T>(await API.GetRestful(APIEndpoint + "/" + id.ToString(), parms).ConfigureAwait(false));
         }
-
+        public async Task<T> Get(string email, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<T>(await API.GetRestful(APIEndpoint + "/" + email, parms).ConfigureAwait(false));
+        }
         public async Task<List<T>> GetAll(Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<List<T>>(await API.GetRestful(APIEndpoint, parms).ConfigureAwait(false));
