@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>WooCommerceNET</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.8.0</Version>
+    <Authors>JamesYang@NZ, Hakan Lindestaf</Authors>
+    <Company>JamesYang@NZ</Company>
+    <PackageLicenseUrl>https://github.com/XiaoFaye/WooCommerce.NET/blob/master/License.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/XiaoFaye/WooCommerce.NET</PackageProjectUrl>
+    <PackageReleaseNotes>WooCommerce.NET is a .NET library for calling WooCommerce REST API in any .NET applications.
+
+GitHub: https://github.com/XiaoFaye/WooCommerce.NET
+Changes Doc: https://github.com/XiaoFaye/WooCommerce.NET/blob/master/Changes.md
+
+* v0.7.3 update
+  1. Fix webResponseFilter not firing issue.
+  2. Fix price check for inherit class issue.
+  3. Return BatchObject instead of raw json string.</PackageReleaseNotes>
+    <Copyright>Copyright ©  2015 - 2018 James Yang@NZ</Copyright>
+    <PackageTags>WooCommerce RESTful API .NET</PackageTags>
+    <Description>A .NET Wrapper for WooCommerce REST API</Description>
+    <PackageId>WooCommerceNET</PackageId>
+    <Product>WooCommerceNET</Product>
+  </PropertyGroup>
+
+</Project>
