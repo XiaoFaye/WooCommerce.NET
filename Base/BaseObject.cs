@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace WooCommerceNET.Base
 {
@@ -217,6 +216,11 @@ namespace WooCommerceNET.Base
         public async Task<T> Update(int id, T item, int parentId, Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<T>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), item, parms).ConfigureAwait(false));
+        }
+
+        public async Task<BatchObject<T>> UpdateRange(int parentId, BatchObject<T> items, Dictionary<string, string> parms = null)
+        {
+            return API.DeserializeJSon<BatchObject<T>>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/batch", items, parms).ConfigureAwait(false));
         }
 
         public async Task<string> Delete(int id, int parentId, bool force = false, Dictionary<string, string> parms = null)

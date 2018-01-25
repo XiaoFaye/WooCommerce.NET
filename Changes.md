@@ -3,6 +3,10 @@
 
 Version History
 -------------------
+* v0.7.4 update
+  1. Targeting .NET Standard 2.0.
+  2. Add Batch Update for WCSubItem.
+  3. Allow WCObject to use custom object in V2.
 * v0.7.3 update
   1. Fix webResponseFilter not firing issue.
   2. Fix price check for inherit class issue.

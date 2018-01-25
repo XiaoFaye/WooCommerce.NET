@@ -6,8 +6,78 @@ using WooCommerceNET.Base;
 
 namespace WooCommerceNET.WooCommerce.v2
 {
-    public class WCObject
+    public class WCObject<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
+        where T1 : Coupon where T2 : Customer where T3 : Product where T4 : ProductReview where T5 : Variation
+        where T6 : Order where T7 : OrderNote where T8 : OrderRefund where T9 : ProductAttribute
+        where T10 : ProductAttributeTerm where T11 : ProductCategory where T12 : ShippingClass 
+        where T13 : ProductTag where T14 : TaxRate where T15 : TaxClass
     {
+       
+        protected RestAPI API { get; set; }
+        public static Func<string, object, object> MetaValueProcessor { get; set; }
+        public WCObject(RestAPI api)
+        {
+            if (api.Version != APIVersion.Version2)
+                throw new Exception("Please use WooCommerce Restful API Version 2 url for this WCObject. e.g.: http://www.yourstore.co.nz/wp-json/wc/v2/");
+
+            API = api;
+
+            Coupon = new WCItem<T1>(api);
+            Customer = new WCItem<T2>(api);
+            Product = new WCProductItem(api);
+            Order = new WCOrderItem(api);
+            Attribute = new WCAttributeItem(api);
+            Category = new WCItem<T11>(api);
+            ShippingClass = new WCItem<T12>(api);
+            Tag = new WCItem<T13>(api);
+            Report = new WCItem<v2.Report>(api);
+            TaxRate = new WCItem<T14>(api);
+            TaxClass = new WCItem<T15>(api);
+            Webhook = new WCItem<v2.Webhook>(api);
+            PaymentGateway = new WCItem<v2.PaymentGateway>(api);
+            ShippingZone = new WCShippingZoneItem(api);
+            ShippingMethod = new WCItem<v2.ShippingMethod>(api);
+            SystemStatus = new WCItem<v2.SystemStatus>(api);
+            SystemStatusTool = new WCItem<v2.SystemStatusTool>(api);
+            Setting = new WCItem<v2.Setting>(api);
+        }
+
+        public WCItem<T1> Coupon { get; protected set; }
+
+        public WCItem<T2> Customer { get; protected set; }
+
+        public WCProductItem Product { get; protected set; }
+
+        public WCOrderItem Order { get; protected set; }
+
+        public WCAttributeItem Attribute { get; protected set; }
+
+        public WCItem<T11> Category { get; protected set; }
+
+        public WCItem<T12> ShippingClass { get; protected set; }
+
+        public WCItem<T13> Tag { get; protected set; }
+
+        public WCItem<Report> Report { get; protected set; }
+
+        public WCItem<T14> TaxRate { get; protected set; }
+
+        public WCItem<T15> TaxClass { get; protected set; }
+
+        public WCItem<Webhook> Webhook { get; protected set; }
+
+        public WCItem<PaymentGateway> PaymentGateway { get; protected set; }
+
+        public WCShippingZoneItem ShippingZone { get; protected set; }
+
+        public WCItem<ShippingMethod> ShippingMethod { get; protected set; }
+
+        public WCItem<SystemStatus> SystemStatus { get; protected set; }
+
+        public WCItem<SystemStatusTool> SystemStatusTool { get; protected set; }
+
+        public WCItem<Setting> Setting { get; protected set; }
+
         [DataContract]
         public class MetaData
         {
@@ -45,126 +115,69 @@ namespace WooCommerceNET.WooCommerce.v2
             }
         }
 
-        protected RestAPI API { get; set; }
-        public static Func<string, object, object> MetaValueProcessor { get; set; }
-        public WCObject(RestAPI api)
+        public class WCProductItem : WCItem<T3>
         {
-            if (api.Version != APIVersion.Version2)
-                throw new Exception("Please use WooCommerce Restful API Version 2 url for this WCObject. e.g.: http://www.yourstore.co.nz/wp-json/wc/v2/");
+            public WCProductItem(RestAPI api) : base(api)
+            {
+                API = api;
 
-            API = api;
+                Reviews = new WCSubItem<T4>(api, APIEndpoint);
+                Variations = new WCSubItem<T5>(api, APIEndpoint);
+            }
 
-            Coupon = new WCItem<v2.Coupon>(api);
-            Customer = new WCItem<v2.Customer>(api);
-            Product = new WCProductItem(api);
-            Order = new WCOrderItem(api);
-            Attribute = new WCAttributeItem(api);
-            Category = new WCItem<v2.ProductCategory>(api);
-            ShippingClass = new WCItem<v2.ShippingClass>(api);
-            Tag = new WCItem<v2.ProductTag>(api);
-            Report = new WCItem<v2.Report>(api);
-            TaxRate = new WCItem<v2.TaxRate>(api);
-            TaxClass = new WCItem<v2.TaxClass>(api);
-            Webhook = new WCItem<v2.Webhook>(api);
-            PaymentGateway = new WCItem<v2.PaymentGateway>(api);
-            ShippingZone = new WCShippingZoneItem(api);
-            ShippingMethod = new WCItem<v2.ShippingMethod>(api);
-            SystemStatus = new WCItem<v2.SystemStatus>(api);
-            SystemStatusTool = new WCItem<v2.SystemStatusTool>(api);
-            Setting = new WCItem<v2.Setting>(api);
+            public WCSubItem<T4> Reviews { get; set; }
+
+            public WCSubItem<T5> Variations { get; set; }
         }
 
-        public WCItem<Coupon> Coupon { get; protected set; }
+        public class WCOrderItem : WCItem<T6>
+        {
+            public WCOrderItem(RestAPI api) : base(api)
+            {
+                API = api;
 
-        public WCItem<Customer> Customer { get; protected set; }
+                Notes = new WCSubItem<T7>(api, APIEndpoint);
+                Refunds = new WCSubItem<T8>(api, APIEndpoint);
+            }
 
-        public WCOrderItem Order { get; protected set; }
+            public WCSubItem<T7> Notes { get; set; }
 
-        public WCProductItem Product { get; protected set; }
+            public WCSubItem<T8> Refunds { get; set; }
+        }
 
-        public WCAttributeItem Attribute { get; protected set; }
+        public class WCAttributeItem : WCItem<T9>
+        {
+            public WCAttributeItem(RestAPI api) : base(api)
+            {
+                API = api;
 
-        public WCItem<ProductCategory> Category { get; protected set; }
+                Terms = new WCSubItem<T10>(api, APIEndpoint);
+            }
 
-        public WCItem<ShippingClass> ShippingClass { get; protected set; }
+            public WCSubItem<T10> Terms { get; set; }
+        }
 
-        public WCItem<ProductTag> Tag { get; protected set; }
+        public class WCShippingZoneItem : WCItem<ShippingZone>
+        {
+            public WCShippingZoneItem(RestAPI api) : base(api)
+            {
+                API = api;
 
-        public WCItem<Report> Report { get; protected set; }
+                Locations = new WCSubItem<ShippingZoneLocation>(api, APIEndpoint);
+                Methods = new WCSubItem<ShippingZoneMethod>(api, APIEndpoint);
+            }
 
-        public WCItem<TaxRate> TaxRate { get; protected set; }
-
-        public WCItem<TaxClass> TaxClass { get; protected set; }
-
-        public WCItem<Webhook> Webhook { get; protected set; }
-
-        public WCItem<PaymentGateway> PaymentGateway { get; protected set; }
-
-        public WCShippingZoneItem ShippingZone { get; protected set; }
-
-        public WCItem<ShippingMethod> ShippingMethod { get; protected set; }
-
-        public WCItem<SystemStatus> SystemStatus { get; protected set; }
-
-        public WCItem<SystemStatusTool> SystemStatusTool { get; protected set; }
-
-        public WCItem<Setting> Setting { get; protected set; }
+            public WCSubItem<ShippingZoneLocation> Locations { get; protected set; }
+            public WCSubItem<ShippingZoneMethod> Methods { get; protected set; }
+        }
     }
 
-    public class WCOrderItem : WCItem<Order>
+    public class WCObject: WCObject<Coupon, Customer, Product, ProductReview, Variation, Order, OrderNote, OrderRefund, ProductAttribute, ProductAttributeTerm, 
+                                    ProductCategory, ShippingClass, ProductTag, TaxRate, TaxClass>
     {
-        public WCOrderItem(RestAPI api) : base(api)
+        public WCObject(RestAPI api) : base(api)
         {
-            API = api;
-
-            Notes = new WCSubItem<OrderNote>(api, APIEndpoint);
-            Refunds = new WCSubItem<OrderRefund>(api, APIEndpoint);
         }
-
-        public WCSubItem<OrderNote> Notes { get; set; }
-
-        public WCSubItem<OrderRefund> Refunds { get; set; }
-    }
-
-    public class WCProductItem : WCItem<Product>
-    {
-        public WCProductItem(RestAPI api) : base(api)
-        {
-            API = api;
-            
-            Reviews = new WCSubItem<ProductReview>(api, APIEndpoint);
-            Variations = new WCSubItem<Variation>(api, APIEndpoint);
-        }
-
-        public WCSubItem<ProductReview> Reviews { get; set; }
-
-        public WCSubItem<Variation> Variations { get; set; }
-    }
-
-    public class WCAttributeItem :WCItem<ProductAttribute>
-    {
-        public WCAttributeItem(RestAPI api) : base(api)
-        {
-            API = api;
-
-            Terms = new WCSubItem<ProductAttributeTerm>(api, APIEndpoint);
-        }
-
-        public WCSubItem<ProductAttributeTerm> Terms { get; set; }
-    }
-
-    public class WCShippingZoneItem : WCItem<ShippingZone>
-    {
-        public WCShippingZoneItem(RestAPI api) : base(api)
-        {
-            API = api;
-
-            Locations = new WCSubItem<ShippingZoneLocation>(api, APIEndpoint);
-            Methods = new WCSubItem<ShippingZoneMethod>(api, APIEndpoint);
-        }
-
-        public WCSubItem<ShippingZoneLocation> Locations { get; protected set; }
-        public WCSubItem<ShippingZoneMethod> Methods { get; protected set; }
     }
 }
 
