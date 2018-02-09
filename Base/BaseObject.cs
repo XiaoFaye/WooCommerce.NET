@@ -142,7 +142,9 @@ namespace WooCommerceNET.Base
                 parms = new Dictionary<string, string>();
 
             parms.Add("email", email);
-            return API.DeserializeJSon<T>(await API.GetRestful(APIEndpoint, parms).ConfigureAwait(false));
+            var json = await API.GetRestful(APIEndpoint, parms).ConfigureAwait(false);
+            var c = API.DeserializeJSon<List<T>>(json);
+            return c.Count == 0 ? default(T) : c[0];
         }
         public async Task<List<T>> GetAll(Dictionary<string, string> parms = null)
         {
