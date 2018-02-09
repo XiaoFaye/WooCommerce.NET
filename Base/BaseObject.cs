@@ -129,7 +129,10 @@ namespace WooCommerceNET.Base
         public WCItem(RestAPI api)
         {
             API = api;
-            APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+            if (typeof(T).Namespace.StartsWith("WooCommerceNET.WooCommerce"))
+                APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+            else
+                APIEndpoint = typeof(T).BaseType.GetRuntimeProperty("Endpoint").GetValue(null).ToString();
         }
 
         public async Task<T> Get(int id, Dictionary<string, string> parms = null)
