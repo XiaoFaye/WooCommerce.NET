@@ -129,17 +129,22 @@ namespace WooCommerceNET.Base
         public WCItem(RestAPI api)
         {
             API = api;
-            APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+            if(typeof(T).BaseType.GetRuntimeProperty("Endpoint") == null)
+                APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+            else
+                APIEndpoint = typeof(T).BaseType.GetRuntimeProperty("Endpoint").GetValue(null).ToString();
         }
 
         public async Task<T> Get(int id, Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<T>(await API.GetRestful(APIEndpoint + "/" + id.ToString(), parms).ConfigureAwait(false));
         }
+
         public async Task<T> Get(string email, Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<T>(await API.GetRestful(APIEndpoint + "/" + email, parms).ConfigureAwait(false));
         }
+
         public async Task<List<T>> GetAll(Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<List<T>>(await API.GetRestful(APIEndpoint, parms).ConfigureAwait(false));

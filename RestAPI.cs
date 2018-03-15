@@ -107,21 +107,28 @@ namespace WooCommerceNET
             HttpWebRequest httpWebRequest = null;
             try
             {
-                if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && AuthorizedHeader)
+                if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
                 {
-                    httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
-                    httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
+                    if (AuthorizedHeader == true)
+                    {
+                        httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                        httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
+                    }
+                    else
+                    {
+                        if (parms == null)
+                            parms = new Dictionary<string, string>();
+
+                        if (!parms.ContainsKey("consumer_key"))
+                            parms.Add("consumer_key", wc_key);
+                        if (!parms.ContainsKey("consumer_secret"))
+                            parms.Add("consumer_secret", wc_secret);
+
+                        httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                    }
                 }
                 else
                 {
-                    if (parms == null)
-                        parms = new Dictionary<string, string>();
-
-                    if (!parms.ContainsKey("consumer_key"))
-                        parms.Add("consumer_key", wc_key);
-                    if (!parms.ContainsKey("consumer_secret"))
-                        parms.Add("consumer_secret", wc_secret);
-
                     httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
                 }
 
