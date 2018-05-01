@@ -592,7 +592,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// tax item id
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public string id { get; set; }
 
         /// <summary>
         /// tax item total
