@@ -151,6 +151,16 @@ namespace WooCommerceNET
                     Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
                     dataStream.Write(buffer, 0, buffer.Length);
                 }
+                else
+                {
+                    if(requestBody.ToString() != string.Empty)
+                    {
+                        httpWebRequest.ContentType = "application/json";
+                        var buffer = Encoding.UTF8.GetBytes(requestBody.ToString());
+                        Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
+                        dataStream.Write(buffer, 0, buffer.Length);
+                    }
+                }
                 
                 // asynchronously get a response
                 WebResponse wr = await httpWebRequest.GetResponseAsync().ConfigureAwait(false);

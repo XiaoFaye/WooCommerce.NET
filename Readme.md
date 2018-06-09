@@ -37,8 +37,11 @@ Product p = new Product()
             };
 await wc.Product.Add(p);
 
-//Update products
+//Update products with new values
 await wc.Product.Update(128, new Product { name = "test 9" });
+
+//Update products with Null values
+await wc.Product.UpdateWithNull(128, new { name = "test 9", weight = "", date_on_sale_from = "", date_on_sale_to = "" });
 
 //Delete product
 await wc.Product.Delete(128);

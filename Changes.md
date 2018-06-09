@@ -3,6 +3,10 @@
 
 Version History
 -------------------
+* v0.7.5 update
+  1. Avoid passing consumer secret when using http.
+  2. Fixing errors when getting APIEndpoint under some cases.
+  3. Allow updating with Null values in V2.
 * v0.7.4 update
   1. Targeting .NET Standard 2.0.
   2. Add Batch Update for WCSubItem.
