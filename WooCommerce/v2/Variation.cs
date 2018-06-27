@@ -166,7 +166,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public object manage_stock { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "stock_quantity")]
-        private object stock_quantityValue { get; set; }
+        protected object stock_quantityValue { get; set; }
         /// <summary>
         /// Stock quantity.
         /// </summary>
