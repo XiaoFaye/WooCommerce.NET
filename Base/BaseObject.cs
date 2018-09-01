@@ -246,6 +246,28 @@ namespace WooCommerceNET.Base
             return API.DeserializeJSon<T>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), item, parms).ConfigureAwait(false));
         }
 
+        public async Task<T> UpdateWithNull(int id, int parentId, object item, Dictionary<string, string> parms = null)
+        {
+            if (API.GetType().Name == "RestAPI")
+            {
+                StringBuilder json = new StringBuilder();
+                json.Append("{");
+                foreach (var prop in item.GetType().GetProperties())
+                {
+                    json.Append($"\"{prop.Name}\": \"\", ");
+                }
+
+                if (json.Length > 1)
+                    json.Remove(json.Length - 2, 1);
+
+                json.Append("}");
+
+                return API.DeserializeJSon<T>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), json.ToString(), parms).ConfigureAwait(false));
+            }
+            else
+                return API.DeserializeJSon<T>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), item, parms).ConfigureAwait(false));
+        }
+
         public async Task<BatchObject<T>> UpdateRange(int parentId, BatchObject<T> items, Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<BatchObject<T>>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/batch", items, parms).ConfigureAwait(false));
