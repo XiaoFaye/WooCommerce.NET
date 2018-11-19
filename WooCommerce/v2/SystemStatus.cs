@@ -27,7 +27,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<object> active_plugins { get; set; }
+        public List<SystemStatusPlugins> active_plugins { get; set; }
 
         /// <summary>
         /// Theme. See System status - Theme properties 
@@ -55,7 +55,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<object> pages { get; set; }
+        public List<SystemStatusPage> pages { get; set; }
 
     }
 
@@ -275,6 +275,34 @@ namespace WooCommerceNET.WooCommerce.v2
     }
     
     [DataContract]
+    public class SystemStatusPlugins
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public string plugin { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string name { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string version { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string version_latest { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string url { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string author_name { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string author_url { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public bool? network_activated { get; set; }
+    }
+
+    [DataContract]
     public class SystemStatusDatabase
     {
         /// <summary>
@@ -303,7 +331,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<string> database_tables { get; set; }
+        public object database_tables { get; set; }
 
     }
     
@@ -487,6 +515,34 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public bool? hide_errors { get; set; }
 
+    }
+
+    [DataContract]
+    public class SystemStatusPage
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public string page_name { get; set; }
+        
+        [DataMember(EmitDefaultValue = false)]
+        public string page_id { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public bool page_set { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public bool page_exists { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public bool page_visible { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string shortcode { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public bool shortcode_required { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public bool shortcode_present { get; set; }
     }
 
     [DataContract]

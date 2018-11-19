@@ -222,7 +222,11 @@ namespace WooCommerceNET.Base
         public WCSubItem(RestAPI api, string parentEndpoint)
         {
             API = api;
-            APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+            if (typeof(T).BaseType.FullName.Contains("v2"))
+                APIEndpoint = typeof(T).BaseType.GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+            else
+                APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
+
             APIParentEndpoint = parentEndpoint;
         }
 

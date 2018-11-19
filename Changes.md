@@ -3,6 +3,8 @@
 
 Version History
 -------------------
+* v0.7.6 update
+  1. Supporting WooCommerce Restful API V3.
 * v0.7.5 update
   1. Avoid passing consumer secret when using http.
   2. Fixing errors when getting APIEndpoint under some cases.

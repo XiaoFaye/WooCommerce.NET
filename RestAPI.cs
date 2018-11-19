@@ -53,6 +53,8 @@ namespace WooCommerceNET
                 Version = APIVersion.Version1;
             else if (urlLower.EndsWith("wp-json/wc/v2"))
                 Version = APIVersion.Version2;
+            else if (urlLower.EndsWith("wp-json/wc/v3"))
+                Version = APIVersion.Version3;
             else if (urlLower.Contains("wp-json/wc-"))
                 Version = APIVersion.ThirdPartyPlugins;
             else
@@ -341,6 +343,7 @@ namespace WooCommerceNET
         Legacy = 1,
         Version1 = 2,
         Version2 = 3,
+        Version3 = 4,
         ThirdPartyPlugins = 99
     }
 }
