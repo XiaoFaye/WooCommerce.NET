@@ -10,6 +10,8 @@ namespace WooCommerceNET.WooCommerce.v2
     {
         public static string Endpoint { get { return "variations"; } }
 
+        [DataMember(EmitDefaultValue = false)]
+        public Error error { get; set; }
         /// <summary>
         /// Unique identifier for the resource. 
         /// read-only

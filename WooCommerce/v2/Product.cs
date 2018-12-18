@@ -13,6 +13,12 @@ namespace WooCommerceNET.WooCommerce.v2
         public static string Endpoint { get { return "products"; } }
 
         /// <summary>
+        /// Container for error information, if any
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public Error error { get; set; }
+
+        /// <summary>
         /// Unique identifier for the resource. 
         /// read-only
         /// </summary>
@@ -719,4 +725,13 @@ namespace WooCommerceNET.WooCommerce.v2
 
     }
 
+    [DataContract]
+    public class Error : JsonObject
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public string code { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string message { get; set; }
+    }
 }
