@@ -21,13 +21,11 @@ namespace WooCommerceNET.Base
                 {
                     if (pi.PropertyType == typeof(decimal?))
                     {
-                        if (GetType().FullName.StartsWith("WooCommerceNET.WooCommerce.v1") ||
-                            GetType().FullName.StartsWith("WooCommerceNET.WooCommerce.v2") ||
-                            GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.v1") ||
-                            GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.v2"))
-                            objValue.SetValue(this, (pi.GetValue(this) as decimal?).Value.ToString(CultureInfo.InvariantCulture));
-                        else
+                        if (GetType().FullName.StartsWith("WooCommerceNET.WooCommerce.Legacy") ||
+                            GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.Legacy"))
                             objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
+                        else
+                            objValue.SetValue(this, (pi.GetValue(this) as decimal?).Value.ToString(CultureInfo.InvariantCulture));
                     }
                     else if (pi.PropertyType == typeof(int?))
                     {
@@ -130,7 +128,7 @@ namespace WooCommerceNET.Base
         public WCItem(RestAPI api)
         {
             API = api;
-            if(typeof(T).BaseType.GetRuntimeProperty("Endpoint") == null)
+            if (typeof(T).BaseType.GetRuntimeProperty("Endpoint") == null)
                 APIEndpoint = typeof(T).GetRuntimeProperty("Endpoint").GetValue(null).ToString();
             else
                 APIEndpoint = typeof(T).BaseType.GetRuntimeProperty("Endpoint").GetValue(null).ToString();
@@ -172,7 +170,7 @@ namespace WooCommerceNET.Base
             {
                 StringBuilder json = new StringBuilder();
                 json.Append("{");
-                foreach(var prop in item.GetType().GetRuntimeProperties())
+                foreach (var prop in item.GetType().GetRuntimeProperties())
                 {
                     json.Append($"\"{prop.Name}\": \"\", ");
                 }
