@@ -60,7 +60,7 @@ namespace WooCommerceNET
             else
             {
                 Version = APIVersion.Unknown;
-                throw new Exception("Unknow WooCommerce Restful API version.");
+                throw new Exception("Unknown WooCommerce Restful API version.");
             }
             
             wc_url = url + (url.EndsWith("/") ? "" : "/");
