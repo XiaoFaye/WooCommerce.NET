@@ -137,6 +137,7 @@ namespace WooCommerceNET
                 // start the stream immediately
                 httpWebRequest.Method = method.ToString();
                 httpWebRequest.AllowReadStreamBuffering = false;
+                httpWebRequest.UserAgent = "WooCommerce.NET";
 
                 if (webRequestFilter != null)
                     webRequestFilter.Invoke(httpWebRequest);
