@@ -162,6 +162,12 @@ namespace WooCommerceNET
                         Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
                         dataStream.Write(buffer, 0, buffer.Length);
                     }
+                }                
+                
+                if (method == RequestMethod.DELETE || method == RequestMethod.PUT)
+                {
+                    httpWebRequest.Headers.Add("X-HTTP-Method-Override", method.ToString());
+                    httpWebRequest.Method = "POST";
                 }
                 
                 // asynchronously get a response
