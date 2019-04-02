@@ -18,10 +18,10 @@ Usage
 -------------------
 
 ```cs
-using WooCommerceNET.WooCommerce.v2;
-using WooCommerceNET.WooCommerce.v2.Extension;
+using WooCommerceNET.WooCommerce.v3;
+using WooCommerceNET.WooCommerce.v3.Extension;
 
-RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/wc/v2/", "<WooCommerce Key>", "<WooCommerce Secret");
+RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/wc/v3/", "<WooCommerce Key>", "<WooCommerce Secret");
 WCObject wc = new WCObject(rest);
 
 //Get all products

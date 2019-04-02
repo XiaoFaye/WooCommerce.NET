@@ -23,8 +23,10 @@ namespace WooCommerceNET.Base
                     {
                         if (GetType().FullName.StartsWith("WooCommerceNET.WooCommerce.v1") ||
                             GetType().FullName.StartsWith("WooCommerceNET.WooCommerce.v2") ||
+                            GetType().FullName.StartsWith("WooCommerceNET.WooCommerce.v3") ||
                             GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.v1") ||
-                            GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.v2"))
+                            GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.v2") ||
+                            GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.v3"))
                             objValue.SetValue(this, (pi.GetValue(this) as decimal?).Value.ToString(CultureInfo.InvariantCulture));
                         else
                             objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
@@ -174,7 +176,7 @@ namespace WooCommerceNET.Base
                 json.Append("{");
                 foreach(var prop in item.GetType().GetRuntimeProperties())
                 {
-                    json.Append($"\"{prop.Name}\": \"\", ");
+                    json.Append($"\"{prop.Name}\": \"{prop.GetValue(item)}\", ");
                 }
 
                 if (json.Length > 1)
@@ -193,7 +195,7 @@ namespace WooCommerceNET.Base
             return API.DeserializeJSon<BatchObject<T>>(await API.PostRestful(APIEndpoint + "/batch", items, parms).ConfigureAwait(false));
         }
 
-        public async Task<string> Delete(int id, bool force = false, Dictionary<string, string> parms = null)
+        public async Task<T> Delete(int id, bool force = false, Dictionary<string, string> parms = null)
         {
             if (force)
             {
@@ -204,7 +206,7 @@ namespace WooCommerceNET.Base
                     parms.Add("force", "true");
             }
 
-            return await API.DeleteRestful(APIEndpoint + "/" + id.ToString(), parms).ConfigureAwait(false);
+            return API.DeserializeJSon<T>(await API.DeleteRestful(APIEndpoint + "/" + id.ToString(), parms).ConfigureAwait(false));
         }
 
         public async Task<string> DeleteRange(BatchObject<T> items, Dictionary<string, string> parms = null)

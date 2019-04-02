@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -27,19 +28,32 @@ namespace WooCommerceNET
         private Action<HttpWebResponse> webResponseFilter;
 
         /// <summary>
+        /// For Wordpress REST API with OAuth 1.0 ONLY
+        /// </summary>
+        public string oauth_token { get; set; }
+
+        /// <summary>
+        /// For Wordpress REST API with OAuth 1.0 ONLY
+        /// </summary>
+        public string oauth_token_secret { get; set; }
+
+        /// <summary>
         /// Initialize the RestAPI object
         /// </summary>
-        /// <param name="url">WooCommerce REST API URL, e.g.: http://yourstore/wp-json/wc/v1/ </param>
-        /// <param name="key">WooCommerce REST API Key</param>
-        /// <param name="secret">WooCommerce REST API Secret</param>
+        /// <param name="url">
+        /// WooCommerce REST API URL, e.g.: http://yourstore/wp-json/wc/v1/ 
+        /// WordPress REST API URL, e.g.: http://yourstore/wp-json/
+        /// </param>
+        /// <param name="key">WooCommerce REST API Key Or WordPress consumerKey</param>
+        /// <param name="secret">WooCommerce REST API Secret Or WordPress consumerSecret</param>
         /// <param name="authorizedHeader">WHEN using HTTPS, do you prefer to send the Credentials in HTTP HEADER?</param>
         /// <param name="jsonSerializeFilter">Provide a function to modify the json string after serilizing.</param>
         /// <param name="jsonDeserializeFilter">Provide a function to modify the json string before deserilizing.</param>
         /// <param name="requestFilter">Provide a function to modify the HttpWebRequest object.</param>
         /// <param name="responseFilter">Provide a function to grab information from the HttpWebResponse object.</param>
-        public RestAPI(string url, string key, string secret, bool authorizedHeader = true, 
-                            Func<string, string> jsonSerializeFilter = null, 
-                            Func<string, string> jsonDeserializeFilter = null, 
+        public RestAPI(string url, string key, string secret, bool authorizedHeader = true,
+                            Func<string, string> jsonSerializeFilter = null,
+                            Func<string, string> jsonDeserializeFilter = null,
                             Action<HttpWebRequest> requestFilter = null,
                             Action<HttpWebResponse> responseFilter = null)//, bool useProxy = false)
         {
@@ -57,18 +71,20 @@ namespace WooCommerceNET
                 Version = APIVersion.Version3;
             else if (urlLower.Contains("wp-json/wc-"))
                 Version = APIVersion.ThirdPartyPlugins;
+            else if (urlLower.EndsWith("wp-json"))
+                Version = APIVersion.WordPressAPI;
             else
             {
                 Version = APIVersion.Unknown;
                 throw new Exception("Unknown WooCommerce Restful API version.");
             }
-            
+
             wc_url = url + (url.EndsWith("/") ? "" : "/");
             wc_key = key;
             AuthorizedHeader = authorizedHeader;
 
             //Why extra '&'? look here: https://wordpress.org/support/topic/woocommerce-rest-api-v3-problem-woocommerce_api_authentication_error/
-            if ((url.ToLower().Contains("wc-api/v3") || !IsLegacy) && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+            if ((url.ToLower().Contains("wc-api/v3") || !IsLegacy) && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI)
                 wc_secret = secret + "&";
             else
                 wc_secret = secret;
@@ -81,7 +97,7 @@ namespace WooCommerceNET
             //wc_Proxy = useProxy;
         }
 
-        
+
 
         public bool IsLegacy
         {
@@ -109,7 +125,13 @@ namespace WooCommerceNET
             HttpWebRequest httpWebRequest = null;
             try
             {
-                if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+                if (Version == APIVersion.WordPressAPI)
+                {
+                    if (string.IsNullOrEmpty(oauth_token) || string.IsNullOrEmpty(oauth_token_secret))
+                        throw new Exception($"oauth_token and oauth_token_secret parameters are required when using WordPress REST API.");
+                }
+
+                if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI)
                 {
                     if (AuthorizedHeader == true)
                     {
@@ -155,7 +177,7 @@ namespace WooCommerceNET
                 }
                 else
                 {
-                    if(requestBody.ToString() != string.Empty)
+                    if (requestBody.ToString() != string.Empty)
                     {
                         httpWebRequest.ContentType = "application/json";
                         var buffer = Encoding.UTF8.GetBytes(requestBody.ToString());
@@ -163,13 +185,13 @@ namespace WooCommerceNET
                         dataStream.Write(buffer, 0, buffer.Length);
                     }
                 }
-                
+
                 // asynchronously get a response
                 WebResponse wr = await httpWebRequest.GetResponseAsync().ConfigureAwait(false);
-				
+
                 if (webResponseFilter != null)
                     webResponseFilter.Invoke((HttpWebResponse)wr);
-				
+
                 return await GetStreamContent(wr.GetResponseStream(), wr.ContentType.Contains("=") ? wr.ContentType.Split('=')[1] : "UTF-8").ConfigureAwait(false);
             }
             catch (WebException we)
@@ -208,9 +230,14 @@ namespace WooCommerceNET
             return await SendHttpClientRequest(endpoint, RequestMethod.DELETE, string.Empty, parms).ConfigureAwait(false);
         }
 
+        public async Task<string> DeleteRestful(string endpoint, object jsonObject, Dictionary<string, string> parms = null)
+        {
+            return await SendHttpClientRequest(endpoint, RequestMethod.DELETE, jsonObject, parms).ConfigureAwait(false);
+        }
+
         private string GetOAuthEndPoint(string method, string endpoint, Dictionary<string, string> parms = null)
         {
-            if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+            if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI)
             {
                 if (parms == null)
                     return endpoint;
@@ -223,12 +250,17 @@ namespace WooCommerceNET
                     return endpoint + "?" + requestParms.TrimEnd('&');
                 }
             }
-
+            
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic.Add("oauth_consumer_key", wc_key);
+
+            if (Version == APIVersion.WordPressAPI)
+                dic.Add("oauth_token", oauth_token);
+
             dic.Add("oauth_nonce", Guid.NewGuid().ToString("N"));
             dic.Add("oauth_signature_method", "HMAC-SHA256");
             dic.Add("oauth_timestamp", Common.GetUnixTime(false));
+            dic.Add("oauth_version", "1.0");
 
             if (parms != null)
                 foreach (var p in parms)
@@ -242,15 +274,18 @@ namespace WooCommerceNET
 
             base_request_uri = base_request_uri + Uri.EscapeDataString(stringToSign.TrimEnd('&'));
 
-            dic.Add("oauth_signature", Common.GetSHA256(wc_secret, base_request_uri));
-
+            if (Version == APIVersion.WordPressAPI)
+                dic.Add("oauth_signature", Common.GetSHA256(wc_secret + "&" + oauth_token_secret, base_request_uri));
+            else
+                dic.Add("oauth_signature", Common.GetSHA256(wc_secret, base_request_uri));
+            
             string parmstr = string.Empty;
             foreach (var parm in dic)
                 parmstr += parm.Key + "=" + Uri.EscapeDataString(parm.Value) + "&";
 
             return endpoint + "?" + parmstr.TrimEnd('&');
         }
-        
+
         private async Task<string> GetStreamContent(Stream s, string charset)
         {
             StringBuilder sb = new StringBuilder();
@@ -300,7 +335,7 @@ namespace WooCommerceNET
                 jsonString = jsonDeseFilter.Invoke(jsonString);
 
             Type dT = typeof(T);
-            
+
             if (dT.Name.EndsWith("List"))
                 dT = dT.GetTypeInfo().DeclaredProperties.First().PropertyType.GenericTypeArguments[0];
 
@@ -344,6 +379,7 @@ namespace WooCommerceNET
         Version1 = 2,
         Version2 = 3,
         Version3 = 4,
+        WordPressAPI = 90,
         ThirdPartyPlugins = 99
     }
 }

@@ -3,6 +3,14 @@
 
 Version History
 -------------------
+* v0.7.7 update
+  1. Supporting Wordpress REST API with OAuth 1.0a.
+  2. Supporting WISDM Customer Specific Pricing REST API.
+  3. Add ProductCategory Batch object.
+  4. Allow to cancel a request before timeout.
+  5. Fix setting all values to Null issue in UpdateWithNull.
+  6. Fix decimal serialization issue in WooCommerce REST API V3.
+  7. Return corresponding object in Delete function.
 * v0.7.6 update
   1. Supporting WooCommerce Restful API V3.
 * v0.7.5 update

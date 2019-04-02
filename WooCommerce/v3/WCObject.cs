@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using WooCommerceNET.Base;
 
@@ -41,6 +42,7 @@ namespace WooCommerceNET.WooCommerce.v3
             SystemStatusTool = new WCItem<SystemStatusTool>(api);
             Setting = new WCItem<Setting>(api);
             Data = new WCItem<Data>(api);
+            Plugin = new WCItem<Plugins>(api);
         }
 
         public WCItem<T1> Coupon { get; protected set; }
@@ -80,6 +82,8 @@ namespace WooCommerceNET.WooCommerce.v3
         public WCItem<Setting> Setting { get; protected set; }
 
         public WCItem<Data> Data { get; protected set; }
+
+        public WCItem<Plugins> Plugin { get; protected set; }
 
         [DataContract]
         public class MetaData
@@ -182,12 +186,35 @@ namespace WooCommerceNET.WooCommerce.v3
         {
         }
     }
+
+    public class Plugins
+    {
+        public static string Endpoint { get { return "plugins"; } }
+    }
 }
 
 namespace WooCommerceNET.WooCommerce.v3.Extension
 {
     public static class WCExtension
     {
+        public static async Task<T> WithCancellation<T>(this Task<T> task, CancellationToken cancellationToken)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            using (cancellationToken.Register(() => tcs.TrySetResult(true)))
+                if (task != await Task.WhenAny(task, tcs.Task))
+                    throw new OperationCanceledException(cancellationToken);
+            return await task;
+        }
+
+        public static async Task WithCancellation(this Task task, CancellationToken cancellationToken)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            using (cancellationToken.Register(() => tcs.TrySetResult(true)))
+                if (task != await Task.WhenAny(task, tcs.Task))
+                    throw new OperationCanceledException(cancellationToken);
+            await task;
+        }
+
         public static async Task<List<CustomerDownloads>> GetCustomerDownloads(this WCItem<Customer> item, int id, Dictionary<string, string> parms = null)
         {
             return item.API.DeserializeJSon<List<CustomerDownloads>>(await item.API.GetRestful(item.APIEndpoint + "/" + id.ToString() + "/downloads", parms).ConfigureAwait(false));
@@ -251,6 +278,72 @@ namespace WooCommerceNET.WooCommerce.v3.Extension
         public static async Task<Currency> GetCurrency(this WCItem<Data> item, string currency = "current")
         {
             return item.API.DeserializeJSon<Currency>(await item.API.GetRestful(item.APIEndpoint + "/currencies/" + currency, null).ConfigureAwait(false));
+        }
+    }
+
+    public static class PluginsExtension
+    {
+        public static async Task<string> WISDM_GetByCustomer(this WCItem<Plugins> item, int userID)
+        {
+            return await item.API.GetRestful($"csp-mappings/user/{userID}");
+        }
+
+        public static async Task<List<WISDM_csp_data>> WISDM_GetByProduct(this WCItem<Plugins> item, int productID)
+        {
+            return item.API.DeserializeJSon<List<WISDM_csp_data>>(await item.API.GetRestful($"csp-mappings/product/{productID}"));
+        }
+
+        public static async Task<List<WISDM_csp_data>> WISDM_GetByCustomerProduct(this WCItem<Plugins> item, int userID, int productID)
+        {
+            return item.API.DeserializeJSon<List<WISDM_csp_data>>(await item.API.GetRestful($"csp-mappings/user/{userID}/product/{productID}"));
+        }
+
+        public static async Task<Dictionary<string, Dictionary<string,string>>> WISDM_Add(this WCItem<Plugins> item, List<WISDM_csp_data> data)
+        {
+            data.ForEach(x => x.GetHash());
+
+            return item.API.DeserializeJSon<Dictionary<string, Dictionary<string, string>>>(await item.API.PostRestful($"csp-mappings", "{ \"csp_data\": " + item.API.SerializeJSon(data) + " }"));
+        }
+
+        public static async Task<Dictionary<string, Dictionary<string, string>>> WISDM_Update(this WCItem<Plugins> item, List<WISDM_csp_data> data)
+        {
+            data.ForEach(x => x.GetHash());
+
+            return item.API.DeserializeJSon<Dictionary<string, Dictionary<string, string>>>(await item.API.PutRestful($"csp-mappings", "{ \"csp_data\": " + item.API.SerializeJSon(data) + " }"));
+        }
+
+        public static async Task<Dictionary<string, List<string>>> WISDM_Delete(this WCItem<Plugins> item, List<WISDM_csp_data> data)
+        {
+            data.ForEach(x => x.GetHash());
+
+            return item.API.DeserializeJSon<Dictionary<string, List<string>>>(await item.API.DeleteRestful($"csp-mappings", "{ \"csp_data\": " + item.API.SerializeJSon(data) + " }"));
+        }
+    }
+
+    [DataContract]
+    public class WISDM_csp_data
+    {
+        [DataMember(EmitDefaultValue = false)]
+        public int product_id { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public int customer_id { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public int min_qty { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string discount_type { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public decimal csp_price { get; set; }
+
+        [DataMember(EmitDefaultValue = false)]
+        public string hash { get; set; }
+
+        public void GetHash()
+        {
+            hash = Common.GetMD5($"{product_id}|{customer_id}|{min_qty}|{discount_type}|{csp_price}");
         }
     }
 }

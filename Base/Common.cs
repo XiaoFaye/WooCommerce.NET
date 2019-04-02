@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace WooCommerceNET.Base
@@ -27,15 +28,22 @@ namespace WooCommerceNET.Base
             return "0." + unixtime.ToString().Substring(10, 6) + "00 " + unixtime.ToString().Substring(0, 10);
         }
 
-        public static string GetSHA1(string message)
+        public static string GetSHA1(string key, string message)
         {
-            SHA1 sha1 = new SHA1(message);
-            return sha1.GetHash();
-            //HashAlgorithmProvider sha1 = HashAlgorithmProvider.OpenAlgorithm("SHA1");
-            //IBuffer vector = CryptographicBuffer.ConvertStringToBinary(message, BinaryStringEncoding.Utf8);
-            //IBuffer digest = sha1.HashData(vector);////Hashing The Data 
+            var encoding = new ASCIIEncoding();
 
-            //return CryptographicBuffer.EncodeToHexString(digest).ToLower();
+            byte[] keyBytes = encoding.GetBytes(key);
+            byte[] messageBytes = encoding.GetBytes(message);
+
+            string Sha1Result = string.Empty;
+
+            using (HMACSHA1 SHA1 = new HMACSHA1(keyBytes))
+            {
+                var Hashed = SHA1.ComputeHash(messageBytes);
+                Sha1Result = Convert.ToBase64String(Hashed);
+            }
+
+            return Sha1Result;
         }
 
         public static string GetSHA256(string key, string message)
@@ -50,6 +58,28 @@ namespace WooCommerceNET.Base
             //IBuffer digest = CryptographicEngine.Sign(signatureKey, contentBuffer);
 
             //return CryptographicBuffer.EncodeToBase64String(digest);
+        }
+
+        public static string GetMD5(string content)
+        {
+            using (MD5 md5Hash = MD5.Create())
+            {
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(content));
+
+                // Create a new Stringbuilder to collect the bytes
+                // and create a string.
+                StringBuilder sBuilder = new StringBuilder();
+
+                // Loop through each byte of the hashed data 
+                // and format each one as a hexadecimal string.
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+
+                // Return the hexadecimal string.
+                return sBuilder.ToString();
+            }
         }
     }
 }

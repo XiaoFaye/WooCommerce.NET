@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>WooCommerceNET</PackageId>
-    <Version>0.7.4</Version>
+    <Version>0.7.7-beta</Version>
     <Authors>JamesYang@NZ</Authors>
     <Company>JamesYang@NZ</Company>
     <Description>A .NET Wrapper for WooCommerce REST API</Description>
-    <Copyright>Copyright ©  2015 - 2018 James Yang@NZ</Copyright>
+    <Copyright>Copyright ©  2015 - 2019 James Yang@NZ</Copyright>
     <PackageLicenseUrl>https://github.com/XiaoFaye/WooCommerce.NET/blob/master/License.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/XiaoFaye/WooCommerce.NET</PackageProjectUrl>
     <PackageReleaseNotes>WooCommerce.NET is a .NET library for calling WooCommerce REST API in any .NET applications.
@@ -15,11 +15,12 @@
 GitHub: https://github.com/XiaoFaye/WooCommerce.NET
 Changes Doc: https://github.com/XiaoFaye/WooCommerce.NET/blob/master/Changes.md
 
-* v0.7.4 update
-  1. Targeting .NET Standard 2.0.
-  2. Add Batch Update for WCSubItem.
-  3. Allow WCObject to use custom object in V2.</PackageReleaseNotes>
+* v0.7.6 update
+  1. Supporting WooCommerce Restful API V3.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>0.7.7.0</AssemblyVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>sn.key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
 </Project>
