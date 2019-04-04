@@ -6,13 +6,16 @@ A Brief Intro
 
 WooCommerce.NET is a .NET library for calling WooCommerce REST API in any .NET applications.
 
-[Visit WooCommerce](http://www.woothemes.com/woocommerce/)
-[Visit WooCommerce REST API DOCS](https://woocommerce.github.io/woocommerce-rest-api-docs/)
+* [Visit WooCommerce](http://www.woothemes.com/woocommerce/)
+* [Visit WooCommerce REST API DOCS](https://woocommerce.github.io/woocommerce-rest-api-docs/)
 
 [![NuGet](https://buildstats.info/nuget/WooCommerceNET)](http://www.nuget.org/packages/WooCommerceNET)
 
 * [How to use JSON.NET in WooCommerce.NET](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-use-JSON.NET-in-WooCommerce.NET)
 * [Handle different types of Meta Value in WC Restful API V2](https://github.com/XiaoFaye/WooCommerce.NET/wiki/Handle-different-types-of-Meta-Value-in-WC-Restful-API-V2)
+* [How to use webRequestFilter and webResponseFilter in WooCommerce.NET](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-use-webRequestFilter-and-webResponseFilter-in-WooCommerce.NET)
+* [Specifiy user agent when making requests to WooCommerce](https://github.com/XiaoFaye/WooCommerce.NET/wiki/Specifiy-user-agent-when-making-requests-to-WooCommerce)
+* [Use X HTTP MethodOverride header for DELETE PUT](https://github.com/XiaoFaye/WooCommerce.NET/wiki/Use-X-HTTP-MethodOverride-header-for-DELETE-PUT)
 
 Usage
 -------------------
