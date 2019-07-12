@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using WooCommerceNET.Base;
@@ -472,15 +472,21 @@ namespace WooCommerceNET.WooCommerce.v2
         /// <summary>
         /// Line subtotal (before discounts).
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
         public decimal? subtotal { get; set; }
+
+
+        [DataMember(EmitDefaultValue = false, Name = "subtotal")]
+        protected object subtotalValue { get; set; }
 
         /// <summary>
         /// Line subtotal tax (before discounts). 
         /// read-only
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
         public decimal? subtotal_tax { get; set; }
+
+        [DataMember(EmitDefaultValue = false, Name = "subtotal_tax")]
+        protected object subtotal_taxValue { get; set; }
+
 
         [DataMember(EmitDefaultValue = false, Name = "total")]
         protected object totalValue { get; set; }
@@ -594,18 +600,21 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public int? id { get; set; }
 
+        [DataMember(EmitDefaultValue = false, Name = "total")]
+        protected object totalValue { get; set; }
+
         /// <summary>
         /// tax item total
         /// </summary>
-        [DataMember(EmitDefaultValue = false, Name = "total")]
-        protected object totalValue { get; set; }
         public decimal? total { get; set; }
+
+
+        [DataMember(EmitDefaultValue = false, Name = "subtotal")]
+        protected object subtotalValue { get; set; }
 
         /// <summary>
         /// tax item subtotal
         /// </summary>
-        [DataMember(EmitDefaultValue = false, Name = "subtotal")]
-        protected object subtotalValue { get; set; }
         public decimal? subtotal { get; set; }
     }
 
