@@ -17,7 +17,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public long? id { get; set; }
 
         /// <summary>
         /// The date the customer was created, in the site’s timezone. 

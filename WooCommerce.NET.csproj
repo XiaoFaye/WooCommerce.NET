@@ -3,24 +3,34 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>WooCommerceNET</PackageId>
-    <Version>0.7.7-beta</Version>
+    <Version>0.7.8</Version>
     <Authors>JamesYang@NZ</Authors>
     <Company>JamesYang@NZ</Company>
-    <Description>A .NET Wrapper for WooCommerce REST API</Description>
+    <Description>A .NET Wrapper for WooCommerce/WordPress REST API</Description>
     <Copyright>Copyright ©  2015 - 2019 James Yang@NZ</Copyright>
-    <PackageLicenseUrl>https://github.com/XiaoFaye/WooCommerce.NET/blob/master/License.md</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/XiaoFaye/WooCommerce.NET</PackageProjectUrl>
-    <PackageReleaseNotes>WooCommerce.NET is a .NET library for calling WooCommerce REST API in any .NET applications.
+    <PackageReleaseNotes>WooCommerce.NET is a .NET library for calling WooCommerce/WordPress REST API in .NET applications.
 
 GitHub: https://github.com/XiaoFaye/WooCommerce.NET
 Changes Doc: https://github.com/XiaoFaye/WooCommerce.NET/blob/master/Changes.md
 
-* v0.7.6 update
-  1. Supporting WooCommerce Restful API V3.</PackageReleaseNotes>
+* v0.7.8 update
+  1. Supporting Wordpress REST API with OAuth 1.0a.
+  2. Supporting Wordpress REST API with JWT Authentication.
+  3. Fix few minor issues.</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>0.7.7.0</AssemblyVersion>
+    <AssemblyVersion>0.7.8.0</AssemblyVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.key.snk</AssemblyOriginatorKeyFile>
+    <PackageLicenseFile>License.md</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="License.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

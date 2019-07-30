@@ -3,6 +3,10 @@
 
 Version History
 -------------------
+* v0.7.8 update
+  1. Supporting Wordpress REST API with OAuth 1.0a.
+  2. Supporting Wordpress REST API with JWT Authentication.
+  3. Fix few minor issues.
 * v0.7.7 update
   1. Supporting Wordpress REST API with OAuth 1.0a.
   2. Supporting WISDM Customer Specific Pricing REST API.

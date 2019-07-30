@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -36,6 +37,8 @@ namespace WooCommerceNET
         /// For Wordpress REST API with OAuth 1.0 ONLY
         /// </summary>
         public string oauth_token_secret { get; set; }
+
+        public WP_JWT_Object JWT_Object { get; set; }
 
         /// <summary>
         /// Initialize the RestAPI object
@@ -71,8 +74,13 @@ namespace WooCommerceNET
                 Version = APIVersion.Version3;
             else if (urlLower.Contains("wp-json/wc-"))
                 Version = APIVersion.ThirdPartyPlugins;
-            else if (urlLower.EndsWith("wp-json"))
+            else if (urlLower.EndsWith("wp-json/wp/v2") || urlLower.EndsWith("wp-json"))
                 Version = APIVersion.WordPressAPI;
+            else if (urlLower.EndsWith("jwt-auth/v1/token"))
+            {
+                Version = APIVersion.WordPressAPIJWT;
+                url = urlLower.Replace("jwt-auth/v1/token", "wp/v2");
+            }
             else
             {
                 Version = APIVersion.Unknown;
@@ -84,7 +92,7 @@ namespace WooCommerceNET
             AuthorizedHeader = authorizedHeader;
 
             //Why extra '&'? look here: https://wordpress.org/support/topic/woocommerce-rest-api-v3-problem-woocommerce_api_authentication_error/
-            if ((url.ToLower().Contains("wc-api/v3") || !IsLegacy) && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI)
+            if ((url.ToLower().Contains("wc-api/v3") || !IsLegacy) && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && !(Version == APIVersion.WordPressAPI || Version == APIVersion.WordPressAPIJWT))
                 wc_secret = secret + "&";
             else
                 wc_secret = secret;
@@ -120,7 +128,7 @@ namespace WooCommerceNET
         /// <param name="requestBody">If your call doesn't have a body, please pass string.Empty, not null.</param>
         /// <param name="parms"></param>
         /// <returns>json string</returns>
-        public async Task<string> SendHttpClientRequest<T>(string endpoint, RequestMethod method, T requestBody, Dictionary<string, string> parms = null)
+        public virtual async Task<string> SendHttpClientRequest<T>(string endpoint, RequestMethod method, T requestBody, Dictionary<string, string> parms = null)
         {
             HttpWebRequest httpWebRequest = null;
             try
@@ -131,7 +139,21 @@ namespace WooCommerceNET
                         throw new Exception($"oauth_token and oauth_token_secret parameters are required when using WordPress REST API.");
                 }
 
-                if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI)
+                if( Version == APIVersion.WordPressAPIJWT && JWT_Object == null)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(wc_url.Replace("wp/v2", "jwt-auth/v1/token"));
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    var buffer = Encoding.UTF8.GetBytes($"username={wc_key}&password={wc_secret}");
+                    Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
+                    dataStream.Write(buffer, 0, buffer.Length);
+                    WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
+                    Stream resStream = response.GetResponseStream();
+                    string result = await GetStreamContent(resStream, "UTF-8").ConfigureAwait(false);
+                    JWT_Object = DeserializeJSon<WP_JWT_Object>(result);
+                }
+
+                if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI && Version != APIVersion.WordPressAPIJWT)
                 {
                     if (AuthorizedHeader == true)
                     {
@@ -154,6 +176,8 @@ namespace WooCommerceNET
                 else
                 {
                     httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                    if (Version == APIVersion.WordPressAPIJWT)
+                        httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
                 }
 
                 // start the stream immediately
@@ -179,12 +203,31 @@ namespace WooCommerceNET
                 {
                     if (requestBody.ToString() != string.Empty)
                     {
-                        httpWebRequest.ContentType = "application/json";
-                        var buffer = Encoding.UTF8.GetBytes(requestBody.ToString());
-                        Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
-                        dataStream.Write(buffer, 0, buffer.Length);
+                        if (requestBody.ToString() == "fileupload")
+                        {
+                            httpWebRequest.Headers["Content-Disposition"] = $"form-data; filename=\"{parms["name"]}\"";
+
+                            Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
+                            FileStream fileStream = new FileStream(parms["path"], FileMode.Open, FileAccess.Read);
+                            byte[] buffer = new byte[4096];
+                            int bytesRead = 0;
+
+                            while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
+                            {
+                                dataStream.Write(buffer, 0, bytesRead);
+                            }
+                            fileStream.Close();
+                        }
+                        else
+                        {
+                            httpWebRequest.ContentType = "application/json";
+                            var buffer = Encoding.UTF8.GetBytes(requestBody.ToString());
+                            Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
+                            dataStream.Write(buffer, 0, buffer.Length);
+                        }
                     }
                 }
+
 
                 // asynchronously get a response
                 WebResponse wr = await httpWebRequest.GetResponseAsync().ConfigureAwait(false);
@@ -237,7 +280,7 @@ namespace WooCommerceNET
 
         private string GetOAuthEndPoint(string method, string endpoint, Dictionary<string, string> parms = null)
         {
-            if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI)
+            if (Version == APIVersion.WordPressAPIJWT || (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI))
             {
                 if (parms == null)
                     return endpoint;
@@ -315,6 +358,11 @@ namespace WooCommerceNET
             byte[] data = stream.ToArray();
             string jsonString = Encoding.UTF8.GetString(data, 0, data.Length);
 
+            if (t.GetType().GetMethod("FormatJsonS") != null)
+            {
+                jsonString = t.GetType().GetMethod("FormatJsonS").Invoke(null, new object[] { jsonString }).ToString();
+            }
+
             if (IsLegacy)
                 if (typeof(T).IsArray)
                     jsonString = "{\"" + typeof(T).Name.ToLower().Replace("[]", "s") + "\":" + jsonString + "}";
@@ -339,6 +387,16 @@ namespace WooCommerceNET
             if (dT.Name.EndsWith("List"))
                 dT = dT.GetTypeInfo().DeclaredProperties.First().PropertyType.GenericTypeArguments[0];
 
+            if(dT.FullName.StartsWith("System.Collections.Generic.List"))
+            {
+                dT = dT.GetProperty("Item").PropertyType;
+            }
+
+            if (dT.GetMethod("FormatJsonD") != null)
+            {
+                jsonString = dT.GetMethod("FormatJsonD").Invoke(null, new object[] { jsonString }).ToString();
+            }
+
             DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
             {
                 DateTimeFormat = new DateTimeFormat(DateTimeFormat),
@@ -362,6 +420,17 @@ namespace WooCommerceNET
         }
     }
 
+    public class WP_JWT_Object
+    {
+        public string token { get; set; }
+
+        public string user_email { get; set; }
+
+        public string user_nicename { get; set; }
+
+        public string user_display_name { get; set; }
+    }
+
     public enum RequestMethod
     {
         HEAD = 1,
@@ -380,6 +449,7 @@ namespace WooCommerceNET
         Version2 = 3,
         Version3 = 4,
         WordPressAPI = 90,
+        WordPressAPIJWT = 91,
         ThirdPartyPlugins = 99
     }
 }

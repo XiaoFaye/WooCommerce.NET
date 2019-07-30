@@ -4,22 +4,27 @@
 A Brief Intro
 -------------------
 
-WooCommerce.NET is a .NET library for calling WooCommerce REST API in any .NET applications.
+WooCommerce.NET is a .NET library for calling WooCommerce/WordPress REST API with OAuth/JWT in .NET applications.
 
-* [Visit WooCommerce](http://www.woothemes.com/woocommerce/)
-* [Visit WooCommerce REST API DOCS](https://woocommerce.github.io/woocommerce-rest-api-docs/)
+[Visit WooCommerce](http://www.woothemes.com/woocommerce/)
+[Visit WooCommerce REST API DOCS](https://woocommerce.github.io/woocommerce-rest-api-docs/)
+[Visit WordPress REST API DOCS](https://developer.wordpress.org/rest-api/)
 
 [![NuGet](https://buildstats.info/nuget/WooCommerceNET)](http://www.nuget.org/packages/WooCommerceNET)
 
+If this project has been helpful for you and you want to support it, please consider [Buying me a coffee](https://www.buymeacoffee.com/YU0SqVyrR):coffee:
+
+Usage (WooCommerce REST API)
+-------------------
 * [How to use JSON.NET in WooCommerce.NET](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-use-JSON.NET-in-WooCommerce.NET)
 * [Specifiy user agent when making requests to WooCommerce](https://github.com/XiaoFaye/WooCommerce.NET/wiki/Specifiy-user-agent-when-making-requests-to-WooCommerce)
 * [How to use webRequestFilter and webResponseFilter in WooCommerce.NET](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-use-webRequestFilter-and-webResponseFilter-in-WooCommerce.NET)
 * [Use X HTTP MethodOverride header for DELETE PUT](https://github.com/XiaoFaye/WooCommerce.NET/wiki/Use-X-HTTP-MethodOverride-header-for-DELETE-PUT)
 * [Handle different types of Meta Value in WC Restful API V2](https://github.com/XiaoFaye/WooCommerce.NET/wiki/Handle-different-types-of-Meta-Value-in-WC-Restful-API-V2)
 
-Usage
--------------------
-
+<details open>
+  <summary>Click to expand/collapse details...</summary>
+  
 ```cs
 using WooCommerceNET.WooCommerce.v3;
 using WooCommerceNET.WooCommerce.v3.Extension;
@@ -83,75 +88,60 @@ cb.delete = delete;
 var c = await wc.Customer.UpdateRange(cb);
 
 ```
+</details>
 
 
-
-Usage (Legacy & V1 API)
+Usage (WordPress REST API - OAuth/JWT Authentication)
 -------------------
+* [How to setup Restful API via OAuth 1.0a in WordPress](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-setup-Restful-API-via-OAuth-1.0a-in-WordPress)
+* [How to setup Restful API via JWT Authentication in WordPress](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-setup-Restful-API-via-JWT-Authentication-in-WordPress)
+
+<details>
+  <summary>Click to expand/collapse details...</summary>
 
 ```cs
-//Legacy way of calling WooCommerce REST API
-//using WooCommerceNET.WooCommerce.Legacy;
-//
-//RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wc-api/v3/", "<WooCommerce Key>", "<WooCommerce Secret");
-//WooCommerceNET.WooCommerce.Legacy.WCObject wc = new WooCommerceNET.WooCommerce.Legacy.WCObject(rest);
 
-using WooCommerceNET.WooCommerce.v1;
+//using OAuth
+RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/wp/v2/", "<Client_Key>", "<Client_Secret>");
+rest.oauth_token = "<OAuth_Token>";
+rest.oauth_token_secret = "<OAuth_Token_Secret>";
 
-RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/wc/v1/", "<WooCommerce Key>", "<WooCommerce Secret");
-WCObject wc = new WCObject(rest);
+//using JWT
+RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/jwt-auth/v1/token", "<UserName>", "<Password>");
 
-//Get all products
-var products = await wc.GetProducts();
+WPObject wp = new WPObject(rest);
 
-//Add new product
-Product p = new Product()
-            {
-                name = "test product 8",
-                title = "test product 8",
-                description = "test product 8",
-                price = 8.0M
-            };
-await wc.PostProduct(p);
+//Get all posts
+var posts = await wp.Post.GetAll();
 
-//Update products
-await wc.UpdateProduct(128, new Product { name = "test 9" });
-
-//Delete product
-await wc.DeleteProduct(128);
-
-//Use parameters
-var p = await wc.GetProducts(new Dictionary<string, string>() {
-                { "include", "10, 11, 12, 13, 14, 15" },
-                { "per_page", "15" } });
-
-
-//Batch update
-CustomerBatch cb = new CustomerBatch();
-
-CustomerList create = new CustomerList();
-create.Add(new Customer()
+//Add a post
+var p = new Posts()
 {
-    first_name = "first",
-    last_name = "last",
-    email = "first@lastsss.com",
-    username = "firstnlast",
-    password = "12345"
-});
+    title = "abc",
+    content = "<h1>abc</h1>"
+};
 
-CustomerList update = new CustomerList();
-update.Add(new Customer()
+await wp.Post.Add(p);
+
+//Update post with new values
+await wp.Post.Update(123, new { title = "new post" });
+
+//Delete a post
+await wp.Post.Delete(123);
+
+//Upload an image
+await wp.Media.Add("imagename.jpg", @"C:\path\to\image\file.jpg");
+
+//Create a new user
+await wp.Users.Add(new Users()
 {
-    id = 4,
-    last_name = "xu2"
+    first_name = "test",
+    last_name = "test",
+    name = "test",
+    username = "test123",
+    email = "test123@gmail.com",
+    password = "test@12345"
 });
-
-List<int> delete = new List<int>() { 8 };
-
-cb.create = create;
-cb.update = update;
-cb.delete = delete;
-
-var c = await wc.UpdateCustomers(cb);
 
 ```
+</details>

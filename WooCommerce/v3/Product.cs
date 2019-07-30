@@ -243,7 +243,7 @@ namespace WooCommerceNET.WooCommerce.v3
         public bool? manage_stock { get; set; }
 
         [DataMember(EmitDefaultValue = false, Name = "stock_quantity")]
-        private object stock_quantityValue { get; set; }
+        protected object stock_quantityValue { get; set; }
         /// <summary>
         /// Stock quantity.
         /// </summary>
@@ -449,7 +449,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Image ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public long? id { get; set; }
 
         /// <summary>
         /// The date the image was created, in the site’s timezone. 
