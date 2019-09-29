@@ -282,6 +282,15 @@ namespace WooCommerceNET.Base
 
         public async Task<string> Delete(int id, int parentId, bool force = false, Dictionary<string, string> parms = null)
         {
+            if (force)
+            {
+                if (parms == null)
+                    parms = new Dictionary<string, string>();
+
+                if (!parms.ContainsKey("force"))
+                    parms.Add("force", "true");
+            }
+
             return await API.DeleteRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), parms).ConfigureAwait(false);
         }
     }

@@ -97,10 +97,24 @@ namespace WooCommerceNET.WooCommerce.v2
         public string description { get; set; }
 
         /// <summary>
+        /// Enable HTML for product description 
+        /// write-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public bool? enable_html_description { get; set; }
+
+        /// <summary>
         /// Product short description.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string short_description { get; set; }
+
+        /// <summary>
+        /// Enable HTML for product short description 
+        /// write-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string enable_html_short_description { get; set; }
 
         /// <summary>
         /// Unique identifier.
@@ -180,7 +194,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? total_sales { get; set; }
+        public long? total_sales { get; set; }
 
         /// <summary>
         /// If the product is virtual. Default is false.

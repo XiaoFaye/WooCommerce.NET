@@ -41,6 +41,22 @@ namespace WooCommerceNET
         public WP_JWT_Object JWT_Object { get; set; }
 
         /// <summary>
+        /// Provide a function to modify the json string before deserilizing, this is for JWT Token ONLY!
+        /// </summary>
+        public Func<string, string> JWTDeserializeFilter { get; set; }
+
+        /// <summary>
+        /// Provide a function to modify the HttpWebRequest object, this is for JWT Token ONLY!
+        /// </summary>
+        public Action<HttpWebRequest> JWTRequestFilter { get; set; }
+
+        /// <summary>
+        /// If running in Debug mode, default is False.
+        /// NOTE: Beware when setting Debug to True, as exceptions might contain sensetive information.
+        /// </summary>
+        public bool Debug { get; set; }
+
+        /// <summary>
         /// Initialize the RestAPI object
         /// </summary>
         /// <param name="url">
@@ -144,12 +160,20 @@ namespace WooCommerceNET
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(wc_url.Replace("wp/v2", "jwt-auth/v1/token"));
                     request.Method = "POST";
                     request.ContentType = "application/x-www-form-urlencoded";
+
+                    if (JWTRequestFilter != null)
+                        JWTRequestFilter.Invoke(request);
+
                     var buffer = Encoding.UTF8.GetBytes($"username={wc_key}&password={wc_secret}");
                     Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
                     dataStream.Write(buffer, 0, buffer.Length);
                     WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                     Stream resStream = response.GetResponseStream();
                     string result = await GetStreamContent(resStream, "UTF-8").ConfigureAwait(false);
+
+                    if (JWTDeserializeFilter != null)
+                        result = JWTDeserializeFilter.Invoke(result);
+
                     JWT_Object = DeserializeJSon<WP_JWT_Object>(result);
                 }
 
@@ -206,6 +230,7 @@ namespace WooCommerceNET
                         if (requestBody.ToString() == "fileupload")
                         {
                             httpWebRequest.Headers["Content-Disposition"] = $"form-data; filename=\"{parms["name"]}\"";
+                            httpWebRequest.ContentType = "multipart/form-data";
 
                             Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
                             FileStream fileStream = new FileStream(parms["path"], FileMode.Open, FileAccess.Read);
@@ -227,7 +252,6 @@ namespace WooCommerceNET
                         }
                     }
                 }
-
 
                 // asynchronously get a response
                 WebResponse wr = await httpWebRequest.GetResponseAsync().ConfigureAwait(false);
@@ -384,31 +408,40 @@ namespace WooCommerceNET
 
             Type dT = typeof(T);
 
-            if (dT.Name.EndsWith("List"))
-                dT = dT.GetTypeInfo().DeclaredProperties.First().PropertyType.GenericTypeArguments[0];
-
-            if(dT.FullName.StartsWith("System.Collections.Generic.List"))
+            try
             {
-                dT = dT.GetProperty("Item").PropertyType;
+                if (dT.Name.EndsWith("List"))
+                    dT = dT.GetTypeInfo().DeclaredProperties.First().PropertyType.GenericTypeArguments[0];
+
+                if (dT.FullName.StartsWith("System.Collections.Generic.List"))
+                {
+                    dT = dT.GetProperty("Item").PropertyType;
+                }
+
+                if (dT.GetMethod("FormatJsonD") != null)
+                {
+                    jsonString = dT.GetMethod("FormatJsonD").Invoke(null, new object[] { jsonString }).ToString();
+                }
+
+                DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
+                {
+                    DateTimeFormat = new DateTimeFormat(DateTimeFormat),
+                    UseSimpleDictionaryFormat = true
+                };
+
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T), settings);
+                MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
+                T obj = (T)ser.ReadObject(stream);
+                stream.Dispose();
+                return obj;
             }
-
-            if (dT.GetMethod("FormatJsonD") != null)
+            catch (Exception ex)
             {
-                jsonString = dT.GetMethod("FormatJsonD").Invoke(null, new object[] { jsonString }).ToString();
+                if (Debug)
+                    throw new Exception(ex.Message + Environment.NewLine + Environment.NewLine + jsonString);
+                else
+                    throw ex;
             }
-
-            DataContractJsonSerializerSettings settings = new DataContractJsonSerializerSettings()
-            {
-                DateTimeFormat = new DateTimeFormat(DateTimeFormat),
-                UseSimpleDictionaryFormat = true
-            };
-
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T), settings);
-            MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
-            T obj = (T)ser.ReadObject(stream);
-            stream.Dispose();
-
-            return obj;
         }
 
         public string DateTimeFormat

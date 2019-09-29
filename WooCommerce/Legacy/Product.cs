@@ -413,7 +413,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? total_sales { get; set; }
+        public long? total_sales { get; set; }
 
         /// <summary>
         /// List of products variations. See Variations Properties

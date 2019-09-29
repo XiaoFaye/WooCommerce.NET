@@ -82,10 +82,24 @@ namespace WooCommerceNET.WooCommerce.v1
         public string description { get; set; }
 
         /// <summary>
+        /// Enable HTML for product description 
+        /// write-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public bool? enable_html_description { get; set; }
+
+        /// <summary>
         /// Product short description.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string short_description { get; set; }
+
+        /// <summary>
+        /// Enable HTML for product short description 
+        /// write-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string enable_html_short_description { get; set; }
 
         /// <summary>
         /// Unique identifier.

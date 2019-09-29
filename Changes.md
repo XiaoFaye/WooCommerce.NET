@@ -3,6 +3,12 @@
 
 Version History
 -------------------
+* v0.7.9 update
+  1. Add RequestFilter and DeserializeFilter for JWT token web request.
+  2. Add enable_html_description and enable_html_short_description flags for WooCommerce Product.
+  3. Add Debug mode for RestAPI. NOTE: Beware when setting Debug to True, as exceptions might contain sensetive information.
+  4. Change total_sales from int (Int32) to long (Int64).
+  5. Fix OrderNote can't be force deleted bug.
 * v0.7.8 update
   1. Supporting Wordpress REST API with OAuth 1.0a.
   2. Supporting Wordpress REST API with JWT Authentication.
