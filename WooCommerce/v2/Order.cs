@@ -736,17 +736,19 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public string code { get; set; }
 
+
+        [DataMember(EmitDefaultValue = false, Name = "discount")]
+        protected object discountValue { get; set; }
         /// <summary>
         /// Discount total.
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
         public decimal? discount { get; set; }
 
+        [DataMember(EmitDefaultValue = false, Name = "discount_tax")]
+        protected object discount_taxValue { get; set; }
         /// <summary>
-        /// Discount total tax. 
-        /// read-only
+        /// Line discount_tax (after discounts).
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
         public decimal? discount_tax { get; set; }
 
         /// <summary>
