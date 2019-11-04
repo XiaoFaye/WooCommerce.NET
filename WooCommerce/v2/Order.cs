@@ -6,7 +6,7 @@ using WooCommerceNET.Base;
 namespace WooCommerceNET.WooCommerce.v2
 {
     public class OrderBatch : BatchObject<Order> { }
-    
+
     [DataContract]
     public class Order : JsonObject
     {
@@ -363,7 +363,7 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public string phone { get; set; }
     }
-    
+
     [DataContract]
     public class OrderShipping
     {
@@ -422,13 +422,13 @@ namespace WooCommerceNET.WooCommerce.v2
         public string country { get; set; }
 
     }
-    
+
     [DataContract]
     public class OrderMeta : WCObject.MetaData
     {
 
     }
-    
+
     [DataContract]
     public class OrderLineItem : JsonObject
     {
@@ -528,7 +528,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public decimal? price { get; set; }
 
     }
-    
+
     [DataContract]
     public class OrderTaxLine
     {
@@ -587,7 +587,7 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public List<OrderMeta> meta_data { get; set; }
     }
-    
+
     [DataContract]
     public class TaxItem : JsonObject
     {
@@ -663,7 +663,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public List<OrderMeta> meta_data { get; set; }
 
     }
-    
+
     [DataContract]
     public class OrderFeeLine : JsonObject
     {
@@ -719,7 +719,7 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public List<OrderMeta> meta_data { get; set; }
     }
-    
+
     [DataContract]
     public class OrderCouponLine
     {
@@ -758,7 +758,7 @@ namespace WooCommerceNET.WooCommerce.v2
         public List<OrderMeta> meta_data { get; set; }
 
     }
-    
+
     [DataContract]
     public class OrderRefundLine : JsonObject
     {

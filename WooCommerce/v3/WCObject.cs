@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using WooCommerceNET.Base;
@@ -15,7 +14,18 @@ namespace WooCommerceNET.WooCommerce.v3
     {
        
         protected RestAPI API { get; set; }
-        public static Func<string, object, object> MetaValueProcessor { get; set; }
+        public static Func<string, object, object> MetaValueProcessor
+        {
+            get
+            {
+                return v2.WCObject.MetaValueProcessor;
+            }
+            set
+            {
+                v2.WCObject.MetaValueProcessor = value;
+            }
+        }
+
         public WCObject(RestAPI api)
         {
             if (api.Version != APIVersion.Version3)
@@ -84,43 +94,6 @@ namespace WooCommerceNET.WooCommerce.v3
         public WCItem<Data> Data { get; protected set; }
 
         public WCItem<Plugins> Plugin { get; protected set; }
-
-        [DataContract]
-        public class MetaData
-        {
-            /// <summary>
-            /// Meta ID. 
-            /// read-only
-            /// </summary>
-            [DataMember(EmitDefaultValue = false)]
-            public int? id { get; set; }
-
-            /// <summary>
-            /// Meta key.
-            /// </summary>
-            [DataMember(EmitDefaultValue = false)]
-            public string key { get; set; }
-
-            /// <summary>
-            /// Meta value.
-            /// </summary>
-            private object preValue;
-            [DataMember(EmitDefaultValue = false)]
-            public object value
-            {
-                get
-                {
-                    return preValue;
-                }
-                set
-                {
-                    if (MetaValueProcessor != null)
-                        preValue = MetaValueProcessor.Invoke(GetType().Name, value);
-                    else
-                        preValue = value;
-                }
-            }
-        }
 
         public class WCProductItem : WCItem<T3>
         {
@@ -281,69 +254,4 @@ namespace WooCommerceNET.WooCommerce.v3.Extension
         }
     }
 
-    public static class PluginsExtension
-    {
-        public static async Task<string> WISDM_GetByCustomer(this WCItem<Plugins> item, int userID)
-        {
-            return await item.API.GetRestful($"csp-mappings/user/{userID}");
-        }
-
-        public static async Task<List<WISDM_csp_data>> WISDM_GetByProduct(this WCItem<Plugins> item, int productID)
-        {
-            return item.API.DeserializeJSon<List<WISDM_csp_data>>(await item.API.GetRestful($"csp-mappings/product/{productID}"));
-        }
-
-        public static async Task<List<WISDM_csp_data>> WISDM_GetByCustomerProduct(this WCItem<Plugins> item, int userID, int productID)
-        {
-            return item.API.DeserializeJSon<List<WISDM_csp_data>>(await item.API.GetRestful($"csp-mappings/user/{userID}/product/{productID}"));
-        }
-
-        public static async Task<Dictionary<string, Dictionary<string,string>>> WISDM_Add(this WCItem<Plugins> item, List<WISDM_csp_data> data)
-        {
-            data.ForEach(x => x.GetHash());
-
-            return item.API.DeserializeJSon<Dictionary<string, Dictionary<string, string>>>(await item.API.PostRestful($"csp-mappings", "{ \"csp_data\": " + item.API.SerializeJSon(data) + " }"));
-        }
-
-        public static async Task<Dictionary<string, Dictionary<string, string>>> WISDM_Update(this WCItem<Plugins> item, List<WISDM_csp_data> data)
-        {
-            data.ForEach(x => x.GetHash());
-
-            return item.API.DeserializeJSon<Dictionary<string, Dictionary<string, string>>>(await item.API.PutRestful($"csp-mappings", "{ \"csp_data\": " + item.API.SerializeJSon(data) + " }"));
-        }
-
-        public static async Task<Dictionary<string, List<string>>> WISDM_Delete(this WCItem<Plugins> item, List<WISDM_csp_data> data)
-        {
-            data.ForEach(x => x.GetHash());
-
-            return item.API.DeserializeJSon<Dictionary<string, List<string>>>(await item.API.DeleteRestful($"csp-mappings", "{ \"csp_data\": " + item.API.SerializeJSon(data) + " }"));
-        }
-    }
-
-    [DataContract]
-    public class WISDM_csp_data
-    {
-        [DataMember(EmitDefaultValue = false)]
-        public int product_id { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public int customer_id { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public int min_qty { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public string discount_type { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public decimal csp_price { get; set; }
-
-        [DataMember(EmitDefaultValue = false)]
-        public string hash { get; set; }
-
-        public void GetHash()
-        {
-            hash = Common.GetMD5($"{product_id}|{customer_id}|{min_qty}|{discount_type}|{csp_price}");
-        }
-    }
 }

@@ -39,7 +39,7 @@ namespace WooCommerceNET.WooCommerce.v2
             ShippingMethod = new WCItem<v2.ShippingMethod>(api);
             SystemStatus = new WCItem<v2.SystemStatus>(api);
             SystemStatusTool = new WCItem<v2.SystemStatusTool>(api);
-            Setting = new WCItem<v2.Setting>(api);
+            Setting = new WCItem<Setting>(api);
         }
 
         public WCItem<T1> Coupon { get; protected set; }

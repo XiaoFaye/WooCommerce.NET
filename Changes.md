@@ -3,6 +3,11 @@
 
 Version History
 -------------------
+* v0.8.0 update
+  1. Fix MetaValueProcessor not working in V3 issue.
+  2. Fix OrderRefund.amount wrong data type issue.
+  3. Add position property to V3 ProductImage, which is missing in WooCommerce offical document.
+  4. Remove WISDM Customer Specific Pricing REST API, this will be in a separate library.
 * v0.7.9 update
   1. Add RequestFilter and DeserializeFilter for JWT token web request.
   2. Add enable_html_description and enable_html_short_description flags for WooCommerce Product.

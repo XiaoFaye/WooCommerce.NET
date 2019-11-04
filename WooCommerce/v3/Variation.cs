@@ -260,7 +260,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Meta data. See Product variation - Meta data properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<VariationMeta> meta_data { get; set; }
+        public List<v2.VariationMeta> meta_data { get; set; }
 
     }
 
@@ -329,6 +329,4 @@ namespace WooCommerceNET.WooCommerce.v3
     [DataContract]
     public class VariationAttribute : v2.VariationAttribute { }
 
-    [DataContract]
-    public class VariationMeta : v2.VariationMeta { }
 }

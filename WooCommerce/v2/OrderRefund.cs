@@ -30,10 +30,12 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public DateTime? date_created_gmt { get; set; }
 
+        [DataMember(EmitDefaultValue = false, Name = "amount")]
+        protected object amountValue { get; set; }
+
         /// <summary>
         /// Refund amount.
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
         public decimal? amount { get; set; }
 
         /// <summary>

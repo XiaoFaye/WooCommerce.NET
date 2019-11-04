@@ -116,7 +116,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Meta data. See Customer - Meta data properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<CustomerMeta> meta_data { get; set; }
+        public List<v2.CustomerMeta> meta_data { get; set; }
     }
 
     [DataContract]
@@ -124,10 +124,7 @@ namespace WooCommerceNET.WooCommerce.v3
 
     [DataContract]
     public class CustomerShipping : v2.CustomerShipping { }
-
-    [DataContract]
-    public class CustomerMeta : v2.WCObject.MetaData { }
-
+    
     [DataContract]
     public class CustomerDownloads : v2.CustomerDownloads { }
 

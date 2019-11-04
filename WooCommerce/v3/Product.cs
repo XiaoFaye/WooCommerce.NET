@@ -440,7 +440,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Meta data. See Product - Meta data properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<ProductMeta> meta_data { get; set; }
+        public List<v2.ProductMeta> meta_data { get; set; }
 
     }
 
@@ -510,6 +510,12 @@ namespace WooCommerceNET.WooCommerce.v3
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string alt { get; set; }
+
+        /// <summary>
+        /// Image position. 0 means that the image is featured.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? position { get; set; }
     }
 
     [DataContract]
@@ -517,9 +523,6 @@ namespace WooCommerceNET.WooCommerce.v3
 
     [DataContract]
     public class ProductDefaultAttribute : v2.ProductDefaultAttribute { }
-
-    [DataContract]
-    public class ProductMeta : v2.ProductMeta { }
 
     [DataContract]
     public class ProductReview
