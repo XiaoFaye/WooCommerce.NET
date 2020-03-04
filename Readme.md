@@ -91,23 +91,23 @@ var c = await wc.Customer.UpdateRange(cb);
 </details>
 
 
-Usage (WordPress REST API - OAuth/JWT Authentication)
+Usage (WordPress REST API - JWT/OAuth Authentication)
 -------------------
-* [How to setup Restful API via OAuth 1.0a in WordPress](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-setup-Restful-API-via-OAuth-1.0a-in-WordPress)
 * [How to setup Restful API via JWT Authentication in WordPress](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-setup-Restful-API-via-JWT-Authentication-in-WordPress)
+* [How to setup Restful API via OAuth 1.0a in WordPress](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-setup-Restful-API-via-OAuth-1.0a-in-WordPress)
 
 <details>
   <summary>Click to expand/collapse details...</summary>
 
 ```cs
 
+//using JWT
+RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/jwt-auth/v1/token", "<UserName>", "<Password>");
+
 //using OAuth
 RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/wp/v2/", "<Client_Key>", "<Client_Secret>");
 rest.oauth_token = "<OAuth_Token>";
 rest.oauth_token_secret = "<OAuth_Token_Secret>";
-
-//using JWT
-RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/jwt-auth/v1/token", "<UserName>", "<Password>");
 
 WPObject wp = new WPObject(rest);
 

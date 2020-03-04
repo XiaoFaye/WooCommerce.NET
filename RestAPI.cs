@@ -216,7 +216,7 @@ namespace WooCommerceNET
                 //else
                 //    httpWebRequest.Proxy = null;
 
-                if (requestBody.GetType() != typeof(string))
+                if (requestBody != null && requestBody.GetType() != typeof(string))
                 {
                     httpWebRequest.ContentType = "application/json";
                     var buffer = Encoding.UTF8.GetBytes(SerializeJSon(requestBody));
@@ -225,12 +225,12 @@ namespace WooCommerceNET
                 }
                 else
                 {
-                    if (requestBody.ToString() != string.Empty)
+                    if (requestBody != null && requestBody.ToString() != string.Empty)
                     {
                         if (requestBody.ToString() == "fileupload")
                         {
                             httpWebRequest.Headers["Content-Disposition"] = $"form-data; filename=\"{parms["name"]}\"";
-                            httpWebRequest.ContentType = "multipart/form-data";
+                            httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
                             Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
                             FileStream fileStream = new FileStream(parms["path"], FileMode.Open, FileAccess.Read);

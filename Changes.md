@@ -3,6 +3,8 @@
 
 Version History
 -------------------
+* v0.8.1 update
+  1. Fix image upload issue while hosting with Apache.
 * v0.8.0 update
   1. Fix MetaValueProcessor not working in V3 issue.
   2. Fix OrderRefund.amount wrong data type issue.
