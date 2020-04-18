@@ -634,6 +634,12 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public string method_id { get; set; }
 
+        /// <summary>
+        /// Instance ID.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string instance_id { get; set; }
+
         [DataMember(EmitDefaultValue = false, Name = "total")]
         protected object totalValue { get; set; }
         /// <summary>

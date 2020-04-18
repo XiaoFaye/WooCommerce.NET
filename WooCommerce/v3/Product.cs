@@ -527,7 +527,7 @@ namespace WooCommerceNET.WooCommerce.v3
     [DataContract]
     public class ProductReview
     {
-        public static string Endpoint { get { return "reviews"; } }
+        public static string Endpoint { get { return "products/reviews"; } }
 
         /// <summary>
         /// Unique identifier for the resource. 

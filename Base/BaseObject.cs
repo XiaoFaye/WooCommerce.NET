@@ -175,9 +175,12 @@ namespace WooCommerceNET.Base
             {
                 StringBuilder json = new StringBuilder();
                 json.Append("{");
-                foreach(var prop in item.GetType().GetRuntimeProperties())
+                foreach (var prop in item.GetType().GetRuntimeProperties())
                 {
-                    json.Append($"\"{prop.Name}\": \"{prop.GetValue(item)}\", ");
+                    if (prop.GetValue(item).ToString() == "")
+                        json.Append($"\"{prop.Name}\": \"\", ");
+                    else
+                        json.Append($"\"{prop.Name}\": \"{prop.GetValue(item)}\", ");
                 }
 
                 if (json.Length > 1)
@@ -261,7 +264,10 @@ namespace WooCommerceNET.Base
                 json.Append("{");
                 foreach (var prop in item.GetType().GetProperties())
                 {
-                    json.Append($"\"{prop.Name}\": \"\", ");
+                    if (prop.GetValue(item).ToString() == "")
+                        json.Append($"\"{prop.Name}\": \"\", ");
+                    else
+                        json.Append($"\"{prop.Name}\": \"{prop.GetValue(item)}\", ");
                 }
 
                 if (json.Length > 1)

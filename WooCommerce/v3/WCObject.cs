@@ -36,6 +36,7 @@ namespace WooCommerceNET.WooCommerce.v3
             Coupon = new WCItem<T1>(api);
             Customer = new WCItem<T2>(api);
             Product = new WCProductItem(api);
+            ProductReview = new WCItem<T4>(api);
             Order = new WCOrderItem(api);
             Attribute = new WCAttributeItem(api);
             Category = new WCItem<T11>(api);
@@ -60,6 +61,8 @@ namespace WooCommerceNET.WooCommerce.v3
         public WCItem<T2> Customer { get; protected set; }
 
         public WCProductItem Product { get; protected set; }
+
+        public WCItem<T4> ProductReview { get; protected set; }
 
         public WCOrderItem Order { get; protected set; }
 
@@ -101,11 +104,11 @@ namespace WooCommerceNET.WooCommerce.v3
             {
                 API = api;
 
-                Reviews = new WCSubItem<T4>(api, APIEndpoint);
+                //Reviews = new WCSubItem<T4>(api, APIEndpoint);
                 Variations = new WCSubItem<T5>(api, APIEndpoint);
             }
 
-            public WCSubItem<T4> Reviews { get; set; }
+            //public WCSubItem<T4> Reviews { get; set; }
 
             public WCSubItem<T5> Variations { get; set; }
         }
