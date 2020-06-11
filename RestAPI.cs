@@ -183,6 +183,8 @@ namespace WooCommerceNET
                     {
                         httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
                         httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
+                        if (JWT_Object != null)
+                            httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
                     }
                     else
                     {
