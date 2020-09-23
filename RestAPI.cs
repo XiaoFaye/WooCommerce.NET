@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WooCommerceNET.Base;
 
@@ -164,7 +165,10 @@ namespace WooCommerceNET
                     if (JWTRequestFilter != null)
                         JWTRequestFilter.Invoke(request);
 
-                    var buffer = Encoding.UTF8.GetBytes($"username={wc_key}&password={wc_secret}");
+                    var convKey = ConvertAmpersandsToUTF8Hex(wc_key);
+                    var convSecret = ConvertAmpersandsToUTF8Hex(wc_secret);
+
+                    var buffer = Encoding.UTF8.GetBytes($"username={convKey}&password={convSecret}");
                     Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
                     dataStream.Write(buffer, 0, buffer.Length);
                     WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
@@ -450,6 +454,12 @@ namespace WooCommerceNET
             {
                 return IsLegacy ? "yyyy-MM-ddTHH:mm:ssZ" : "yyyy-MM-ddTHH:mm:ss";
             }
+        }
+
+        private string ConvertAmpersandsToUTF8Hex(string original)
+        {
+            var pattern = new Regex("[&]");
+            return pattern.Replace(original, "%26");
         }
     }
 
