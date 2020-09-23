@@ -171,6 +171,10 @@ namespace WooCommerceNET
                     var buffer = Encoding.UTF8.GetBytes($"username={convKey}&password={convSecret}");
                     Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
                     dataStream.Write(buffer, 0, buffer.Length);
+                    dataStream.Close();
+
+                    request.ContentLength = buffer.Length;
+
                     WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                     Stream resStream = response.GetResponseStream();
                     string result = await GetStreamContent(resStream, "UTF-8").ConfigureAwait(false);
