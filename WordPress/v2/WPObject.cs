@@ -73,11 +73,12 @@ namespace WooCommerce.NET.WordPress.v2
                 API = api;
             }
 
-            public async Task<T8> Add(string fileName, string filePath)
+            public async Task<T8> Add(string fileName, string filePath, bool fromUrl = false)
             {
                 Dictionary<string, string> ps = new Dictionary<string, string>();
                 ps.Add("name", fileName);
                 ps.Add("path", filePath);
+                ps.Add("source", fromUrl ? "url" : "local");
 
                 return API.DeserializeJSon<T8>(await API.PostRestful(APIEndpoint, "fileupload", ps).ConfigureAwait(false));
             }
