@@ -60,7 +60,7 @@ namespace WooCommerceNET
         /// Initialize the RestAPI object
         /// </summary>
         /// <param name="url">
-        /// WooCommerce REST API URL, e.g.: http://yourstore/wp-json/wc/v1/ 
+        /// WooCommerce REST API URL, e.g.: http://yourstore/wp-json/wc/v1/
         /// WordPress REST API URL, e.g.: http://yourstore/wp-json/
         /// </param>
         /// <param name="key">WooCommerce REST API Key Or WordPress consumerKey</param>
@@ -160,6 +160,7 @@ namespace WooCommerceNET
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(wc_url.Replace("wp/v2", "jwt-auth/v1/token"));
                     request.Method = "POST";
                     request.ContentType = "application/x-www-form-urlencoded";
+                    request.UserAgent = "WooCommerceNET";
 
                     if (JWTRequestFilter != null)
                         JWTRequestFilter.Invoke(request);
@@ -317,7 +318,7 @@ namespace WooCommerceNET
                     return endpoint + "?" + requestParms.TrimEnd('&');
                 }
             }
-            
+
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic.Add("oauth_consumer_key", wc_key);
 
@@ -345,7 +346,7 @@ namespace WooCommerceNET
                 dic.Add("oauth_signature", Common.GetSHA256(wc_secret + "&" + oauth_token_secret, base_request_uri));
             else
                 dic.Add("oauth_signature", Common.GetSHA256(wc_secret, base_request_uri));
-            
+
             string parmstr = string.Empty;
             foreach (var parm in dic)
                 parmstr += parm.Key + "=" + Uri.EscapeDataString(parm.Value) + "&";
