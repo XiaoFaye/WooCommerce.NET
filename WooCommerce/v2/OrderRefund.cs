@@ -116,7 +116,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Tax class of product.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int tax_class { get; set; }
+        public int? tax_class { get; set; }
 
         /// <summary>
         /// Line subtotal (before discounts).
