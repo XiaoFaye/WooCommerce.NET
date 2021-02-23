@@ -41,6 +41,11 @@ namespace WooCommerceNET
         public WP_JWT_Object JWT_Object { get; set; }
 
         /// <summary>
+        /// Authenticate Woocommerce API with JWT when set to True
+        /// </summary>
+        public bool WCAuthWithJWT { get; set; }
+
+        /// <summary>
         /// Provide a function to modify the json string before deserilizing, this is for JWT Token ONLY!
         /// </summary>
         public Func<string, string> JWTDeserializeFilter { get; set; }
@@ -155,32 +160,29 @@ namespace WooCommerceNET
                         throw new Exception($"oauth_token and oauth_token_secret parameters are required when using WordPress REST API.");
                 }
 
-                if(JWT_Object == null)
+                if ((Version == APIVersion.WordPressAPIJWT || WCAuthWithJWT) && JWT_Object == null)
                 {
-                    try
-                    {
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(wc_url.Replace("wp/v2", "jwt-auth/v1/token").Replace("wc/v3", "jwt-auth/v1/token"));
-                        request.Method = "POST";
-                        request.ContentType = "application/x-www-form-urlencoded";
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(wc_url.Replace("wp/v2", "jwt-auth/v1/token")
+                                                                                        .Replace("wc/v1", "jwt-auth/v1/token")
+                                                                                        .Replace("wc/v2", "jwt-auth/v1/token")
+                                                                                        .Replace("wc/v3", "jwt-auth/v1/token"));
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded";
 
-                        if (JWTRequestFilter != null)
-                            JWTRequestFilter.Invoke(request);
+                    if (JWTRequestFilter != null)
+                        JWTRequestFilter.Invoke(request);
 
-                        var buffer = Encoding.UTF8.GetBytes($"username={wc_key}&password={wc_secret}");
-                        Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
-                        dataStream.Write(buffer, 0, buffer.Length);
-                        WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
-                        Stream resStream = response.GetResponseStream();
-                        string result = await GetStreamContent(resStream, "UTF-8").ConfigureAwait(false);
+                    var buffer = Encoding.UTF8.GetBytes($"username={wc_key}&password={wc_secret}");
+                    Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
+                    dataStream.Write(buffer, 0, buffer.Length);
+                    WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
+                    Stream resStream = response.GetResponseStream();
+                    string result = await GetStreamContent(resStream, "UTF-8").ConfigureAwait(false);
 
-                        if (JWTDeserializeFilter != null)
-                            result = JWTDeserializeFilter.Invoke(result);
+                    if (JWTDeserializeFilter != null)
+                        result = JWTDeserializeFilter.Invoke(result);
 
-                        JWT_Object = DeserializeJSon<WP_JWT_Object>(result);
-                    }
-                    catch (Exception e)
-                    {
-                    }
+                    JWT_Object = DeserializeJSon<WP_JWT_Object>(result);
                 }
 
                 if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI && Version != APIVersion.WordPressAPIJWT)
@@ -188,14 +190,10 @@ namespace WooCommerceNET
                     if (AuthorizedHeader == true)
                     {
                         httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
-                        if (JWT_Object != null)
-                        {
+                        if (WCAuthWithJWT && JWT_Object != null)
                             httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
-                        }
                         else
-                        {
                             httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
-                        }
                     }
                     else
                     {
