@@ -123,6 +123,9 @@ namespace WooCommerceNET.Base
 
         [DataMember(EmitDefaultValue = false)]
         public List<int> delete { get; set; }
+
+        [IgnoreDataMember]
+        public List<T> DeletedItems { get; set; }
     }
 
     public class WCItem<T>
@@ -159,6 +162,7 @@ namespace WooCommerceNET.Base
             return API.DeserializeJSon<T>(await API.PostRestful(APIEndpoint, item, parms).ConfigureAwait(false));
         }
 
+        [Obsolete("AddRange method is obsolete, please use UpdateRange for batch Add, Update, Delete.")]
         public async Task<BatchObject<T>> AddRange(BatchObject<T> items, Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<BatchObject<T>>(await API.PostRestful(APIEndpoint + "/batch", items, parms).ConfigureAwait(false));
@@ -196,7 +200,37 @@ namespace WooCommerceNET.Base
 
         public async Task<BatchObject<T>> UpdateRange(BatchObject<T> items, Dictionary<string, string> parms = null)
         {
-            return API.DeserializeJSon<BatchObject<T>>(await API.PostRestful(APIEndpoint + "/batch", items, parms).ConfigureAwait(false));
+            string json = await UpdateRangeRaw(items, parms);
+
+            if (items.delete == null || items.delete.Count == 0)
+                return API.DeserializeJSon<BatchObject<T>>(json);
+            else
+            {
+                BatchObject<T> batchResult = new BatchObject<T>();
+
+                if ((items.create == null || items.create.Count == 0) && (items.update == null || items.update.Count == 0))
+                {
+                    batchResult.DeletedItems = API.DeserializeJSon<List<T>>(json.Substring(json.IndexOf("[")).TrimEnd('}'));
+                }
+                else
+                {
+                    var pos = json.LastIndexOf("\"delete\":[");
+                    if (pos != -1)
+                    {
+                        batchResult = API.DeserializeJSon<BatchObject<T>>(json.Substring(0, pos - 1) + "}");
+                        batchResult.DeletedItems = API.DeserializeJSon<List<T>>(json.Substring(pos + 9).TrimEnd('}'));
+                    }
+                    else
+                        batchResult = API.DeserializeJSon<BatchObject<T>>(json);
+                }
+                
+                return batchResult;
+            }
+        }
+
+        public async Task<string> UpdateRangeRaw(BatchObject<T> items, Dictionary<string, string> parms = null)
+        {
+            return await API.PostRestful(APIEndpoint + "/batch", items, parms).ConfigureAwait(false);
         }
 
         public async Task<T> Delete(int id, bool force = false, Dictionary<string, string> parms = null)
@@ -213,6 +247,7 @@ namespace WooCommerceNET.Base
             return API.DeserializeJSon<T>(await API.DeleteRestful(APIEndpoint + "/" + id.ToString(), parms).ConfigureAwait(false));
         }
 
+        [Obsolete("DeleteRange method is obsolete, please use UpdateRange for batch Add, Update, Delete.")]
         public async Task<string> DeleteRange(BatchObject<T> items, Dictionary<string, string> parms = null)
         {
             return await API.PostRestful(APIEndpoint + "/batch", items, parms).ConfigureAwait(false);
