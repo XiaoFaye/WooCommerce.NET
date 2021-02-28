@@ -16,13 +16,13 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Parent order ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? parent_id { get; set; }
+        public uint? parent_id { get; set; }
 
         /// <summary>
         /// Order status. Default is pending. Options (plugins may include new status): pending, processing, on-hold, completed, cancelled, refunded and failed.
@@ -75,7 +75,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// User ID who owns the order. Use 0 for guests. Default is 0.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? customer_id { get; set; }
+        public uint? customer_id { get; set; }
 
         /// <summary>
         /// Total discount amount for the order. 
@@ -253,7 +253,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Product name. 
@@ -273,13 +273,13 @@ namespace WooCommerceNET.WooCommerce.v1
         /// Product ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? product_id { get; set; }
+        public uint? product_id { get; set; }
 
         /// <summary>
         /// Variation ID, if applicable.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? variation_id { get; set; }
+        public uint? variation_id { get; set; }
 
         /// <summary>
         /// Quantity ordered.
@@ -369,7 +369,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// tax item id
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// tax item total
@@ -394,7 +394,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Shipping method name.
@@ -439,7 +439,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Tax rate code. 
@@ -494,7 +494,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Fee name. 
@@ -546,7 +546,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Coupon code. 
@@ -580,7 +580,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// The date the order note was created, in the site’s timezone. 
@@ -611,7 +611,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// The date the order refund was created, in the site’s timezone. 
@@ -649,7 +649,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Product name. 
@@ -669,13 +669,13 @@ namespace WooCommerceNET.WooCommerce.v1
         /// Product ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? product_id { get; set; }
+        public uint? product_id { get; set; }
 
         /// <summary>
         /// Variation ID, if applicable.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? variation_id { get; set; }
+        public uint? variation_id { get; set; }
 
         /// <summary>
         /// Quantity ordered.

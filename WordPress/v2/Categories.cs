@@ -14,7 +14,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// Unique identifier for the term.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int id  { get; set; }
+        public uint id  { get; set; }
 
         /// <summary>
         /// Number of published posts for the term.
@@ -56,7 +56,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The parent term ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int parent  { get; set; }
+        public uint parent  { get; set; }
 
         /// <summary>
         /// Meta fields.

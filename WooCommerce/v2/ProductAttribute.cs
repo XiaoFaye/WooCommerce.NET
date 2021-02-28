@@ -12,7 +12,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Attribute name. 
@@ -57,7 +57,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Term name. 

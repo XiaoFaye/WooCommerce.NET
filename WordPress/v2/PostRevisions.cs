@@ -14,7 +14,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the author of the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int author { get; set; }
+        public uint author { get; set; }
 
         /// <summary>
         /// The date the object was published, in the site's timezone.
@@ -54,7 +54,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// Unique identifier for the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int id  { get; set; }
+        public uint id  { get; set; }
 
         /// <summary>
         /// The date the object was last modified, in the site's timezone.
@@ -72,7 +72,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the parent of the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int parent  { get; set; }
+        public uint parent  { get; set; }
 
         /// <summary>
         /// An alphanumeric identifier for the object unique to its type.

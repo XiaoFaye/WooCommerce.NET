@@ -48,7 +48,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// Unique identifier for the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int id  { get; set; }
+        public uint id  { get; set; }
 
         /// <summary>
         /// URL to the object.
@@ -210,7 +210,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the associated post of the attachment.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? post  { get; set; }
+        public uint? post  { get; set; }
 
         /// <summary>
         /// URL to the original attachment file.

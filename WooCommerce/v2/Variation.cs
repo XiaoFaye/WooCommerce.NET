@@ -15,7 +15,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// The date the variation was created, in the site’s timezone. 
@@ -304,7 +304,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Image ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// The date the image was created, in the site’s timezone. 
@@ -366,7 +366,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Attribute ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Attribute name.
