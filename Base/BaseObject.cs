@@ -318,7 +318,12 @@ namespace WooCommerceNET.Base
 
         public virtual async Task<BatchObject<T>> UpdateRange(int parentId, BatchObject<T> items, Dictionary<string, string> parms = null)
         {
-            return API.DeserializeJSon<BatchObject<T>>(await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/batch", items, parms).ConfigureAwait(false));
+            return API.DeserializeJSon<BatchObject<T>>(await UpdateRangeRaw(parentId, items, parms));
+        }
+
+        public virtual async Task<string> UpdateRangeRaw(int parentId, BatchObject<T> items, Dictionary<string, string> parms = null)
+        {
+            return await API.PostRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/batch", items, parms).ConfigureAwait(false);
         }
 
         public virtual async Task<string> Delete(int id, int parentId, bool force = false, Dictionary<string, string> parms = null)
