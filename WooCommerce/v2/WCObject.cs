@@ -113,6 +113,18 @@ namespace WooCommerceNET.WooCommerce.v2
                         preValue = value;
                 }
             }
+
+            /// <summary>
+            /// Display key.
+            /// </summary>
+            [DataMember(EmitDefaultValue = false)]
+            public string display_key { get; set; }
+
+            /// <summary>
+            /// Display value.
+            /// </summary>
+            [DataMember(EmitDefaultValue = false)]
+            public string display_value { get; set; }
         }
 
         public class WCProductItem : WCItem<T3>
