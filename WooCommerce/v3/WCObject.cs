@@ -255,6 +255,20 @@ namespace WooCommerceNET.WooCommerce.v3.Extension
         {
             return item.API.DeserializeJSon<Currency>(await item.API.GetRestful(item.APIEndpoint + "/currencies/" + currency, null).ConfigureAwait(false));
         }
+
+        public static async Task<TaxClass> DeleteTaxClass(this WCItem<TaxClass> item, string slug, bool force = false, Dictionary<string, string> parms = null)
+        {
+            if (force)
+            {
+                if (parms == null)
+                    parms = new Dictionary<string, string>();
+
+                if (!parms.ContainsKey("force"))
+                    parms.Add("force", "true");
+            }
+
+            return item.API.DeserializeJSon<TaxClass>(await item.API.DeleteRestful(item.APIEndpoint + "/" + slug, parms).ConfigureAwait(false));
+        }
     }
 
 }
