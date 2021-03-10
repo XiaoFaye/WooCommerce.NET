@@ -28,7 +28,7 @@ namespace WooCommerceNET.WooCommerce.v3
 
         public WCObject(RestAPI api)
         {
-            if (api.Version != APIVersion.Version3)
+            if (api.Version != APIVersion.Version3 && api.Version != APIVersion.ThirdPartyPlugins)
                 throw new Exception("Please use WooCommerce Restful API Version 3 url for this WCObject. e.g.: http://www.yourstore.co.nz/wp-json/wc/v3/");
 
             API = api;
