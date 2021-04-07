@@ -318,32 +318,7 @@ namespace WooCommerceNET.Base
 
         public virtual async Task<BatchObject<T>> UpdateRange(int parentId, BatchObject<T> items, Dictionary<string, string> parms = null)
         {
-            string json = await UpdateRangeRaw( parentId, items, parms );
-
-            if ( items.delete == null || items.delete.Count == 0 )
-                return API.DeserializeJSon<BatchObject<T>>( json );
-            else
-            {
-                BatchObject<T> batchResult = new BatchObject<T>();
-
-                if ( ( items.create == null || items.create.Count == 0 ) && ( items.update == null || items.update.Count == 0 ) )
-                {
-                    batchResult.DeletedItems = API.DeserializeJSon<List<T>>( json.Substring( json.IndexOf( "[" ) ).TrimEnd( '}' ) );
-                }
-                else
-                {
-                    var pos = json.LastIndexOf( "\"delete\":[" );
-                    if ( pos != -1 )
-                    {
-                        batchResult = API.DeserializeJSon<BatchObject<T>>( json.Substring( 0, pos - 1 ) + "}" );
-                        batchResult.DeletedItems = API.DeserializeJSon<List<T>>( json.Substring( pos + 9 ).TrimEnd( '}' ) );
-                    }
-                    else
-                        batchResult = API.DeserializeJSon<BatchObject<T>>( json );
-                }
-
-                return batchResult;
-            }
+            return API.DeserializeJSon<BatchObject<T>>(await UpdateRangeRaw(parentId, items, parms));
         }
 
         public virtual async Task<string> UpdateRangeRaw(int parentId, BatchObject<T> items, Dictionary<string, string> parms = null)
