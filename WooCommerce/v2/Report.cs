@@ -85,7 +85,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? total_discount { get; set; }
+        public string total_discount { get; set; }
 
         /// <summary>
         /// Group type. 
