@@ -122,7 +122,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public int? items { get; set; }
-
+        
         /// <summary>
         /// Total tax
         /// </summary>
