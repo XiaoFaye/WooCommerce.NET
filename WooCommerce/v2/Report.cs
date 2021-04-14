@@ -85,7 +85,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? total_discount { get; set; }
+        public string total_discount { get; set; }
 
         /// <summary>
         /// Group type. 
@@ -99,7 +99,53 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<string> totals { get; set; }
+        public Dictionary<string, SalesReportTotal> totals { get; set; }
+    }
+
+    [DataContract]
+    public class SalesReportTotal
+    {
+        /// <summary>
+        /// Total Sales
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string sales { get; set; }
+
+        /// <summary>
+        /// Total number of orders
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? orders { get; set; }
+
+        /// <summary>
+        /// Total numbers of items
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? items { get; set; }
+        
+        /// <summary>
+        /// Total tax
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string tax { get; set; }
+
+        /// <summary>
+        /// Total shipping
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string shipping { get; set; }
+
+        /// <summary>
+        /// Total discount
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string discount { get; set; }
+
+        /// <summary>
+        /// Total number of customers
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public int? customers { get; set; }
     }
 
     [DataContract]
