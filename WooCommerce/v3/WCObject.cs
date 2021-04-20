@@ -25,6 +25,18 @@ namespace WooCommerceNET.WooCommerce.v3
                 v2.WCObject.MetaValueProcessor = value;
             }
         }
+        public static Func<string, object, object> MetaDisplayValueProcessor
+        {
+            get 
+            {
+                return v2.WCObject.MetaDisplayValueProcessor;
+            }
+            set
+            {
+                v2.WCObject.MetaDisplayValueProcessor = value;
+            }
+        }
+
 
         public WCObject(RestAPI api)
         {

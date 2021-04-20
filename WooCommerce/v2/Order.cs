@@ -727,6 +727,12 @@ namespace WooCommerceNET.WooCommerce.v2
     }
 
     [DataContract]
+    public class OrderCouponLineMeta : WCObject.MetaData
+    {
+
+    }
+
+    [DataContract]
     public class OrderCouponLine
     {
         /// <summary>
@@ -761,7 +767,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Meta data. See Order - Meta data properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<OrderMeta> meta_data { get; set; }
+        public List<OrderCouponLineMeta> meta_data { get; set; }
 
     }
 
