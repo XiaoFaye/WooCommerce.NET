@@ -248,6 +248,11 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public List<VariationMeta> meta_data { get; set; }
 
+        /// <summary>
+        /// Container for error information, if any
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public VariationError error { get; set; }
     }
     
     [DataContract]
@@ -386,5 +391,16 @@ namespace WooCommerceNET.WooCommerce.v2
     public class VariationMeta : WCObject.MetaData
     {
         
+    }
+
+    [DataContract]
+    public class VariationError : JsonObject
+    {
+        [DataMember( EmitDefaultValue = false )]
+        public string code { get; set; }
+        [DataMember( EmitDefaultValue = false )]
+        public string message { get; set; }
+        [DataMember( EmitDefaultValue = false )]
+        public object data { get; set; }
     }
 }
