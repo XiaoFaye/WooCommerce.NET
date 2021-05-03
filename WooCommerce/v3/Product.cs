@@ -442,6 +442,11 @@ namespace WooCommerceNET.WooCommerce.v3
         [DataMember(EmitDefaultValue = false)]
         public List<v2.ProductMeta> meta_data { get; set; }
 
+        /// <summary>
+        /// Container for error information, if any
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public ProductError error { get; set; }
     }
 
     [DataContract]
@@ -591,4 +596,6 @@ namespace WooCommerceNET.WooCommerce.v3
         public bool? verified { get; set; }
     }
 
+    [DataContract]
+    public class ProductError : v2.ProductError { }
 }
