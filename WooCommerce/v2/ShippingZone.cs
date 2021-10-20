@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using WooCommerceNET.CustomConverters;
 
 namespace WooCommerceNET.WooCommerce.v2
 {
@@ -165,7 +167,8 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Setting value.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string value { get; set; }
+        [JsonConverter(typeof(ShippingZoneMethodSettingsConverter))]
+        public object value { get; set; }
 
         /// <summary>
         /// Default value for the setting. 
