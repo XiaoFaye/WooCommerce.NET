@@ -25,10 +25,22 @@ namespace WooCommerceNET.WooCommerce.v3
                 v2.WCObject.MetaValueProcessor = value;
             }
         }
+        public static Func<string, object, object> MetaDisplayValueProcessor
+        {
+            get 
+            {
+                return v2.WCObject.MetaDisplayValueProcessor;
+            }
+            set
+            {
+                v2.WCObject.MetaDisplayValueProcessor = value;
+            }
+        }
+
 
         public WCObject(RestAPI api)
         {
-            if (api.Version != APIVersion.Version3)
+            if (api.Version != APIVersion.Version3 && api.Version != APIVersion.ThirdPartyPlugins)
                 throw new Exception("Please use WooCommerce Restful API Version 3 url for this WCObject. e.g.: http://www.yourstore.co.nz/wp-json/wc/v3/");
 
             API = api;
@@ -254,6 +266,20 @@ namespace WooCommerceNET.WooCommerce.v3.Extension
         public static async Task<Currency> GetCurrency(this WCItem<Data> item, string currency = "current")
         {
             return item.API.DeserializeJSon<Currency>(await item.API.GetRestful(item.APIEndpoint + "/currencies/" + currency, null).ConfigureAwait(false));
+        }
+
+        public static async Task<TaxClass> DeleteTaxClass(this WCItem<TaxClass> item, string slug, bool force = false, Dictionary<string, string> parms = null)
+        {
+            if (force)
+            {
+                if (parms == null)
+                    parms = new Dictionary<string, string>();
+
+                if (!parms.ContainsKey("force"))
+                    parms.Add("force", "true");
+            }
+
+            return item.API.DeserializeJSon<TaxClass>(await item.API.DeleteRestful(item.APIEndpoint + "/" + slug, parms).ConfigureAwait(false));
         }
     }
 

@@ -19,7 +19,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// UTC DateTime when the customer was created 

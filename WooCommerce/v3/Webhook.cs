@@ -15,7 +15,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// The delivery duration, in seconds.     

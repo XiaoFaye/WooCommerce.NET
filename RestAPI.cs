@@ -42,6 +42,11 @@ namespace WooCommerceNET
         public WP_JWT_Object JWT_Object { get; set; }
 
         /// <summary>
+        /// Authenticate Woocommerce API with JWT when set to True
+        /// </summary>
+        public bool WCAuthWithJWT { get; set; }
+
+        /// <summary>
         /// Provide a function to modify the json string before deserilizing, this is for JWT Token ONLY!
         /// </summary>
         public Func<string, string> JWTDeserializeFilter { get; set; }
@@ -156,9 +161,12 @@ namespace WooCommerceNET
                         throw new Exception($"oauth_token and oauth_token_secret parameters are required when using WordPress REST API.");
                 }
 
-                if( Version == APIVersion.WordPressAPIJWT && JWT_Object == null)
+                if ((Version == APIVersion.WordPressAPIJWT || WCAuthWithJWT) && JWT_Object == null)
                 {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(wc_url.Replace("wp/v2", "jwt-auth/v1/token"));
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(wc_url.Replace("wp/v2", "jwt-auth/v1/token")
+                                                                                        .Replace("wc/v1", "jwt-auth/v1/token")
+                                                                                        .Replace("wc/v2", "jwt-auth/v1/token")
+                                                                                        .Replace("wc/v3", "jwt-auth/v1/token"));
                     request.Method = "POST";
                     request.ContentType = "application/x-www-form-urlencoded";
 
@@ -190,7 +198,10 @@ namespace WooCommerceNET
                     if (AuthorizedHeader == true)
                     {
                         httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
-                        httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
+                        if (WCAuthWithJWT && JWT_Object != null)
+                            httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
+                        else
+                            httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
                     }
                     else
                     {
@@ -461,7 +472,7 @@ namespace WooCommerceNET
         {
             get
             {
-                return IsLegacy ? "yyyy-MM-ddTHH:mm:ssZ" : "yyyy-MM-ddTHH:mm:ss";
+                return IsLegacy ? "yyyy-MM-ddTHH:mm:ssZ" : "yyyy-MM-ddTHH:mm:ssK";
             }
         }
 

@@ -48,7 +48,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// Unique identifier for the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int id { get; set; }
+        public uint id { get; set; }
 
         /// <summary>
         /// URL to the object.
@@ -96,7 +96,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the parent of the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int parent  { get; set; }
+        public uint parent  { get; set; }
 
         /// <summary>
         /// The title for the object.
@@ -147,7 +147,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the author of the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int author  { get; set; }
+        public uint author  { get; set; }
 
         /// <summary>
         /// The excerpt for the object.

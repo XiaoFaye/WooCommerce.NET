@@ -3,10 +3,23 @@
 
 Version History
 -------------------
+* v0.8.3 update
+  1. Fix error while creating a refund. #476
+  2. Allow authenticate Woocommerce API with JWT (set WCAuthWithJWT to true). #478
+  3. Fix error on retrieving refund. #484
+  4. Fix error on deserialize BatchObject. #523
+  5. Fix error on date format. #524
+  6. Add user-friendly attribute names and values to Metadata. #558
+  7. Change all id field to unsigned 32bit integer to prevent overflow. #560
+  8. Change functions in BaseObject to virtual to support Unit Test. #568
+  9. Add function to delete tax class by slug. #576
+  10. Allow WC Plugins to use WCObject.
+  11. Add UpdateRangeRaw to ignore deserialize return json. #523
 * v0.8.2 update
   1. Fix UpdateWithNull is not working correctly. #449
   2. Fix Product Review 404 issue in WooCommerce API V3. #444
   3. Missing property in OrderShippingLine (instance_id). #441
+  4. Missing property in OrderNote. #451
 * v0.8.1 update
   1. Fix image upload issue while hosting with Apache.
 * v0.8.0 update

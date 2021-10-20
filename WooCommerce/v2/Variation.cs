@@ -15,7 +15,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// The date the variation was created, in the site’s timezone. 
@@ -248,6 +248,11 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public List<VariationMeta> meta_data { get; set; }
 
+        /// <summary>
+        /// Container for error information, if any
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public VariationError error { get; set; }
     }
     
     [DataContract]
@@ -304,7 +309,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Image ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// The date the image was created, in the site’s timezone. 
@@ -366,7 +371,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Attribute ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Attribute name.
@@ -386,5 +391,16 @@ namespace WooCommerceNET.WooCommerce.v2
     public class VariationMeta : WCObject.MetaData
     {
         
+    }
+
+    [DataContract]
+    public class VariationError : JsonObject
+    {
+        [DataMember( EmitDefaultValue = false )]
+        public string code { get; set; }
+        [DataMember( EmitDefaultValue = false )]
+        public string message { get; set; }
+        [DataMember( EmitDefaultValue = false )]
+        public object data { get; set; }
     }
 }

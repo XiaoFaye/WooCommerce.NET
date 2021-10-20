@@ -17,7 +17,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Product name.
@@ -378,7 +378,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Product parent ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? parent_id { get; set; }
+        public uint? parent_id { get; set; }
 
         /// <summary>
         /// Optional note to send the customer after purchase.
@@ -442,6 +442,11 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public List<ProductMeta> meta_data { get; set; }
 
+        /// <summary>
+        /// Container for error information, if any
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public ProductError error { get; set; }
     }
     
     [DataContract]
@@ -497,7 +502,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Category ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Category name. 
@@ -522,7 +527,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Tag ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Tag name. 
@@ -547,7 +552,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Image ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// The date the image was created, in the site’s timezone. 
@@ -610,7 +615,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Attribute ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Attribute name.
@@ -651,7 +656,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Attribute ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Attribute name.
@@ -683,7 +688,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// The content of the review. 
@@ -733,4 +738,14 @@ namespace WooCommerceNET.WooCommerce.v2
 
     }
 
+    [DataContract]
+    public class ProductError : JsonObject
+    {
+        [DataMember( EmitDefaultValue = false )]
+        public string code { get; set; }
+        [DataMember( EmitDefaultValue = false )]
+        public string message { get; set; }
+        [DataMember( EmitDefaultValue = false )]
+        public object data { get; set; }
+    }
 }

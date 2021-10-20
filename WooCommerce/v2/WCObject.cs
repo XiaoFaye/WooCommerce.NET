@@ -15,6 +15,7 @@ namespace WooCommerceNET.WooCommerce.v2
        
         protected RestAPI API { get; set; }
         public static Func<string, object, object> MetaValueProcessor { get; set; }
+        public static Func<string, object, object> MetaDisplayValueProcessor { get; set; }
         public WCObject(RestAPI api)
         {
             if (api.Version != APIVersion.Version2)
@@ -86,7 +87,7 @@ namespace WooCommerceNET.WooCommerce.v2
             /// read-only
             /// </summary>
             [DataMember(EmitDefaultValue = false)]
-            public int? id { get; set; }
+            public uint? id { get; set; }
 
             /// <summary>
             /// Meta key.
@@ -112,6 +113,29 @@ namespace WooCommerceNET.WooCommerce.v2
                     else
                         preValue = value;
                 }
+            }
+
+            /// <summary>
+            /// Display key.
+            /// </summary>
+            [DataMember(EmitDefaultValue = false)]
+            public string display_key { get; set; }
+
+            /// <summary>
+            /// Display value.
+            /// </summary>
+            private object preDisplayValue;
+            [DataMember(EmitDefaultValue = false)]
+            public object display_value 
+            {
+                get => preDisplayValue; 
+                set 
+                {
+                    if ( MetaDisplayValueProcessor != null)
+                        preDisplayValue = MetaDisplayValueProcessor.Invoke(GetType().Name, value);
+                    else
+                        preDisplayValue = value;
+                } 
             }
         }
 

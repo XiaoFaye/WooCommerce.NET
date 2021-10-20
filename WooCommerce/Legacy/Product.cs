@@ -27,7 +27,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Product slug 
@@ -338,7 +338,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// Product parent ID (post_parent)
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? parent_id { get; set; }
+        public uint? parent_id { get; set; }
 
         /// <summary>
         /// List of product categories names (string). In write-mode need to pass a array of categories IDs (integer) (uses wp_set_object_terms())
@@ -502,7 +502,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// Image ID (attachment ID)
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// UTC DateTime when the image was created 
@@ -670,7 +670,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// UTC DateTime when the variation was created 
@@ -876,7 +876,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Attribute name
@@ -919,7 +919,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Term name 
@@ -958,7 +958,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Category name 
@@ -977,7 +977,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// Category parent
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? parent { get; set; }
+        public uint? parent { get; set; }
 
         /// <summary>
         /// Category description
@@ -1013,7 +1013,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Shipping Class name 
@@ -1032,7 +1032,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// Shipping Class parent
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? parent { get; set; }
+        public uint? parent { get; set; }
 
         /// <summary>
         /// Shipping Class description
@@ -1056,7 +1056,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// Tag name 
@@ -1101,7 +1101,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? id { get; set; }
+        public uint? id { get; set; }
 
         /// <summary>
         /// UTC DateTime when the review was created 
