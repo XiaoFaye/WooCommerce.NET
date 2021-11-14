@@ -511,7 +511,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Meta data. See Order - Meta data properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<OrderMeta> meta_data { get; set; }
+        public List<ProductMeta> meta_data { get; set; }
 
         /// <summary>
         /// Product SKU. 
