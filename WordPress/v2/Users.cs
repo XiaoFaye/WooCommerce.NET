@@ -14,7 +14,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// Unique identifier for the user.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Login name for the user.

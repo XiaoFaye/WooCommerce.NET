@@ -48,7 +48,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// Unique identifier for the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint id  { get; set; }
+        public ulong? id  { get; set; }
 
         /// <summary>
         /// URL to the object.
@@ -112,7 +112,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the author of the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int author  { get; set; }
+        public ulong? author  { get; set; }
 
         /// <summary>
         /// Whether or not comments are open on the object.
@@ -210,7 +210,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the associated post of the attachment.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? post  { get; set; }
+        public ulong? post  { get; set; }
 
         /// <summary>
         /// URL to the original attachment file.

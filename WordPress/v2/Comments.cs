@@ -13,13 +13,13 @@ namespace WooCommerce.NET.WordPress.v2
         /// Unique identifier for the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint id  { get; set; }
+        public ulong? id  { get; set; }
 
         /// <summary>
         /// The ID of the user object, if author was a user.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int author { get; set; }
+        public ulong? author { get; set; }
 
         /// <summary>
         /// Email address for the object author.
@@ -95,13 +95,13 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the parent of the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint parent { get; set; }
+        public ulong? parent { get; set; }
 
         /// <summary>
         /// The ID of the associated post object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint post { get; set; }
+        public ulong? post { get; set; }
 
         /// <summary>
         /// State of the object.

@@ -13,7 +13,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Category name. 
@@ -32,7 +32,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// The ID for the parent of the resource.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? parent { get; set; }
+        public ulong? parent { get; set; }
 
         /// <summary>
         /// HTML description of the resource.
@@ -73,7 +73,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Image ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// The date the image was created, in the site’s timezone. 

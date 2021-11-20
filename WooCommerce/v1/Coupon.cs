@@ -15,7 +15,7 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Coupon code. 

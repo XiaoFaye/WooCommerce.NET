@@ -86,7 +86,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Number of decimal points shown in displayed prices for this country.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int num_decimals { get; set; }
+        public uint num_decimals { get; set; }
 
         /// <summary>
         /// List of states in this country. See Continents - Countries - States properties

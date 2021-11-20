@@ -17,7 +17,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Product name.
@@ -378,7 +378,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Product parent ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? parent_id { get; set; }
+        public ulong? parent_id { get; set; }
 
         /// <summary>
         /// Optional note to send the customer after purchase.
@@ -539,7 +539,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// The date the review was created, in the site’s timezone.
@@ -557,7 +557,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Unique identifier for the product that the review belongs to.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? product_id { get; set; }
+        public ulong? product_id { get; set; }
 
         /// <summary>
         /// Status of the review. Options: approved, hold, spam, unspam, transh and untrash. Defauls to approved.

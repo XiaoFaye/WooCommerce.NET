@@ -292,7 +292,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? product_id { get; set; }
+        public ulong? product_id { get; set; }
 
         /// <summary>
         /// Product name. 
@@ -313,7 +313,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? order_id { get; set; }
+        public ulong? order_id { get; set; }
 
         /// <summary>
         /// Order key. 

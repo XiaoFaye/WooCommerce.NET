@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,7 +47,7 @@ namespace WooCommerceNET
                 //if (JWTRequestFilter != null)
                 //    JWTRequestFilter.Invoke(request);                   
 
-                request.Content = new StringContent($"username={wc_key}&password={wc_secret}",
+                request.Content = new StringContent($"username={wc_key}&password={WebUtility.UrlEncode(wc_secret)}",
                                            Encoding.UTF8,
                                            "application/x-www-form-urlencoded");
 

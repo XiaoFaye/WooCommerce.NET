@@ -119,14 +119,14 @@ namespace WooCommerceNET.WooCommerce.v1
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint product_id { get; set; }
+        public ulong? product_id { get; set; }
 
         /// <summary>
         /// Total number of purchases. 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int quantity { get; set; }
+        public uint quantity { get; set; }
 
     }
 

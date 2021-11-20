@@ -15,7 +15,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// The date the order refund was created, in the site’s timezone. 
@@ -49,7 +49,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// User ID of user who created the refund.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? refunded_by { get; set; }
+        public ulong? refunded_by { get; set; }
 
         /// <summary>
         /// Meta data. See Order refund - Meta data properties
@@ -86,7 +86,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Product name.
@@ -98,13 +98,13 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Product ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? product_id { get; set; }
+        public ulong? product_id { get; set; }
 
         /// <summary>
         /// Variation ID, if applicable.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? variation_id { get; set; }
+        public ulong? variation_id { get; set; }
 
         /// <summary>
         /// Quantity ordered.

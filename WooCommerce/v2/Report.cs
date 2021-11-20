@@ -163,7 +163,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? product_id { get; set; }
+        public ulong? product_id { get; set; }
 
         /// <summary>
         /// Total number of purchases. 

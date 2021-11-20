@@ -19,7 +19,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Order number 
@@ -167,7 +167,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// required when creating a new order
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? customer_id { get; set; }
+        public ulong? customer_id { get; set; }
 
         /// <summary>
         /// URL to view the order in frontend 
@@ -273,7 +273,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Line item subtotal
@@ -400,7 +400,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Shipping method ID 
@@ -438,14 +438,14 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Tax rate ID 
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int? rate_id { get; set; }
+        public ulong? rate_id { get; set; }
 
         /// <summary>
         /// Tax rate code 
@@ -492,7 +492,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Shipping method title 
@@ -543,7 +543,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Coupon code 
@@ -576,7 +576,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// UTC DateTime when the order note was created 
@@ -615,7 +615,7 @@ namespace WooCommerceNET.WooCommerce.Legacy
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// UTC DateTime when the order refund was created 

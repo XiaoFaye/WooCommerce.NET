@@ -15,7 +15,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// The date the variation was created, in the site’s timezone. 
@@ -254,7 +254,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Menu order, used to custom sort products.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int menu_order { get; set; }
+        public uint menu_order { get; set; }
 
         /// <summary>
         /// Meta data. See Product variation - Meta data properties
@@ -282,7 +282,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Image ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// The date the image was created, in the site’s timezone. 

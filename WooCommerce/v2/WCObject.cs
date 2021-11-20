@@ -87,7 +87,7 @@ namespace WooCommerceNET.WooCommerce.v2
             /// read-only
             /// </summary>
             [DataMember(EmitDefaultValue = false)]
-            public uint? id { get; set; }
+            public ulong? id { get; set; }
 
             /// <summary>
             /// Meta key.
@@ -128,14 +128,14 @@ namespace WooCommerceNET.WooCommerce.v2
             [DataMember(EmitDefaultValue = false)]
             public object display_value 
             {
-                get => preDisplayValue; 
-                set 
+                get => preDisplayValue;
+                set
                 {
-                    if ( MetaDisplayValueProcessor != null)
+                    if (MetaDisplayValueProcessor != null)
                         preDisplayValue = MetaDisplayValueProcessor.Invoke(GetType().Name, value);
                     else
                         preDisplayValue = value;
-                } 
+                }
             }
         }
 

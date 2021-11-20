@@ -48,7 +48,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// Unique identifier for the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// URL to the object.
@@ -96,7 +96,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the parent of the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint parent  { get; set; }
+        public ulong? parent  { get; set; }
 
         /// <summary>
         /// The title for the object.
@@ -147,7 +147,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID for the author of the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint author  { get; set; }
+        public ulong? author  { get; set; }
 
         /// <summary>
         /// The excerpt for the object.
@@ -175,7 +175,7 @@ namespace WooCommerce.NET.WordPress.v2
         /// The ID of the featured media for the object.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public int featured_media  { get; set; }
+        public ulong? featured_media  { get; set; }
 
         /// <summary>
         /// Whether or not comments are open on the object.

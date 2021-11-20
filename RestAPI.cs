@@ -172,9 +172,11 @@ namespace WooCommerceNET
                     if (JWTRequestFilter != null)
                         JWTRequestFilter.Invoke(request);
 
-                    var buffer = Encoding.UTF8.GetBytes($"username={wc_key}&password={wc_secret}");
-                    Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
-                    dataStream.Write(buffer, 0, buffer.Length);
+                    var buffer = Encoding.UTF8.GetBytes($"username={wc_key}&password={WebUtility.UrlEncode(wc_secret)}");
+                    using (Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false))
+                    {
+                        dataStream.Write(buffer, 0, buffer.Length);
+                    }
                     WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                     Stream resStream = response.GetResponseStream();
                     string result = await GetStreamContent(resStream, "UTF-8").ConfigureAwait(false);
@@ -231,8 +233,10 @@ namespace WooCommerceNET
                 {
                     httpWebRequest.ContentType = "application/json";
                     var buffer = Encoding.UTF8.GetBytes(SerializeJSon(requestBody));
-                    Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
-                    dataStream.Write(buffer, 0, buffer.Length);
+                    using (Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false))
+                    {
+                        dataStream.Write(buffer, 0, buffer.Length);
+                    }
                 }
                 else
                 {
@@ -243,23 +247,27 @@ namespace WooCommerceNET
                             httpWebRequest.Headers["Content-Disposition"] = $"form-data; filename=\"{parms["name"]}\"";
                             httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
-                            Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
-                            FileStream fileStream = new FileStream(parms["path"], FileMode.Open, FileAccess.Read);
-                            byte[] buffer = new byte[4096];
-                            int bytesRead = 0;
-
-                            while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
+                            using (Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false))
                             {
-                                dataStream.Write(buffer, 0, bytesRead);
+                                FileStream fileStream = new FileStream(parms["path"], FileMode.Open, FileAccess.Read);
+                                byte[] buffer = new byte[4096];
+                                int bytesRead = 0;
+
+                                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
+                                {
+                                    dataStream.Write(buffer, 0, bytesRead);
+                                }
+                                fileStream.Close();
                             }
-                            fileStream.Close();
                         }
                         else
                         {
                             httpWebRequest.ContentType = "application/json";
                             var buffer = Encoding.UTF8.GetBytes(requestBody.ToString());
-                            Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
-                            dataStream.Write(buffer, 0, buffer.Length);
+                            using (Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false))
+                            {
+                                dataStream.Write(buffer, 0, buffer.Length);
+                            }
                         }
                     }
                 }

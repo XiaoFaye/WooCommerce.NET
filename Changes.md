@@ -3,6 +3,14 @@
 
 Version History
 -------------------
+* v0.8.4 update
+  1. Change all id field to 64bit integer (unsigned long) to prevent overflow. #560
+  2. Create RestClient.cs to use HttpClient, as Blazor does not support HttpWebRequest. PR#639
+  3. Accept '&' in password while calling WordPress Restful API. PR#527
+  4. Close HttpWebRequest write stream when finish. PR#529
+  5. Add WCObject.MetaDisplayValueProcessor function. PR#600
+  6. Add OrderCouponLineMeta class. PR#600
+  7. Change MetaData.display_value field to type object and run it through MetaDisplayValueProcessor() if configured. PR#600
 * v0.8.3 update
   1. Fix error while creating a refund. #476
   2. Allow authenticate Woocommerce API with JWT (set WCAuthWithJWT to true). #478

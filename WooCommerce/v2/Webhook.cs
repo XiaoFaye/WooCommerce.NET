@@ -14,7 +14,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// A friendly name for the webhook.
@@ -107,7 +107,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// The delivery duration, in seconds.     
@@ -221,13 +221,13 @@ namespace WooCommerceNET.WooCommerce.v2
         /// The webhook’s ID
         /// </summary>
         [DataMember(Name = "X-WC-Webhook-ID", EmitDefaultValue = false)]
-        public int XWCWebhookID { get; set; }
+        public uint XWCWebhookID { get; set; }
 
         /// <summary>
         /// The delivery ID
         /// </summary>
         [DataMember(Name = "X-WC-Webhook-Delivery-ID", EmitDefaultValue = false)]
-        public int XWCWebhookDeliveryID { get; set; }
+        public uint XWCWebhookDeliveryID { get; set; }
 
     }
 

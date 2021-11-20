@@ -17,13 +17,13 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Parent order ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? parent_id { get; set; }
+        public ulong? parent_id { get; set; }
 
         /// <summary>
         /// Order number. 
@@ -155,7 +155,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// User ID who owns the order. 0 for guests. Default is 0.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? customer_id { get; set; }
+        public ulong? customer_id { get; set; }
 
         /// <summary>
         /// Customer’s IP address. 
@@ -437,7 +437,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Product name.
@@ -449,13 +449,13 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Product ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? product_id { get; set; }
+        public ulong? product_id { get; set; }
 
         /// <summary>
         /// Variation ID, if applicable.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? variation_id { get; set; }
+        public ulong? variation_id { get; set; }
 
         /// <summary>
         /// Quantity ordered.
@@ -595,7 +595,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// tax item id
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// tax item total
@@ -620,7 +620,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Shipping method name.
@@ -678,7 +678,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Fee name.
@@ -705,13 +705,11 @@ namespace WooCommerceNET.WooCommerce.v2
         /// </summary>
         public decimal? total { get; set; }
 
-        [DataMember(EmitDefaultValue = false, Name = "total_tax")]
-        protected object total_taxValue { get; set; }
-
         /// <summary>
         /// Line total tax (after discounts). 
         /// read-only
         /// </summary>
+        [DataMember(EmitDefaultValue = false)]
         public decimal? total_tax { get; set; }
 
         /// <summary>
@@ -742,7 +740,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Coupon code.
@@ -781,7 +779,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public uint? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// Refund reason. 
