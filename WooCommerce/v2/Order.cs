@@ -705,11 +705,13 @@ namespace WooCommerceNET.WooCommerce.v2
         /// </summary>
         public decimal? total { get; set; }
 
+        [DataMember(EmitDefaultValue = false, Name = "total_tax")]
+        protected object total_taxValue { get; set; }
+
         /// <summary>
         /// Line total tax (after discounts). 
         /// read-only
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
         public decimal? total_tax { get; set; }
 
         /// <summary>
