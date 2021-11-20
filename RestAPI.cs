@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WooCommerceNET.Base;
 
@@ -172,9 +173,16 @@ namespace WooCommerceNET
                     if (JWTRequestFilter != null)
                         JWTRequestFilter.Invoke(request);
 
-                    var buffer = Encoding.UTF8.GetBytes($"username={wc_key}&password={wc_secret}");
+                    var convKey = ConvertAmpersandsToUTF8Hex(wc_key);
+                    var convSecret = ConvertAmpersandsToUTF8Hex(wc_secret);
+
+                    var buffer = Encoding.UTF8.GetBytes($"username={convKey}&password={convSecret}");
                     Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false);
                     dataStream.Write(buffer, 0, buffer.Length);
+                    dataStream.Close();
+
+                    request.ContentLength = buffer.Length;
+
                     WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
                     Stream resStream = response.GetResponseStream();
                     string result = await GetStreamContent(resStream, "UTF-8").ConfigureAwait(false);
@@ -244,7 +252,12 @@ namespace WooCommerceNET
                             httpWebRequest.ContentType = "application/x-www-form-urlencoded";
 
                             Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false);
-                            FileStream fileStream = new FileStream(parms["path"], FileMode.Open, FileAccess.Read);
+
+                            // If the given path is a physical path, open file. If not, read from URL.
+                            var fileStream = parms["source"] == "local" ?
+                                new FileStream(parms["path"], FileMode.Open, FileAccess.Read) :
+                                (new WebClient()).OpenRead(parms["path"]);
+
                             byte[] buffer = new byte[4096];
                             int bytesRead = 0;
 
@@ -461,6 +474,12 @@ namespace WooCommerceNET
             {
                 return IsLegacy ? "yyyy-MM-ddTHH:mm:ssZ" : "yyyy-MM-ddTHH:mm:ssK";
             }
+        }
+
+        private string ConvertAmpersandsToUTF8Hex(string original)
+        {
+            var pattern = new Regex("[&]");
+            return pattern.Replace(original, "%26");
         }
     }
 

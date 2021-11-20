@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>WooCommerceNET</id>
+    <version>0.8.3</version>
+    <authors>JamesYang@NZ</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">License.md</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://github.com/XiaoFaye/WooCommerce.NET</projectUrl>
+    <description>A .NET Wrapper for WooCommerce/WordPress REST API</description>
+    <releaseNotes>WooCommerce.NET is a .NET library for calling WooCommerce/WordPress REST API in .NET applications.
+
+GitHub: https://github.com/XiaoFaye/WooCommerce.NET
+Changes Doc: https://github.com/XiaoFaye/WooCommerce.NET/blob/master/Changes.md
+
+* v0.8.3 update
+  1. Fix error while creating a refund. #476
+  2. Allow authenticate Woocommerce API with JWT (set WCAuthWithJWT to true). #478
+  3. Fix error on retrieving refund. #484
+  4. Fix error on deserialize BatchObject. #523
+  5. Fix error on date format. #524
+  6. Add user-friendly attribute names and values to Metadata. #558
+  7. Change all id field to unsigned 32bit integer to prevent overflow. #560
+  8. Change functions in BaseObject to virtual to support Unit Test. #568
+  9. Add function to delete tax class by slug. #576
+  10. Allow WC Plugins to use WCObject.
+  11. Add UpdateRangeRaw to ignore deserialize return json. #523</releaseNotes>
+    <copyright>Copyright ©  2015 - 2021 James Yang@NZ</copyright>
+    <tags>WooCommerce Wordpress Restful API</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\bin\Debug\netstandard2.0\WooCommerce.NET.dll" target="lib\netstandard2.0\WooCommerce.NET.dll" />
+    <file src="C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\License.md" target="License.md" />
+  </files>
+</package>

@@ -1,0 +1,10 @@
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\obj\Debug\netstandard2.0\WooCommerce.NET.csproj.AssemblyReference.cache
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\obj\Debug\netstandard2.0\WooCommerce.NET.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\obj\Debug\netstandard2.0\WooCommerce.NET.AssemblyInfoInputs.cache
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\obj\Debug\netstandard2.0\WooCommerce.NET.AssemblyInfo.cs
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\obj\Debug\netstandard2.0\WooCommerce.NET.csproj.CoreCompileInputs.cache
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\bin\Debug\netstandard2.0\WooCommerce.NET.deps.json
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\bin\Debug\netstandard2.0\WooCommerce.NET.dll
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\bin\Debug\netstandard2.0\WooCommerce.NET.pdb
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\obj\Debug\netstandard2.0\WooCommerce.NET.dll
+C:\Users\kamorim\source\repos\L4B\l4b-shop-api\WooCommerce.NET\obj\Debug\netstandard2.0\WooCommerce.NET.pdb
