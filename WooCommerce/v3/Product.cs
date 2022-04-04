@@ -468,7 +468,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Image ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public long? id { get; set; }
+        public ulong? id { get; set; }
 
         /// <summary>
         /// The date the image was created, in the site’s timezone. 
