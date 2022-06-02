@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -43,7 +41,7 @@ namespace WooCommerceNET
         /// <summary>
         /// Authenticate Woocommerce API with JWT when set to True
         /// </summary>
-        public bool WCAuthWithJWT { get; set; }
+        internal bool WCAuthWithJWT { get; set; }
 
         /// <summary>
         /// Provide a function to modify the json string before deserilizing, this is for JWT Token ONLY!
@@ -79,11 +77,13 @@ namespace WooCommerceNET
                             Func<string, string> jsonSerializeFilter = null,
                             Func<string, string> jsonDeserializeFilter = null,
                             Action<HttpWebRequest> requestFilter = null,
-                            Action<HttpWebResponse> responseFilter = null)//, bool useProxy = false)
+                            Action<HttpWebResponse> responseFilter = null,
+                            bool wcAuthWithJWT = false)//, bool useProxy = false)
         {
             if (string.IsNullOrEmpty(url))
                 throw new Exception("Please use a valid WooCommerce Restful API url.");
 
+            WCAuthWithJWT = wcAuthWithJWT;
             string urlLower = url.Trim().ToLower().TrimEnd('/');
             if (urlLower.EndsWith("wc-api/v1") || urlLower.EndsWith("wc-api/v2") || urlLower.EndsWith("wc-api/v3"))
                 Version = APIVersion.Legacy;
@@ -113,7 +113,7 @@ namespace WooCommerceNET
             AuthorizedHeader = authorizedHeader;
 
             //Why extra '&'? look here: https://wordpress.org/support/topic/woocommerce-rest-api-v3-problem-woocommerce_api_authentication_error/
-            if ((url.ToLower().Contains("wc-api/v3") || !IsLegacy) && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && !(Version == APIVersion.WordPressAPI || Version == APIVersion.WordPressAPIJWT))
+            if ((url.ToLower().Contains("wc-api/v3") || !IsLegacy) && !wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && !(Version == APIVersion.WordPressAPI || Version == APIVersion.WordPressAPIJWT) && (!WCAuthWithJWT))
                 wc_secret = secret + "&";
             else
                 wc_secret = secret;
@@ -213,7 +213,7 @@ namespace WooCommerceNET
                 else
                 {
                     httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
-                    if (Version == APIVersion.WordPressAPIJWT)
+                    if (JWT_Object != null)
                         httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
                 }
 
@@ -336,7 +336,7 @@ namespace WooCommerceNET
                     return endpoint + "?" + requestParms.TrimEnd('&');
                 }
             }
-            
+
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic.Add("oauth_consumer_key", wc_key);
 
@@ -364,7 +364,7 @@ namespace WooCommerceNET
                 dic.Add("oauth_signature", Common.GetSHA256(wc_secret + "&" + oauth_token_secret, base_request_uri));
             else
                 dic.Add("oauth_signature", Common.GetSHA256(wc_secret, base_request_uri));
-            
+
             string parmstr = string.Empty;
             foreach (var parm in dic)
                 parmstr += parm.Key + "=" + Uri.EscapeDataString(parm.Value) + "&";
