@@ -3,6 +3,10 @@
 
 Version History
 -------------------
+* v0.8.5 update
+  1. Change all id field to 64bit integer (unsigned long) to prevent overflow. #560
+  2. Add WCCustomerItem for get customer by email endpoint.
+  3. Escape all querystrings.
 * v0.8.4 update
   1. Change all id field to 64bit integer (unsigned long) to prevent overflow. #560
   2. Create RestClient.cs to use HttpClient, as Blazor does not support HttpWebRequest. PR#639
