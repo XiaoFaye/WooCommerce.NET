@@ -147,11 +147,6 @@ namespace WooCommerceNET.Base
             return API.DeserializeJSon<T>(await API.GetRestful(APIEndpoint + "/" + id.ToString(), parms).ConfigureAwait(false));
         }
 
-        public virtual async Task<T> Get(string email, Dictionary<string, string> parms = null)
-        {
-            return API.DeserializeJSon<T>(await API.GetRestful(APIEndpoint + "/" + email, parms).ConfigureAwait(false));
-        }
-
         public virtual async Task<List<T>> GetAll(Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<List<T>>(await API.GetRestful(APIEndpoint, parms).ConfigureAwait(false));
@@ -276,7 +271,7 @@ namespace WooCommerceNET.Base
             return API.DeserializeJSon<T>(await API.GetRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint + "/" + id.ToString(), parms).ConfigureAwait(false));
         }
 
-        public virtual async Task<List<T>> GetAll(ulong parentId, Dictionary<string, string> parms = null)
+        public virtual async Task<List<T>> GetAll(object parentId, Dictionary<string, string> parms = null)
         {
             return API.DeserializeJSon<List<T>>(await API.GetRestful(APIParentEndpoint + "/" + parentId.ToString() + "/" + APIEndpoint, parms).ConfigureAwait(false));
         }
