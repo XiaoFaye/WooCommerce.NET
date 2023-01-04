@@ -360,19 +360,19 @@ namespace WooCommerceNET.WooCommerce.v3
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<int> related_ids { get; set; }
+        public List<ulong> related_ids { get; set; }
 
         /// <summary>
         /// List of up-sell products IDs.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<int> upsell_ids { get; set; }
+        public List<ulong> upsell_ids { get; set; }
 
         /// <summary>
         /// List of cross-sell products IDs.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<int> cross_sell_ids { get; set; }
+        public List<ulong> cross_sell_ids { get; set; }
 
         /// <summary>
         /// Product parent ID.
@@ -468,7 +468,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Image ID.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public ulong? id { get; set; }
+        public long? id { get; set; }
 
         /// <summary>
         /// The date the image was created, in the site’s timezone. 

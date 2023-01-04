@@ -24,7 +24,7 @@ namespace WooCommerceNET.WooCommerce.v2
             API = api;
 
             Coupon = new WCItem<T1>(api);
-            Customer = new WCItem<T2>(api);
+            Customer = new WCCustomerItem(api);
             Product = new WCProductItem(api);
             Order = new WCOrderItem(api);
             Attribute = new WCAttributeItem(api);
@@ -45,7 +45,7 @@ namespace WooCommerceNET.WooCommerce.v2
 
         public WCItem<T1> Coupon { get; protected set; }
 
-        public WCItem<T2> Customer { get; protected set; }
+        public WCCustomerItem Customer { get; protected set; }
 
         public WCProductItem Product { get; protected set; }
 
@@ -136,6 +136,29 @@ namespace WooCommerceNET.WooCommerce.v2
                     else
                         preDisplayValue = value;
                 }
+            }
+        }
+
+        public class WCCustomerItem : WCItem<T2>
+        {
+            public WCCustomerItem(RestAPI api) : base(api)
+            {
+                API = api;
+            }
+
+            public virtual async Task<T2> Get(string email, Dictionary<string, string> parms = null)
+            {
+                if (parms == null)
+                    parms = new Dictionary<string, string>();
+
+                parms.Add("email", email);
+
+                var customers = await GetAll(parms);
+
+                if (customers == null || customers.Count == 0)
+                    return null;
+                else
+                    return customers[0];
             }
         }
 
