@@ -446,6 +446,11 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Container for error information, if any
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
+        public string gtin { get; set; }
+        /// <summary>
+        /// Container for error information, if any
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
         public ProductError error { get; set; }
     }
 
