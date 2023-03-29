@@ -14,7 +14,7 @@ WooCommerce.NET is a .NET library for calling WooCommerce/WordPress REST API wit
 
 If this project has been helpful for you and you want to support it, please consider [Buying me a coffee](https://www.buymeacoffee.com/YU0SqVyrR):coffee:
 
-**For priority paid support/consulting service, customized REST API implementation and plugins REST API implementation, please email to [James (me:sunglasses:)](mailto:xiaofaye@msn.com)**
+**For priority paid support/consulting service, customized REST API development and plugins REST API development, please email to [James (me:sunglasses:)](mailto:xiaofaye@msn.com)**
 
 Usage (WooCommerce REST API)
 -------------------
