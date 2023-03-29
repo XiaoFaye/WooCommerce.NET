@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using WooCommerceNET.Base;
 
@@ -28,10 +29,12 @@ namespace WooCommerceNET.WooCommerce.v1
         where T10 : ShippingClass where T11 : ProductTag where T12 : TaxRate where T13 : TaxClass where T14 : Webhook
     {
         protected RestAPI API;
-        public WCObject(RestAPI api)
+        public WCObject(RestAPI api, CultureInfo culture = null)
         {
             if (api.Version != APIVersion.Version1)
                 throw new Exception("Please use WooCommerce Restful API Version 1 url for this WCObject. e.g.: http://www.yourstore.co.nz/wp-json/wc/v1/");
+
+            JsonObject.Culture = culture ?? CultureInfo.InvariantCulture;
 
             API = api;
         }
@@ -614,7 +617,7 @@ namespace WooCommerceNET.WooCommerce.v1
     public class WCObject : WCObject<Coupon, Customer, Order, OrderNote, OrderRefund, Product, ProductCategory,
                                     ProductAttribute, ProductAttributeTerm, ShippingClass, ProductTag, TaxRate, TaxClass, Webhook>
     {
-        public WCObject(RestAPI api) : base(api)
+        public WCObject(RestAPI api, CultureInfo culture = null) : base(api, culture)
         {
         }
     }

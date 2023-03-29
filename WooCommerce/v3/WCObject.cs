@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using WooCommerceNET.Base;
@@ -38,10 +39,12 @@ namespace WooCommerceNET.WooCommerce.v3
         }
 
 
-        public WCObject(RestAPI api)
+        public WCObject(RestAPI api, CultureInfo culture = null)
         {
             if (api.Version != APIVersion.Version3 && api.Version != APIVersion.ThirdPartyPlugins)
                 throw new Exception("Please use WooCommerce Restful API Version 3 url for this WCObject. e.g.: http://www.yourstore.co.nz/wp-json/wc/v3/");
+
+            JsonObject.Culture = culture ?? CultureInfo.InvariantCulture;
 
             API = api;
 
@@ -193,7 +196,7 @@ namespace WooCommerceNET.WooCommerce.v3
     public class WCObject: WCObject<Coupon, Customer, Product, ProductReview, Variation, Order, OrderNote, OrderRefund, ProductAttribute, ProductAttributeTerm, 
                                     ProductCategory, ShippingClass, ProductTag, TaxRate, TaxClass, Data>
     {
-        public WCObject(RestAPI api) : base(api)
+        public WCObject(RestAPI api, CultureInfo culture = null) : base(api, culture)
         {
         }
     }

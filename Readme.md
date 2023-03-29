@@ -14,6 +14,8 @@ WooCommerce.NET is a .NET library for calling WooCommerce/WordPress REST API wit
 
 If this project has been helpful for you and you want to support it, please consider [Buying me a coffee](https://www.buymeacoffee.com/YU0SqVyrR):coffee:
 
+**For priority paid support/consulting service, customized REST API implementation and plugins REST API implementation, please email to [James (me:sunglasses:)](mailto:xiaofaye@msn.com)**
+
 Usage (WooCommerce REST API)
 -------------------
 * [How to use JSON.NET in WooCommerce.NET](https://github.com/XiaoFaye/WooCommerce.NET/wiki/How-to-use-JSON.NET-in-WooCommerce.NET)
@@ -31,6 +33,9 @@ using WooCommerceNET.WooCommerce.v3.Extension;
 
 RestAPI rest = new RestAPI("http://www.yourstore.co.nz/wp-json/wc/v3/", "<WooCommerce Key>", "<WooCommerce Secret");
 WCObject wc = new WCObject(rest);
+
+//Use below code for WCObject only if you would like to have different CultureInfo
+WCObject wc = new WCObject(rest, CultureInfo.GetCultureInfo("de-DE"));
 
 //Get all products
 var products = await wc.Product.GetAll();

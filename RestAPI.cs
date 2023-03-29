@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -127,7 +125,6 @@ namespace WooCommerceNET
         }
 
 
-
         public bool IsLegacy
         {
             get
@@ -189,15 +186,7 @@ namespace WooCommerceNET
 
                 if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI && Version != APIVersion.WordPressAPIJWT)
                 {
-                    if (AuthorizedHeader == true)
-                    {
-                        httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
-                        if (WCAuthWithJWT && JWT_Object != null)
-                            httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
-                        else
-                            httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
-                    }
-                    else
+                    if (AuthorizedHeader == false)
                     {
                         if (parms == null)
                             parms = new Dictionary<string, string>();
@@ -206,8 +195,22 @@ namespace WooCommerceNET
                             parms.Add("consumer_key", wc_key);
                         if (!parms.ContainsKey("consumer_secret"))
                             parms.Add("consumer_secret", wc_secret);
+                    }
 
+                    //Allow accessing WordPress plugin REST API with WooCommerce secret and key.
+                    //Url should be passed to RestAPI as WooCommerce Rest API url, e.g.: https://mystore.com/wp-json/wc/v3
+                    //Endpoint should be starting with wp-json
+                    if (endpoint.StartsWith("wp-json"))
+                        httpWebRequest = (HttpWebRequest)WebRequest.Create(new Uri(new Uri($"https://{new Uri(wc_url).Host}"), GetOAuthEndPoint(method.ToString(), endpoint, parms)));
+                    else
                         httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+
+                    if (AuthorizedHeader == true)
+                    {
+                        if (WCAuthWithJWT && JWT_Object != null)
+                            httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
+                        else
+                            httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
                     }
                 }
                 else
@@ -220,7 +223,7 @@ namespace WooCommerceNET
                 // start the stream immediately
                 httpWebRequest.Method = method.ToString();
                 httpWebRequest.AllowReadStreamBuffering = false;
-
+                
                 if (webRequestFilter != null)
                     webRequestFilter.Invoke(httpWebRequest);
 
@@ -298,27 +301,27 @@ namespace WooCommerceNET
 
         public async Task<string> GetRestful(string endpoint, Dictionary<string, string> parms = null)
         {
-            return await SendHttpClientRequest(endpoint, RequestMethod.GET, string.Empty, parms).ConfigureAwait(false);
+            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.GET, string.Empty, parms).ConfigureAwait(false);
         }
 
         public async Task<string> PostRestful(string endpoint, object jsonObject, Dictionary<string, string> parms = null)
         {
-            return await SendHttpClientRequest(endpoint, RequestMethod.POST, jsonObject, parms).ConfigureAwait(false);
+            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.POST, jsonObject, parms).ConfigureAwait(false);
         }
 
         public async Task<string> PutRestful(string endpoint, object jsonObject, Dictionary<string, string> parms = null)
         {
-            return await SendHttpClientRequest(endpoint, RequestMethod.PUT, jsonObject, parms).ConfigureAwait(false);
+            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.PUT, jsonObject, parms).ConfigureAwait(false);
         }
 
         public async Task<string> DeleteRestful(string endpoint, Dictionary<string, string> parms = null)
         {
-            return await SendHttpClientRequest(endpoint, RequestMethod.DELETE, string.Empty, parms).ConfigureAwait(false);
+            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.DELETE, string.Empty, parms).ConfigureAwait(false);
         }
 
         public async Task<string> DeleteRestful(string endpoint, object jsonObject, Dictionary<string, string> parms = null)
         {
-            return await SendHttpClientRequest(endpoint, RequestMethod.DELETE, jsonObject, parms).ConfigureAwait(false);
+            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.DELETE, jsonObject, parms).ConfigureAwait(false);
         }
 
         protected string GetOAuthEndPoint(string method, string endpoint, Dictionary<string, string> parms = null)

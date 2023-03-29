@@ -5,13 +5,15 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using WooCommerce.NET.WordPress.v2;
 
 namespace WooCommerceNET.Base
 {
     [DataContract]
     public class JsonObject
     {
+        [IgnoreDataMember]
+        public static CultureInfo Culture { get; set; }
+
         [OnSerializing]
         void OnSerializing(StreamingContext ctx)
         {
@@ -28,13 +30,13 @@ namespace WooCommerceNET.Base
                             GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.v1") ||
                             GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.v2") ||
                             GetType().GetTypeInfo().BaseType.FullName.StartsWith("WooCommerceNET.WooCommerce.v3"))
-                            objValue.SetValue(this, (pi.GetValue(this) as decimal?).Value.ToString(CultureInfo.InvariantCulture));
+                            objValue.SetValue(this, (pi.GetValue(this) as decimal?).Value.ToString(Culture));
                         else
-                            objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
+                            objValue.SetValue(this, decimal.Parse(pi.GetValue(this).ToString(), Culture));
                     }
                     else if (pi.PropertyType == typeof(int?))
                     {
-                        objValue.SetValue(this, int.Parse(pi.GetValue(this).ToString(), CultureInfo.InvariantCulture));
+                        objValue.SetValue(this, int.Parse(pi.GetValue(this).ToString(), Culture));
                     }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {
@@ -58,14 +60,14 @@ namespace WooCommerceNET.Base
                         object value = objValue.GetValue(this);
 
                         if (!(value == null || value.ToString() == string.Empty))
-                            pi.SetValue(this, decimal.Parse(value.ToString(), CultureInfo.InvariantCulture));
+                            pi.SetValue(this, decimal.Parse(value.ToString(), Culture));
                     }
                     else if (pi.PropertyType == typeof(int?))
                     {
                         object value = objValue.GetValue(this);
 
                         if (!(value == null || value.ToString() == string.Empty))
-                            pi.SetValue(this, int.Parse(value.ToString(), CultureInfo.InvariantCulture));
+                            pi.SetValue(this, int.Parse(value.ToString(), Culture));
                     }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {

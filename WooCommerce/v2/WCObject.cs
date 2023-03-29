@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using WooCommerceNET.Base;
@@ -16,10 +17,12 @@ namespace WooCommerceNET.WooCommerce.v2
         protected RestAPI API { get; set; }
         public static Func<string, object, object> MetaValueProcessor { get; set; }
         public static Func<string, object, object> MetaDisplayValueProcessor { get; set; }
-        public WCObject(RestAPI api)
+        public WCObject(RestAPI api, CultureInfo culture = null)
         {
             if (api.Version != APIVersion.Version2)
                 throw new Exception("Please use WooCommerce Restful API Version 2 url for this WCObject. e.g.: http://www.yourstore.co.nz/wp-json/wc/v2/");
+
+            JsonObject.Culture = culture ?? CultureInfo.InvariantCulture;
 
             API = api;
 
@@ -222,7 +225,7 @@ namespace WooCommerceNET.WooCommerce.v2
     public class WCObject: WCObject<Coupon, Customer, Product, ProductReview, Variation, Order, OrderNote, OrderRefund, ProductAttribute, ProductAttributeTerm, 
                                     ProductCategory, ShippingClass, ProductTag, TaxRate, TaxClass>
     {
-        public WCObject(RestAPI api) : base(api)
+        public WCObject(RestAPI api, CultureInfo culture = null) : base(api, culture)
         {
         }
     }

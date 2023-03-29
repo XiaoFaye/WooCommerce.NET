@@ -3,6 +3,10 @@
 
 Version History
 -------------------
+* v0.8.6 update
+  1. Fix manage_stock property deserializing issue in Project object. #722
+  2. Add Culture object in WCObject constructor to resolve format issue. #731
+  3. Allow accessing WordPress plugin REST API with WooCommerce secret and key.
 * v0.8.5 update
   1. Change all id field to 64bit integer (unsigned long) to prevent overflow. #560
   2. Add WCCustomerItem for get customer by email endpoint.
