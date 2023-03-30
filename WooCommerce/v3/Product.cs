@@ -443,7 +443,7 @@ namespace WooCommerceNET.WooCommerce.v3
         public List<v2.ProductMeta> meta_data { get; set; }
 
         /// <summary>
-        /// Container for error information, if any
+        /// Product gtin value, unique, but not all stores has it
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public string gtin { get; set; }
