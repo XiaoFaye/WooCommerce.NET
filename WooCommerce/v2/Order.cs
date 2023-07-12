@@ -461,7 +461,7 @@ namespace WooCommerceNET.WooCommerce.v2
         /// Quantity ordered.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public decimal? quantity { get; set; }
+        public ulong? quantity { get; set; }
 
         /// <summary>
         /// Tax class of product.
