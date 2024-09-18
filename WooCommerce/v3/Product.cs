@@ -424,7 +424,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<int> variations { get; set; }
+        public List<ulong> variations { get; set; }
 
         /// <summary>
         /// List of grouped products ID. 
