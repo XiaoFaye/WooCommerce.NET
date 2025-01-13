@@ -455,7 +455,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// Product GTIN, UPC, EAN o ISBN
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public string? global_unique_id { get; set; }
+        public string global_unique_id { get; set; }
     }
 
     [DataContract]
