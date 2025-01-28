@@ -64,6 +64,12 @@ namespace WooCommerceNET.WooCommerce.v3
         [DataMember(EmitDefaultValue = false)]
         public string sku { get; set; }
 
+        /// <summary>
+        /// Variation GTIN, UPC, EAN o ISBN
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string global_unique_id { get; set; }
+
         [DataMember(EmitDefaultValue = false, Name = "price")]
         protected object priceValue { get; set; }
         /// <summary>
