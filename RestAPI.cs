@@ -153,7 +153,7 @@ namespace WooCommerceNET
             {
                 if (Version == APIVersion.WordPressAPI)
                 {
-                    if (string.IsNullOrEmpty(oauth_token) || string.IsNullOrEmpty(oauth_token_secret))
+                    if ((string.IsNullOrEmpty(oauth_token) || string.IsNullOrEmpty(oauth_token_secret)) && (string.IsNullOrEmpty(wc_key) || string.IsNullOrEmpty(wc_secret)))
                         throw new Exception($"oauth_token and oauth_token_secret parameters are required when using WordPress REST API.");
                 }
 
@@ -218,6 +218,8 @@ namespace WooCommerceNET
                     httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
                     if (Version == APIVersion.WordPressAPIJWT)
                         httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
+                    else if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version == APIVersion.WordPressAPI)
+                        httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
                 }
 
                 // start the stream immediately
@@ -326,7 +328,9 @@ namespace WooCommerceNET
 
         protected string GetOAuthEndPoint(string method, string endpoint, Dictionary<string, string> parms = null)
         {
-            if (Version == APIVersion.WordPressAPIJWT || (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI))
+            if (Version == APIVersion.WordPressAPIJWT ||
+                (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI) ||
+                (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version == APIVersion.WordPressAPI && !string.IsNullOrEmpty(wc_key) && !string.IsNullOrEmpty(wc_secret)))
             {
                 if (parms == null)
                     return endpoint;
