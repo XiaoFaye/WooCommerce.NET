@@ -424,7 +424,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<int> variations { get; set; }
+        public List<ulong> variations { get; set; }
 
         /// <summary>
         /// List of grouped products ID. 
@@ -450,6 +450,12 @@ namespace WooCommerceNET.WooCommerce.v3
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public ProductError error { get; set; }
+        
+        /// <summary>
+        /// Product GTIN, UPC, EAN o ISBN
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string global_unique_id { get; set; }
     }
 
     [DataContract]
