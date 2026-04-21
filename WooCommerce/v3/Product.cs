@@ -396,6 +396,12 @@ namespace WooCommerceNET.WooCommerce.v3
         public List<ProductCategoryLine> categories { get; set; }
 
         /// <summary>
+        /// List of brands. See Product - Brands properties
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public List<ProductCategoryLine> brands { get; set; }
+
+        /// <summary>
         /// List of tags. See Product - Tags properties
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
@@ -431,7 +437,7 @@ namespace WooCommerceNET.WooCommerce.v3
         /// read-only
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public List<int> grouped_products { get; set; }
+        public List<ulong> grouped_products { get; set; }
 
         /// <summary>
         /// Menu order, used to custom sort products.
