@@ -3,6 +3,11 @@
 
 Version History
 -------------------
+* v0.8.7 update
+  1. Allow authorized with Application Passwords for WordPress.
+  2. Add support for Brands. #795
+  3. Add Variation GTIN, UPC, EAN o ISBN field.
+  4. Update data type from integer to unsigned long for more fields.
 * v0.8.6 update
   1. Fix manage_stock property deserializing issue in Project object. #722
   2. Add Culture object in WCObject constructor to resolve format issue. #731
