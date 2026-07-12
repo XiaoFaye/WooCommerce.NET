@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -14,6 +16,11 @@ namespace WooCommerceNET
 {
     public class RestAPI
     {
+        // HttpClient is intended to be instantiated once and reused for the lifetime of the
+        // application, rather than created per-request like HttpWebRequest was. Creating a new
+        // HttpClient per call can exhaust available sockets under load ("socket exhaustion").
+        private static readonly HttpClient httpClient = new HttpClient();
+
         protected string wc_url = string.Empty;
         protected string wc_key = "";
         protected string wc_secret = "";
@@ -23,8 +30,8 @@ namespace WooCommerceNET
 
         protected Func<string, string> jsonSeFilter;
         protected Func<string, string> jsonDeseFilter;
-        protected Action<HttpWebRequest> webRequestFilter;
-        protected Action<HttpWebResponse> webResponseFilter;
+        protected Action<HttpRequestMessage> webRequestFilter;
+        protected Action<HttpResponseMessage> webResponseFilter;
 
         /// <summary>
         /// For Wordpress REST API with OAuth 1.0 ONLY
@@ -49,9 +56,9 @@ namespace WooCommerceNET
         public Func<string, string> JWTDeserializeFilter { get; set; }
 
         /// <summary>
-        /// Provide a function to modify the HttpWebRequest object, this is for JWT Token ONLY!
+        /// Provide a function to modify the HttpRequestMessage object, this is for JWT Token ONLY!
         /// </summary>
-        public Action<HttpWebRequest> JWTRequestFilter { get; set; }
+        public Action<HttpRequestMessage> JWTRequestFilter { get; set; }
 
         /// <summary>
         /// If running in Debug mode, default is False.
@@ -71,13 +78,13 @@ namespace WooCommerceNET
         /// <param name="authorizedHeader">WHEN using HTTPS, do you prefer to send the Credentials in HTTP HEADER?</param>
         /// <param name="jsonSerializeFilter">Provide a function to modify the json string after serilizing.</param>
         /// <param name="jsonDeserializeFilter">Provide a function to modify the json string before deserilizing.</param>
-        /// <param name="requestFilter">Provide a function to modify the HttpWebRequest object.</param>
-        /// <param name="responseFilter">Provide a function to grab information from the HttpWebResponse object.</param>
+        /// <param name="requestFilter">Provide a function to modify the HttpRequestMessage object.</param>
+        /// <param name="responseFilter">Provide a function to grab information from the HttpResponseMessage object.</param>
         public RestAPI(string url, string key, string secret, bool authorizedHeader = true,
                             Func<string, string> jsonSerializeFilter = null,
                             Func<string, string> jsonDeserializeFilter = null,
-                            Action<HttpWebRequest> requestFilter = null,
-                            Action<HttpWebResponse> responseFilter = null)//, bool useProxy = false)
+                            Action<HttpRequestMessage> requestFilter = null,
+                            Action<HttpResponseMessage> responseFilter = null)//, bool useProxy = false)
         {
             if (string.IsNullOrEmpty(url))
                 throw new Exception("Please use a valid WooCommerce Restful API url.");
@@ -124,13 +131,9 @@ namespace WooCommerceNET
             //wc_Proxy = useProxy;
         }
 
-
         public bool IsLegacy
         {
-            get
-            {
-                return Version == APIVersion.Legacy;
-            }
+            get => Version == APIVersion.Legacy;
         }
 
         public APIVersion Version { get; private set; }
@@ -148,7 +151,7 @@ namespace WooCommerceNET
         /// <returns>json string</returns>
         public virtual async Task<string> SendHttpClientRequest<T>(string endpoint, RequestMethod method, T requestBody, Dictionary<string, string> parms = null)
         {
-            HttpWebRequest httpWebRequest = null;
+            HttpRequestMessage httpRequestMessage = null;
             try
             {
                 if (Version == APIVersion.WordPressAPI)
@@ -159,30 +162,33 @@ namespace WooCommerceNET
 
                 if ((Version == APIVersion.WordPressAPIJWT || WCAuthWithJWT) && JWT_Object == null)
                 {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(wc_url.Replace("wp/v2", "jwt-auth/v1/token")
-                                                                                        .Replace("wc/v1", "jwt-auth/v1/token")
-                                                                                        .Replace("wc/v2", "jwt-auth/v1/token")
-                                                                                        .Replace("wc/v3", "jwt-auth/v1/token"));
-                    request.Method = "POST";
-                    request.ContentType = "application/x-www-form-urlencoded";
+                    string tokenUrl = wc_url.Replace("wp/v2", "jwt-auth/v1/token")
+                                             .Replace("wc/v1", "jwt-auth/v1/token")
+                                             .Replace("wc/v2", "jwt-auth/v1/token")
+                                             .Replace("wc/v3", "jwt-auth/v1/token");
 
-                    if (JWTRequestFilter != null)
-                        JWTRequestFilter.Invoke(request);
-
-                    var buffer = Encoding.UTF8.GetBytes($"username={wc_key}&password={WebUtility.UrlEncode(wc_secret)}");
-                    using (Stream dataStream = await request.GetRequestStreamAsync().ConfigureAwait(false))
+                    using (HttpRequestMessage tokenRequest = new HttpRequestMessage(HttpMethod.Post, tokenUrl))
                     {
-                        dataStream.Write(buffer, 0, buffer.Length);
+                        string formBody = $"username={wc_key}&password={WebUtility.UrlEncode(wc_secret)}";
+                        tokenRequest.Content = new StringContent(formBody, Encoding.UTF8);
+                        tokenRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+                        if (JWTRequestFilter != null)
+                            JWTRequestFilter.Invoke(tokenRequest);
+
+                        using (HttpResponseMessage tokenResponse = await httpClient.SendAsync(tokenRequest).ConfigureAwait(false))
+                        {
+                            string result = await GetResponseContent(tokenResponse).ConfigureAwait(false);
+
+                            if (JWTDeserializeFilter != null)
+                                result = JWTDeserializeFilter.Invoke(result);
+
+                            JWT_Object = DeserializeJSon<WP_JWT_Object>(result);
+                        }
                     }
-                    WebResponse response = await request.GetResponseAsync().ConfigureAwait(false);
-                    Stream resStream = response.GetResponseStream();
-                    string result = await GetStreamContent(resStream, "UTF-8").ConfigureAwait(false);
-
-                    if (JWTDeserializeFilter != null)
-                        result = JWTDeserializeFilter.Invoke(result);
-
-                    JWT_Object = DeserializeJSon<WP_JWT_Object>(result);
                 }
+
+                string requestUri;
 
                 if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version != APIVersion.WordPressAPI && Version != APIVersion.WordPressAPIJWT)
                 {
@@ -201,33 +207,33 @@ namespace WooCommerceNET
                     //Url should be passed to RestAPI as WooCommerce Rest API url, e.g.: https://mystore.com/wp-json/wc/v3
                     //Endpoint should be starting with wp-json
                     if (endpoint.StartsWith("wp-json"))
-                        httpWebRequest = (HttpWebRequest)WebRequest.Create(new Uri(new Uri($"https://{new Uri(wc_url).Host}"), GetOAuthEndPoint(method.ToString(), endpoint, parms)));
+                        requestUri = new Uri(new Uri($"https://{new Uri(wc_url).Host}"), GetOAuthEndPoint(method.ToString(), endpoint, parms)).ToString();
                     else
-                        httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                        requestUri = wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms);
+
+                    httpRequestMessage = new HttpRequestMessage(new HttpMethod(method.ToString()), requestUri);
 
                     if (AuthorizedHeader == true)
                     {
                         if (WCAuthWithJWT && JWT_Object != null)
-                            httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
+                            httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", JWT_Object.token);
                         else
-                            httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
+                            httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret)));
                     }
                 }
                 else
                 {
-                    httpWebRequest = (HttpWebRequest)WebRequest.Create(wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms));
+                    requestUri = wc_url + GetOAuthEndPoint(method.ToString(), endpoint, parms);
+                    httpRequestMessage = new HttpRequestMessage(new HttpMethod(method.ToString()), requestUri);
+
                     if (Version == APIVersion.WordPressAPIJWT)
-                        httpWebRequest.Headers["Authorization"] = "Bearer " + JWT_Object.token;
+                        httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", JWT_Object.token);
                     else if (wc_url.StartsWith("https", StringComparison.OrdinalIgnoreCase) && Version == APIVersion.WordPressAPI)
-                        httpWebRequest.Headers["Authorization"] = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret));
+                        httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(wc_key + ":" + wc_secret)));
                 }
 
-                // start the stream immediately
-                httpWebRequest.Method = method.ToString();
-                httpWebRequest.AllowReadStreamBuffering = false;
-                
                 if (webRequestFilter != null)
-                    webRequestFilter.Invoke(httpWebRequest);
+                    webRequestFilter.Invoke(httpRequestMessage);
 
                 //if (wc_Proxy)
                 //    httpWebRequest.Proxy.Credentials = CredentialCache.DefaultCredentials;
@@ -236,12 +242,9 @@ namespace WooCommerceNET
 
                 if (requestBody != null && requestBody.GetType() != typeof(string))
                 {
-                    httpWebRequest.ContentType = "application/json";
-                    var buffer = Encoding.UTF8.GetBytes(SerializeJSon(requestBody));
-                    using (Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false))
-                    {
-                        dataStream.Write(buffer, 0, buffer.Length);
-                    }
+                    string json = SerializeJSon(requestBody);
+                    httpRequestMessage.Content = new StringContent(json, Encoding.UTF8);
+                    httpRequestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
                 else
                 {
@@ -249,83 +252,71 @@ namespace WooCommerceNET
                     {
                         if (requestBody.ToString() == "fileupload")
                         {
-                            httpWebRequest.Headers["Content-Disposition"] = $"form-data; filename=\"{parms["name"]}\"";
-                            httpWebRequest.ContentType = "application/x-www-form-urlencoded";
-
-                            using (Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false))
+                            FileStream fileStream = new FileStream(parms["path"], FileMode.Open, FileAccess.Read);
+                            StreamContent streamContent = new StreamContent(fileStream);
+                            streamContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                            streamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
                             {
-                                FileStream fileStream = new FileStream(parms["path"], FileMode.Open, FileAccess.Read);
-                                byte[] buffer = new byte[4096];
-                                int bytesRead = 0;
+                                FileName = parms["name"]
+                            };
 
-                                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
-                                {
-                                    dataStream.Write(buffer, 0, bytesRead);
-                                }
-                                fileStream.Close();
-                            }
+                            httpRequestMessage.Content = streamContent;
                         }
                         else
                         {
-                            httpWebRequest.ContentType = "application/json";
-                            var buffer = Encoding.UTF8.GetBytes(requestBody.ToString());
-                            using (Stream dataStream = await httpWebRequest.GetRequestStreamAsync().ConfigureAwait(false))
-                            {
-                                dataStream.Write(buffer, 0, buffer.Length);
-                            }
+                            httpRequestMessage.Content = new StringContent(requestBody.ToString(), Encoding.UTF8);
+                            httpRequestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                         }
                     }
                 }
 
-                // asynchronously get a response
-                WebResponse wr = await httpWebRequest.GetResponseAsync().ConfigureAwait(false);
+                // asynchronously get a response, reading headers first so large bodies aren't buffered up-front
+                using (HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false))
+                {
+                    if (webResponseFilter != null)
+                        webResponseFilter.Invoke(httpResponseMessage);
 
-                if (webResponseFilter != null)
-                    webResponseFilter.Invoke((HttpWebResponse)wr);
+                    string content = await GetResponseContent(httpResponseMessage).ConfigureAwait(false);
 
-                return await GetStreamContent(wr.GetResponseStream(), wr.ContentType.Contains("=") ? wr.ContentType.Split('=')[1] : "UTF-8").ConfigureAwait(false);
+                    // HttpClient does not throw automatically on non-2xx status codes the way
+                    // HttpWebRequest/WebException did, so replicate that behavior explicitly,
+                    // surfacing the response body (often a JSON error payload) as the message.
+                    if (!httpResponseMessage.IsSuccessStatusCode)
+                        throw new HttpRequestException(content);
+
+                    return content;
+                }
             }
-            catch (WebException we)
+            catch (HttpRequestException)
             {
-                if (httpWebRequest != null && httpWebRequest.HaveResponse)
-                    if (we.Response != null)
-                        throw new WebException(await GetStreamContent(we.Response.GetResponseStream(), we.Response.ContentType.Contains("=") ? we.Response.ContentType.Split('=')[1] : "UTF-8").ConfigureAwait(false), we.InnerException, we.Status, we.Response);
-                    else
-                        throw we;
-                else
-                    throw we;
+                throw;
             }
             catch (Exception e)
             {
                 return e.Message;
             }
+            finally
+            {
+                if (httpRequestMessage != null)
+                    httpRequestMessage.Dispose();
+            }
         }
 
         public async Task<string> GetRestful(string endpoint, Dictionary<string, string> parms = null)
-        {
-            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.GET, string.Empty, parms).ConfigureAwait(false);
-        }
-
+        => await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.GET, string.Empty, parms).ConfigureAwait(false);
+        
         public async Task<string> PostRestful(string endpoint, object jsonObject, Dictionary<string, string> parms = null)
-        {
-            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.POST, jsonObject, parms).ConfigureAwait(false);
-        }
-
+        => await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.POST, jsonObject, parms).ConfigureAwait(false);
+        
         public async Task<string> PutRestful(string endpoint, object jsonObject, Dictionary<string, string> parms = null)
-        {
-            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.PUT, jsonObject, parms).ConfigureAwait(false);
-        }
-
+        => await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.PUT, jsonObject, parms).ConfigureAwait(false);
+        
         public async Task<string> DeleteRestful(string endpoint, Dictionary<string, string> parms = null)
-        {
-            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.DELETE, string.Empty, parms).ConfigureAwait(false);
-        }
-
+        => await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.DELETE, string.Empty, parms).ConfigureAwait(false);
+        
         public async Task<string> DeleteRestful(string endpoint, object jsonObject, Dictionary<string, string> parms = null)
-        {
-            return await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.DELETE, jsonObject, parms).ConfigureAwait(false);
-        }
-
+        => await SendHttpClientRequest(endpoint.ToLower(), RequestMethod.DELETE, jsonObject, parms).ConfigureAwait(false);
+        
         protected string GetOAuthEndPoint(string method, string endpoint, Dictionary<string, string> parms = null)
         {
             if (Version == APIVersion.WordPressAPIJWT ||
@@ -343,7 +334,7 @@ namespace WooCommerceNET
                     return endpoint + "?" + requestParms.TrimEnd('&');
                 }
             }
-            
+
             Dictionary<string, string> dic = new Dictionary<string, string>();
             dic.Add("oauth_consumer_key", wc_key);
 
@@ -371,7 +362,7 @@ namespace WooCommerceNET
                 dic.Add("oauth_signature", Common.GetSHA256(wc_secret + "&" + oauth_token_secret, base_request_uri));
             else
                 dic.Add("oauth_signature", Common.GetSHA256(wc_secret, base_request_uri));
-            
+
             string parmstr = string.Empty;
             foreach (var parm in dic)
                 parmstr += parm.Key + "=" + Uri.EscapeDataString(parm.Value) + "&";
@@ -379,6 +370,26 @@ namespace WooCommerceNET
             return endpoint + "?" + parmstr.TrimEnd('&');
         }
 
+        /// <summary>
+        /// Reads the body of an HttpResponseMessage as a string, honoring the charset
+        /// declared in the response's Content-Type header (defaulting to UTF-8).
+        /// Replaces the old stream-chunking GetStreamContent() usage for HTTP responses.
+        /// </summary>
+        protected async Task<string> GetResponseContent(HttpResponseMessage response)
+        {
+            var charset = "UTF-8";
+            MediaTypeHeaderValue contentType = response.Content.Headers.ContentType;
+            if (contentType != null && !string.IsNullOrEmpty(contentType.CharSet))
+                charset = contentType.CharSet;
+
+            var data = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            return Encoding.GetEncoding(charset).GetString(data);
+        }
+
+        /// <summary>
+        /// Retained for backwards compatibility with any derived classes that call it directly.
+        /// No longer used internally now that responses are read via GetResponseContent().
+        /// </summary>
         protected async Task<string> GetStreamContent(Stream s, string charset)
         {
             StringBuilder sb = new StringBuilder();
@@ -472,10 +483,7 @@ namespace WooCommerceNET
 
         public string DateTimeFormat
         {
-            get
-            {
-                return IsLegacy ? "yyyy-MM-ddTHH:mm:ssZ" : "yyyy-MM-ddTHH:mm:ssK";
-            }
+            get => IsLegacy ? "yyyy-MM-ddTHH:mm:ssZ" : "yyyy-MM-ddTHH:mm:ssK";
         }
     }
 

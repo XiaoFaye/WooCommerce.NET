@@ -34,10 +34,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="RestClient.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="License.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
