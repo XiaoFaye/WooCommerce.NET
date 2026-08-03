@@ -421,6 +421,11 @@ namespace WooCommerceNET.WooCommerce.v2
         [DataMember(EmitDefaultValue = false)]
         public string country { get; set; }
 
+        /// <summary>
+        /// Phone number.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string phone { get; set; }
     }
 
     [DataContract]
