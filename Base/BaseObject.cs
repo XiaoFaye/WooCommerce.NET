@@ -59,21 +59,21 @@ namespace WooCommerceNET.Base
                     {
                         object value = objValue.GetValue(this);
 
-                        if (!(value == null || value.ToString() == string.Empty))
+                        if (!(value == null || value.ToString() == string.Empty || value.ToString() == "-"))
                             pi.SetValue(this, decimal.Parse(value.ToString(), Culture));
                     }
                     else if (pi.PropertyType == typeof(int?))
                     {
                         object value = objValue.GetValue(this);
 
-                        if (!(value == null || value.ToString() == string.Empty))
+                        if (!(value == null || value.ToString() == string.Empty || value.ToString() == "-"))
                             pi.SetValue(this, int.Parse(value.ToString(), Culture));
                     }
                     else if (pi.PropertyType == typeof(DateTime?))
                     {
                         object value = objValue.GetValue(this);
 
-                        if (!(value == null || value.ToString() == string.Empty))
+                        if (!(value == null || value.ToString() == string.Empty || value.ToString() == "-"))
                             pi.SetValue(this, DateTime.Parse(value.ToString()));
                     }
                 }
