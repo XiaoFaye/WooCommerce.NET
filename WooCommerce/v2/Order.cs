@@ -526,7 +526,28 @@ namespace WooCommerceNET.WooCommerce.v2
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public decimal? price { get; set; }
+        
+        [DataMember(EmitDefaultValue = false)]
+        public OrderLineItemImage image { get; set; }
 
+    }
+    
+    [DataContract]
+    public class OrderLineItemImage
+    {
+        /// <summary>
+        /// Item ID. 
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string id { get; set; }  
+        
+        /// <summary>
+        /// Image URL
+        /// read-only
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public string src { get; set; }
     }
 
     [DataContract]
